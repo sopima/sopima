@@ -1,0 +1,100 @@
+<?php
+
+declare(strict_types=1);
+
+
+
+define('BASE_PATH', dirname(__DIR__));
+
+$dotenv = BASE_PATH . '/.env';
+if (file_exists($dotenv)) {
+    foreach (file($dotenv, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+        if (str_starts_with(trim($line), '#') || !str_contains($line, '=')) continue;
+        [$key, $value] = explode('=', $line, 2);
+        $_ENV[trim($key)] = trim($value);
+    }
+}
+
+function env(string $key, mixed $default = null): mixed
+{
+    return $_ENV[$key] ?? $default;
+}
+
+require_once BASE_PATH . '/vendor/autoload.php';
+require_once BASE_PATH . '/app/Services/MailService.php';
+require_once BASE_PATH . '/app/Helpers/db.php';
+require_once BASE_PATH . '/app/Helpers/auth.php';
+
+ini_set("session.gc_maxlifetime", 86400);
+session_set_cookie_params(["lifetime" => 86400, "path" => "/", "secure" => false, "httponly" => true, "samesite" => "Lax"]);
+session_start();
+
+$uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uri    = rtrim($uri, '/');
+$method = $_SERVER['REQUEST_METHOD'];
+
+$routes = [
+    ''           => ['auth' => true,  'admin' => false, 'controller' => 'DashboardController'],
+    '/dashboard' => ['auth' => true,  'admin' => false, 'controller' => 'DashboardController'],
+    '/contracts' => ['auth' => true,  'admin' => false, 'controller' => 'ContractController'],
+    '/clients'   => ['auth' => true,  'admin' => false, 'controller' => 'ClientController'],
+    '/users'     => ['auth' => true,  'admin' => true,  'controller' => 'UserController'],
+    '/tokens'        => ['auth' => true,  'admin' => true,  'controller' => 'TokenController'],
+    '/settings'      => ['auth' => true,  'admin' => true,  'controller' => 'SettingsController'],
+    '/backup'        => ['auth' => true,  'admin' => true,  'controller' => 'BackupController'],
+    '/notifications' => ['auth' => true,  'admin' => false, 'controller' => 'NotificationController'],
+    '/login'     => ['auth' => false, 'admin' => false, 'controller' => 'AuthController'],
+    '/logout'    => ['auth' => false, 'admin' => false, 'controller' => null],
+];
+
+function middleware(array $route): void {
+    if ($route['auth'] && !isLoggedIn()) {
+        header('Location: /login');
+        exit;
+    }
+    if ($route['admin'] && $_SESSION['role'] !== 'admin') {
+        http_response_code(403);
+        require BASE_PATH . '/app/views/layouts/main.php';
+        echo '<div style="padding:3rem;text-align:center;color:var(--text-muted);">
+            <i class="ti ti-lock" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:.4;"></i>
+            <h3 style="color:rgba(255,255,255,.6);margin-bottom:.5rem;">Zugriff verweigert</h3>
+            <p>Diese Seite ist nur für Administratoren.</p>
+            <a href="/dashboard" class="btn btn-outline" style="margin-top:1.5rem;">← Dashboard</a>
+        </div>';
+        require BASE_PATH . '/app/views/layouts/footer.php';
+        exit;
+    }
+}
+
+if (str_starts_with($uri, '/api')) {
+    require BASE_PATH . '/app/Controllers/ApiController.php';
+    exit;
+}
+
+if ($uri === '/logout') {
+    session_destroy();
+    header('Location: /login');
+    exit;
+}
+
+if (isset($routes[$uri])) {
+    $route = $routes[$uri];
+    middleware($route);
+    if ($route['controller']) {
+        require BASE_PATH . '/app/Controllers/' . $route['controller'] . '.php';
+    }
+} else {
+    http_response_code(404);
+    if (isLoggedIn()) {
+        $user = currentUser();
+        require BASE_PATH . '/app/views/layouts/main.php';
+        echo '<div style="padding:3rem;text-align:center;color:var(--text-muted);">
+            <i class="ti ti-error-404" style="font-size:3rem;display:block;margin-bottom:1rem;opacity:.4;"></i>
+            <h3 style="color:rgba(255,255,255,.6);margin-bottom:.5rem;">Seite nicht gefunden</h3>
+            <a href="/dashboard" class="btn btn-outline" style="margin-top:1.5rem;">← Dashboard</a>
+        </div>';
+        require BASE_PATH . '/app/views/layouts/footer.php';
+    } else {
+        header('Location: /login');
+    }
+}

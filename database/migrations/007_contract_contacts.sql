@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS contract_contacts (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    contract_id INTEGER NOT NULL UNIQUE,
+    company VARCHAR(255) DEFAULT NULL,
+    first_name VARCHAR(100) DEFAULT NULL,
+    last_name VARCHAR(100) DEFAULT NULL,
+    email VARCHAR(255) DEFAULT NULL,
+    phone VARCHAR(50) DEFAULT NULL,
+    mobile VARCHAR(50) DEFAULT NULL,
+    street VARCHAR(255) DEFAULT NULL,
+    zip VARCHAR(20) DEFAULT NULL,
+    city VARCHAR(100) DEFAULT NULL,
+    iban VARCHAR(34) DEFAULT NULL,
+    bank VARCHAR(255) DEFAULT NULL,
+    bic VARCHAR(11) DEFAULT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (contract_id) REFERENCES contracts(id) ON DELETE CASCADE
+);
