@@ -34,16 +34,6 @@ php bin/create-admin.php
 
 Apache VHost DocumentRoot auf `public/` zeigen lassen, `mod_rewrite` aktivieren.
 
-## Docker
-
-```bash
-cp .env.example .env
-# .env anpassen
-docker compose -f docker-compose.sqlite.yml up -d
-docker compose -f docker-compose.sqlite.yml exec app php database/migrate.php
-docker compose -f docker-compose.sqlite.yml exec app php bin/create-admin.php
-```
-
 ## API
 
 Siehe [docs/API.md](docs/API.md) für alle Endpunkte, Authentifizierung und Rate Limiting.
