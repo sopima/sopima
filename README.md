@@ -38,6 +38,23 @@ docker compose -f docker-compose.sqlite.yml exec app php database/migrate.php
 docker compose -f docker-compose.sqlite.yml exec app php bin/create-admin.php
 ```
 
+
+## Direkt ohne Docker (Entwicklung)
+
+```bash
+cp .env.example .env
+# DB_DRIVER=sqlite setzen, APP_SECRET generieren: openssl rand -hex 32
+composer install
+php database/migrate.php
+php bin/create-admin.php
+```
+
+Apache VHost DocumentRoot auf `public/` zeigen lassen, `mod_rewrite` aktivieren.
+
+## API
+
+Siehe [docs/API.md](docs/API.md) für alle Endpunkte, Authentifizierung und Rate Limiting.
+
 ## Lizenz
 
 MIT
