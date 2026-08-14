@@ -16,40 +16,33 @@ Selbst gehostete, open-source Vertragsverwaltung für Einzelpersonen, kleine Org
 
 ## Voraussetzungen
 
-- Docker & Docker Compose
+- PHP 8.2+
+- Composer
+- Apache mit mod_rewrite
+- SQLite 3
 
-## Schnellstart (MySQL)
-
-```bash
-cp .env.example .env
-# .env anpassen: APP_SECRET, DB_PASSWORD etc. setzen
-docker compose up -d
-docker compose exec app php database/migrate.php
-docker compose exec app php bin/create-admin.php
-```
-
-## Schnellstart (SQLite)
+## Schnellstart
 
 ```bash
 cp .env.example .env
+# APP_SECRET setzen: openssl rand -hex 32
 # DB_DRIVER=sqlite und DB_SQLITE_PATH in .env setzen
-docker compose -f docker-compose.sqlite.yml up -d
-docker compose -f docker-compose.sqlite.yml exec app php database/migrate.php
-docker compose -f docker-compose.sqlite.yml exec app php bin/create-admin.php
-```
-
-
-## Direkt ohne Docker (Entwicklung)
-
-```bash
-cp .env.example .env
-# DB_DRIVER=sqlite setzen, APP_SECRET generieren: openssl rand -hex 32
 composer install
 php database/migrate.php
 php bin/create-admin.php
 ```
 
 Apache VHost DocumentRoot auf `public/` zeigen lassen, `mod_rewrite` aktivieren.
+
+## Docker
+
+```bash
+cp .env.example .env
+# .env anpassen
+docker compose -f docker-compose.sqlite.yml up -d
+docker compose -f docker-compose.sqlite.yml exec app php database/migrate.php
+docker compose -f docker-compose.sqlite.yml exec app php bin/create-admin.php
+```
 
 ## API
 
