@@ -53,6 +53,16 @@ Siehe [docs/API.md](docs/API.md) für alle Endpunkte, Authentifizierung und Rate
 Sopima ist ein Community-Projekt. Issues und Pull Requests sind willkommen.
 Bitte vor größeren Änderungen kurz ein Issue öffnen.
 
+## Benachrichtigungen (Cronjob)
+
+Bei direkter PHP/Apache-Installation: `bin/notify.php` als Cronjob einrichten:
+
+```
+0 8 * * * php /path/to/sopima/bin/notify.php >> /var/log/sopima_notify.log 2>&1
+```
+
+Im Docker-Betrieb kann ein separater Cronjob-Container oder ein Host-Cronjob genutzt werden.
+
 ## Lizenz
 
 MIT
