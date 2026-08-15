@@ -20,6 +20,8 @@ function env(string $key, mixed $default = null): mixed
     return $_ENV[$key] ?? $default;
 }
 
+define('APP_NAME', env('APP_NAME', 'Sopima'));
+
 require_once BASE_PATH . '/vendor/autoload.php';
 require_once BASE_PATH . '/app/Services/MailService.php';
 require_once BASE_PATH . '/app/Helpers/db.php';
@@ -64,6 +66,12 @@ function middleware(array $route): void {
         require BASE_PATH . '/app/views/layouts/footer.php';
         exit;
     }
+}
+
+// Setup-Wizard – vor DB und Auth prüfen
+if ($uri === '/setup') {
+    require BASE_PATH . '/app/Controllers/SetupController.php';
+    exit;
 }
 
 if (str_starts_with($uri, '/api')) {
