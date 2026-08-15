@@ -112,6 +112,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 4) {
             $hash = password_hash($password, PASSWORD_BCRYPT);
             $pdo->prepare("INSERT INTO users (name, email, password_hash, role, active) VALUES (?, ?, ?, 'admin', 1)")
                 ->execute([$name, $email, $hash]);
+            $adminId = $pdo->lastInsertId();
+            // Admin allen bestehenden Mandanten zuweisen
+            $clients = $pdo->query("SELECT id FROM clients")->fetchAll(PDO::FETCH_COLUMN);
+            foreach ($clients as $clientId) {
+                $pdo->prepare("INSERT OR IGNORE INTO user_clients (user_id, client_id) VALUES (?, ?)")
+                    ->execute([$adminId, $clientId]);
+            }
             header('Location: /setup?step=5');
             exit;
         } catch (Throwable $e) {
