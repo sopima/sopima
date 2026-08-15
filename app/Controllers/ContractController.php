@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $renewal_interval_months = $_POST['renewal_interval_months'] ? (int)$_POST['renewal_interval_months'] : null;
         $cancellation_period_days = $_POST['cancellation_period_days'] ? (int)$_POST['cancellation_period_days'] : null;
         $dates = calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months, $cancellation_period_days, $renewal_interval_months);
-        $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, contract_type, title, partner, counterparty_type, description, start_date, end_date, auto_renewal, minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date, value, billing_interval, payment_method, iban, mandate_reference, interest_rate, loan_amount, monthly_rate, deductible, service_interval_months, status, notes, direction) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, contract_type, title, partner, counterparty_type, description, start_date, end_date, auto_renewal, minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date, value, billing_interval, payment_method, iban, mandate_reference, interest_rate, loan_amount, monthly_rate, deductible, service_interval_months, status, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $stmt->execute([
             $contract_number,
             $_POST['client_id'],
@@ -120,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['status'],
             $_POST['notes'],
             $_POST['direction'] ?? 'ausgabe',
+            $_POST['plan'] ?: null,
         ]);
         $lastId = $db->lastInsertId();
         // Personen speichern
@@ -167,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $renewal_interval_months_u = $_POST['renewal_interval_months'] ? (int)$_POST['renewal_interval_months'] : null;
         $cancellation_period_days_u = $_POST['cancellation_period_days'] ? (int)$_POST['cancellation_period_days'] : null;
         $dates_u = calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months_u, $cancellation_period_days_u, $renewal_interval_months_u);
-        $stmt = $db->prepare("UPDATE contracts SET client_id=?, category_id=?, contract_type=?, title=?, partner=?, counterparty_type=?, description=?, start_date=?, end_date=?, auto_renewal=?, minimum_term_months=?, renewal_interval_months=?, cancellation_period_days=?, cancellation_deadline=?, notice_date=?, value=?, billing_interval=?, payment_method=?, iban=?, mandate_reference=?, interest_rate=?, loan_amount=?, monthly_rate=?, deductible=?, service_interval_months=?, status=?, notes=?, direction=? WHERE id=? AND client_id IN ($in)");
+        $stmt = $db->prepare("UPDATE contracts SET client_id=?, category_id=?, contract_type=?, title=?, partner=?, counterparty_type=?, description=?, start_date=?, end_date=?, auto_renewal=?, minimum_term_months=?, renewal_interval_months=?, cancellation_period_days=?, cancellation_deadline=?, notice_date=?, value=?, billing_interval=?, payment_method=?, iban=?, mandate_reference=?, interest_rate=?, loan_amount=?, monthly_rate=?, deductible=?, service_interval_months=?, status=?, notes=?, direction=?, plan=? WHERE id=? AND client_id IN ($in)");
         $stmt->execute([
             $_POST['client_id'],
             $_POST['category_id'] ?: null,
@@ -197,6 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['status'],
             $_POST['notes'],
             $_POST['direction'] ?? 'ausgabe',
+            $_POST['plan'] ?: null,
             $_POST['id'],
         ]);
         // Personen: löschen und neu schreiben

@@ -137,7 +137,7 @@
         </div>
         <?php endif; ?>
         <div style="height:.75rem;"></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;">
             <div class="form-group" style="margin:0;">
                 <label>Wert (€)</label>
                 <input type="number" step="0.01" name="value" value="<?php echo $contract['value'] ?? ''; ?>" placeholder="0,00">
@@ -161,6 +161,10 @@
                         </option>
                     <?php endforeach; ?>
                 </select>
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label>Tarif</label>
+                <input type="text" name="plan" value="<?php echo htmlspecialchars($contract['plan'] ?? ''); ?>" placeholder="z. B. Starter, Basic …">
             </div>
         </div>
         <div style="height:.75rem;"></div>
