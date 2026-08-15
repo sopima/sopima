@@ -51,8 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
         $env .= "MAIL_FROM_NAME={$mailName}\n";
 
         $envPath = BASE_PATH . '/storage/.env';
-        if (!file_put_contents($envPath, $env)) {
-            $errors[] = '.env konnte nicht geschrieben werden. Schreibrechte prüfen.';
+        $written = file_put_contents($envPath, $env);
+        if ($written === false || $written === 0) {
+            $errors[] = '.env konnte nicht geschrieben werden. Pfad: ' . $envPath . ' | Schreibbar: ' . (is_writable(dirname($envPath)) ? 'ja' : 'nein');
         } else {
             // Auch direkt nach BASE_PATH schreiben damit db() sie findet
             file_put_contents(BASE_PATH . '/.env', $env);
