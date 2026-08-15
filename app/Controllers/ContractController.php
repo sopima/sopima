@@ -152,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cl_stmt->execute([$_POST['client_id']]);
         $cl_row = $cl_stmt->fetch();
         if ($cl_row && strtolower($cl_row['type']) !== 'privat') {
-            $db->prepare("INSERT INTO contract_contacts (contract_id, company, first_name, last_name, email, phone, mobile, street, zip, city, iban, bank, bic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE company=VALUES(company), first_name=VALUES(first_name), last_name=VALUES(last_name), email=VALUES(email), phone=VALUES(phone), mobile=VALUES(mobile), street=VALUES(street), zip=VALUES(zip), city=VALUES(city), iban=VALUES(iban), bank=VALUES(bank), bic=VALUES(bic)")
+            $db->prepare("INSERT INTO contract_contacts (contract_id, company, first_name, last_name, email, phone, mobile, street, zip, city, iban, bank, bic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(contract_id) DO UPDATE SET company=excluded.company, first_name=excluded.first_name, last_name=excluded.last_name, email=excluded.email, phone=excluded.phone, mobile=excluded.mobile, street=excluded.street, zip=excluded.zip, city=excluded.city, iban=excluded.iban, bank=excluded.bank, bic=excluded.bic")
                ->execute([$lastId, $_POST['cc_company']??null, $_POST['cc_first_name']??null, $_POST['cc_last_name']??null, $_POST['cc_email']??null, $_POST['cc_phone']??null, $_POST['cc_mobile']??null, $_POST['cc_street']??null, $_POST['cc_zip']??null, $_POST['cc_city']??null, $_POST['cc_iban']??null, $_POST['cc_bank']??null, $_POST['cc_bic']??null]);
         }
         header('Location: /contracts');
@@ -231,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cl_stmt2->execute([$_POST['client_id']]);
         $cl_row2 = $cl_stmt2->fetch();
         if ($cl_row2 && strtolower($cl_row2['type']) !== 'privat') {
-            $db->prepare("INSERT INTO contract_contacts (contract_id, company, first_name, last_name, email, phone, mobile, street, zip, city, iban, bank, bic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE company=VALUES(company), first_name=VALUES(first_name), last_name=VALUES(last_name), email=VALUES(email), phone=VALUES(phone), mobile=VALUES(mobile), street=VALUES(street), zip=VALUES(zip), city=VALUES(city), iban=VALUES(iban), bank=VALUES(bank), bic=VALUES(bic)")
+            $db->prepare("INSERT INTO contract_contacts (contract_id, company, first_name, last_name, email, phone, mobile, street, zip, city, iban, bank, bic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(contract_id) DO UPDATE SET company=excluded.company, first_name=excluded.first_name, last_name=excluded.last_name, email=excluded.email, phone=excluded.phone, mobile=excluded.mobile, street=excluded.street, zip=excluded.zip, city=excluded.city, iban=excluded.iban, bank=excluded.bank, bic=excluded.bic")
                ->execute([(int)$_POST['id'], $_POST['cc_company']??null, $_POST['cc_first_name']??null, $_POST['cc_last_name']??null, $_POST['cc_email']??null, $_POST['cc_phone']??null, $_POST['cc_mobile']??null, $_POST['cc_street']??null, $_POST['cc_zip']??null, $_POST['cc_city']??null, $_POST['cc_iban']??null, $_POST['cc_bank']??null, $_POST['cc_bic']??null]);
         }
         header('Location: /contracts');
@@ -322,9 +322,9 @@ if ($action === 'create') {
     $contract = $stmt->fetch();
     if (!$contract) { http_response_code(403); die('Zugriff verweigert.'); }
     // Zuletzt angesehen in DB speichern
-    $db->prepare("INSERT INTO recently_viewed (user_id, contract_id) VALUES (?,?) ON DUPLICATE KEY UPDATE viewed_at=datetime('now')")->execute([$_SESSION["user_id"], $id]);
+    $db->prepare("INSERT INTO recently_viewed (user_id, contract_id) VALUES (?,?) ON CONFLICT(user_id, contract_id) DO UPDATE SET viewed_at=datetime('now')")->execute([$_SESSION["user_id"], $id]);
     // Nur die letzten 5 pro User behalten
-    $db->prepare("DELETE FROM recently_viewed WHERE user_id=? AND contract_id NOT IN (SELECT contract_id FROM (SELECT contract_id FROM recently_viewed WHERE user_id=? ORDER BY viewed_at DESC LIMIT 5) AS t)")->execute([$_SESSION["user_id"], $_SESSION["user_id"]]);
+    $db->prepare("DELETE FROM recently_viewed WHERE user_id=? AND contract_id NOT IN (SELECT contract_id FROM recently_viewed WHERE user_id=? ORDER BY viewed_at DESC LIMIT 5)")->execute([$_SESSION["user_id"], $_SESSION["user_id"]]);
 
     $cc_stmt = $db->prepare("SELECT * FROM contract_contacts WHERE contract_id=?");
     $cc_stmt->execute([$id]);

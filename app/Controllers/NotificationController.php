@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmt = $db->prepare("INSERT INTO notification_settings (user_id, channel, enabled, config, days_before)
                                VALUES (?,?,?,?,?)
-                               ON DUPLICATE KEY UPDATE enabled=?, config=?, days_before=?");
+                               ON CONFLICT(user_id, channel) DO UPDATE SET enabled=excluded.enabled, config=excluded.config, days_before=excluded.days_before");
         $stmt->execute([
             $user['id'], $channel, $enabled, json_encode($config), $days,
             $enabled, json_encode($config), $days
