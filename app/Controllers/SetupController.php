@@ -193,9 +193,10 @@ $defaultPath = BASE_PATH . '/storage/database/sopima.sqlite';
             'mbstring'            => extension_loaded('mbstring'),
             'fileinfo'            => extension_loaded('fileinfo'),
             'zip'                 => extension_loaded('zip'),
+            'storage/ beschreibbar'          => is_writable(BASE_PATH . '/storage'),
             'storage/database/ beschreibbar' => is_writable(BASE_PATH . '/storage/database') || (!is_dir(BASE_PATH . '/storage/database') && is_writable(BASE_PATH . '/storage')),
             'storage/uploads/ beschreibbar'  => is_writable(BASE_PATH . '/storage/uploads')  || (!is_dir(BASE_PATH . '/storage/uploads')  && is_writable(BASE_PATH . '/storage')),
-            '.env beschreibbar'   => is_writable(BASE_PATH . '/.env') || (!file_exists(BASE_PATH . '/.env') && is_writable(BASE_PATH)),
+            '.env beschreibbar'              => is_writable(BASE_PATH . '/storage'),
         ];
         $allOk = !in_array(false, $checks, true);
         ?>
