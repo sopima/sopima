@@ -1,5 +1,11 @@
 Options -Indexes
 
+# Sensible Dateien sperren
+<FilesMatch "^\.env|composer\.(json|lock)|Dockerfile|docker-compose.*\.yml$">
+    Require all denied
+    ErrorDocument 403 /index.php?error=404
+</FilesMatch>
+
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
