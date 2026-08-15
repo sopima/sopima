@@ -1,5 +1,7 @@
 # Sopima
 
+> ⚠️ **Alpha-Stadium** – Sopima befindet sich in aktiver Entwicklung. Funktionen können sich ändern, Fehler sind möglich. Nicht für produktionskritische Daten empfohlen. Feedback willkommen.
+
 Selbst gehostete, open-source Vertragsverwaltung für Einzelpersonen, kleine Organisationen und Teams.
 
 ## Funktionen
@@ -45,6 +47,11 @@ Danach `http://localhost:8080/setup` aufrufen.
 ## API
 
 Siehe [docs/API.md](docs/API.md) für alle Endpunkte, Authentifizierung und Rate Limiting.
+
+## Mitmachen
+
+Sopima ist ein Community-Projekt. Issues und Pull Requests sind willkommen.
+Bitte vor größeren Änderungen kurz ein Issue öffnen.
 
 ## Lizenz
 
