@@ -54,6 +54,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
         if (!file_put_contents($envPath, $env)) {
             $errors[] = '.env konnte nicht geschrieben werden. Schreibrechte prüfen.';
         } else {
+            // Auch direkt nach BASE_PATH schreiben damit db() sie findet
+            file_put_contents(BASE_PATH . '/.env', $env);
+            // $_ENV sofort aktualisieren
+            foreach (explode("\n", $env) as $line) {
+                $line = trim($line);
+                if (empty($line) || str_starts_with($line, '#') || !str_contains($line, '=')) continue;
+                [$k, $v] = explode('=', $line, 2);
+                $_ENV[trim($k)] = trim($v);
+            }
             header('Location: /setup?step=3');
             exit;
         }
