@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 4) {
         try {
             $pdo  = db();
             $hash = password_hash($password, PASSWORD_BCRYPT);
-            $pdo->prepare("INSERT INTO users (name, email, password, role, active) VALUES (?, ?, ?, 'admin', 1)")
+            $pdo->prepare("INSERT INTO users (name, email, password_hash, role, active) VALUES (?, ?, ?, 'admin', 1)")
                 ->execute([$name, $email, $hash]);
             header('Location: /setup?step=5');
             exit;
