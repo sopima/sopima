@@ -9,15 +9,3 @@ services:
       - ./env:/var/www/html/.env
 volumes:
   sopima_storage:
-ENDOFFILEcat > /var/www/entwicklung/sopima/public_html/sopima/docker-compose.yml << 'ENDOFFILE'
-services:
-  app:
-    image: ghcr.io/sopima/sopima:latest
-    restart: unless-stopped
-    ports:
-      - "8080:80"
-    volumes:
-      - sopima_storage:/var/www/html/storage
-      - ./env:/var/www/html/.env
-volumes:
-  sopima_storage:
