@@ -156,7 +156,7 @@ function collectBackupData(PDO $db, array $user): array {
     $ids = array_column($clientIds->fetchAll(PDO::FETCH_ASSOC), 'client_id');
 
     if (empty($ids)) {
-        return ['meta' => ['version' => '1.0', 'app' => 'Sopima', 'exported_at' => date('c')],
+        return ['meta' => ['version' => '1.0', 'app' => APP_NAME, 'exported_at' => date('c')],
                 'clients' => [], 'users' => [], 'contracts' => []];
     }
 
@@ -196,7 +196,7 @@ function collectBackupData(PDO $db, array $user): array {
     return [
         'meta' => [
             'version'     => '1.0',
-            'app'         => 'Sopima',
+            'app'         => APP_NAME,
             'exported_at' => date('c'),
         ],
         'clients'   => $clientsData,

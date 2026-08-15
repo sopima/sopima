@@ -87,7 +87,7 @@
                                onchange="document.getElementById('file-label').textContent = this.files[0]?.name ?? 'Datei auswählen';">
                     </label>
                     <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem;">
-                        Nur Sopima JSON-Backups. Nach dem Import müssen API-Tokens neu erstellt werden.
+                        Nur <?php echo APP_NAME; ?> JSON-Backups. Nach dem Import müssen API-Tokens neu erstellt werden.
                     </p>
                 </div>
                 <button type="submit" class="btn btn-danger"

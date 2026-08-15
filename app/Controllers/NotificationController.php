@@ -20,14 +20,14 @@ if (isset($_GET['action']) && $_GET['action'] === 'test' && $_SERVER['REQUEST_ME
         exit;
     }
     $config = json_decode($row['config'], true) ?? [];
-    $message = "Sopima – Testnachricht\nDieser Kanal ist korrekt konfiguriert.";
+    $message = APP_NAME . " – Testnachricht\nDieser Kanal ist korrekt konfiguriert.";
     $sent = false; $error = '';
 
     if ($channel === 'email' && !empty($config['address'])) {
-        $sent = MailService::sendNotification($config['address'], '', 'Sopima Testbenachrichtigung', "Dieser Kanal ist korrekt konfiguriert.");
+        $sent = MailService::sendNotification($config['address'], '', APP_NAME . " Testbenachrichtigung", "Dieser Kanal ist korrekt konfiguriert.");
         if (!$sent) $error = 'MailService fehlgeschlagen – siehe error_log';
     } elseif ($channel === 'discord' && !empty($config['webhook_url'])) {
-        $payload = json_encode(['content' => "**Sopima Test**\n" . $message]);
+        $payload = json_encode(['content' => "**" . APP_NAME . " Test**\n" . $message]);
         $ch = curl_init($config['webhook_url']);
         curl_setopt_array($ch, [CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$payload,CURLOPT_HTTPHEADER=>['Content-Type: application/json'],CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>10]);
         $res = curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
@@ -43,17 +43,17 @@ if (isset($_GET['action']) && $_GET['action'] === 'test' && $_SERVER['REQUEST_ME
         if (!$sent) $error = $body['description'] ?? "HTTP $code";
     } elseif ($channel === 'ntfy' && !empty($config['url']) && !empty($config['topic'])) {
         $ch = curl_init(rtrim($config['url'],'/').'/'.$config['topic']);
-        curl_setopt_array($ch, [CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$message,CURLOPT_HTTPHEADER=>['Title: Sopima Test','Priority: default'],CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>10]);
+        curl_setopt_array($ch, [CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$message,CURLOPT_HTTPHEADER=>['Title: ' . APP_NAME . ' Test','Priority: default'],CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>10]);
         curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
         $sent = $code >= 200 && $code < 300; if (!$sent) $error = "HTTP $code";
     } elseif ($channel === 'gotify' && !empty($config['url']) && !empty($config['token'])) {
-        $payload = json_encode(['title'=>'Sopima Test','message'=>$message,'priority'=>5]);
+        $payload = json_encode(['title'=>APP_NAME . ' Test','message'=>$message,'priority'=>5]);
         $ch = curl_init(rtrim($config['url'],'/').'message?token='.$config['token']);
         curl_setopt_array($ch, [CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$payload,CURLOPT_HTTPHEADER=>['Content-Type: application/json'],CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>10]);
         curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
         $sent = $code >= 200 && $code < 300; if (!$sent) $error = "HTTP $code";
     } elseif ($channel === 'pushover' && !empty($config['user_key']) && !empty($config['api_token'])) {
-        $payload = ['token'=>$config['api_token'],'user'=>$config['user_key'],'title'=>'Sopima Test','message'=>$message];
+        $payload = ['token'=>$config['api_token'],'user'=>$config['user_key'],'title'=>APP_NAME . ' Test','message'=>$message];
         $ch = curl_init('https://api.pushover.net/1/messages.json');
         curl_setopt_array($ch, [CURLOPT_POST=>true,CURLOPT_POSTFIELDS=>$payload,CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>10]);
         curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);

@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sopima – Login</title>
+    <title><?php echo APP_NAME; ?> – Login</title>
     <link rel="stylesheet" href="/css/app.css">
     <link rel="stylesheet" href="/css/tabler-icons.min.css">
 </head>
 <body class="login-page">
     <div class="login-box">
-        <h1>Sopima</h1>
+        <h1><?php echo APP_NAME; ?></h1>
         <?php if (!empty($error)): ?>
             <div class="alert alert-error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>

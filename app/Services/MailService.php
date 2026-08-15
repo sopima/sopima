@@ -54,7 +54,7 @@ class MailService
 <body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:20px;margin:0">
   <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.08)">
     <div style="background:#0d6efd;padding:24px 32px">
-      <h1 style="color:#fff;margin:0;font-size:20px">Sopima</h1>
+      <h1 style="color:#fff;margin:0;font-size:20px"><?php echo APP_NAME; ?></h1>
     </div>
     <div style="padding:32px">
       <p style="margin:0 0 16px">Hallo ' . htmlspecialchars($name) . ',</p>
@@ -66,7 +66,7 @@ class MailService
       ' . $btn . '
     </div>
     <div style="padding:16px 32px;background:#f9fafb;font-size:12px;color:#999;border-top:1px solid #eee">
-      Diese E-Mail wurde automatisch versandt &middot; <a href="' . APP_URL . '" style="color:#0d6efd;text-decoration:none">Sopima</a>
+      Diese E-Mail wurde automatisch versandt &middot; <a href="' . APP_URL . '" style="color:#0d6efd;text-decoration:none"><?php echo APP_NAME; ?></a>
     </div>
   </div>
 </body>
@@ -75,7 +75,7 @@ class MailService
 
     public static function sendPasswordReset(string $toEmail, string $toName, string $resetUrl): bool
     {
-        $subject = 'Passwort zurücksetzen – Sopima';
+        $subject = 'Passwort zurücksetzen – ' . APP_NAME;
         $body    = self::wrapTemplate(
             $toName,
             'Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts gestellt.',

@@ -1,5 +1,5 @@
 <aside class="sidebar">
-    <div class="logo">Sopima</div>
+    <div class="logo"><?php echo APP_NAME; ?></div>
     <nav>
         <a href="/dashboard" class="<?php echo str_contains($_SERVER['REQUEST_URI'], 'dashboard') || $_SERVER['REQUEST_URI'] === '/' ? 'active' : ''; ?>">
             <i class="ti ti-layout-dashboard"></i> Dashboard
