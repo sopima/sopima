@@ -79,6 +79,20 @@ if (str_starts_with($uri, '/api')) {
     exit;
 }
 
+// Kein Admin vorhanden → Setup
+if ($uri !== '/setup') {
+    try {
+        $count = db()->query("SELECT COUNT(*) FROM users")->fetchColumn();
+        if ((int)$count === 0) {
+            header('Location: /setup');
+            exit;
+        }
+    } catch (Throwable) {
+        header('Location: /setup');
+        exit;
+    }
+}
+
 if ($uri === '/logout') {
     session_destroy();
     header('Location: /login');
