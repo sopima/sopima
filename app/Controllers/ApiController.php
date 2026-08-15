@@ -42,7 +42,7 @@ function apiRateLimit(array $token, int $limit = 60, int $window = 60): void {
     $windowStart = $now - ($now % $window);
     $stmt = $db->prepare("INSERT INTO api_rate_limits (token_id, window_start, request_count)
                           VALUES (?, ?, 1)
-                          ON DUPLICATE KEY UPDATE request_count = request_count + 1");
+                          ON CONFLICT(token_id, window_start) DO UPDATE SET request_count = request_count + 1");
     $stmt->execute([$token['id'], $windowStart]);
     $stmt = $db->prepare("SELECT request_count FROM api_rate_limits WHERE token_id = ? AND window_start = ?");
     $stmt->execute([$token['id'], $windowStart]);
@@ -131,9 +131,10 @@ if ($apiUri === '/contracts' && $method === 'POST') {
     $prefix = strtoupper(substr(preg_replace("/[^a-zA-Z]/", "", $cl_row["name"] ?? "CH"), 0, 4));
     $b36 = base_convert((string)time(), 10, 36);
     $rand = bin2hex(random_bytes(1));
-    $contract_number = "CH-" . $prefix . "-" . $b36 . "-" . $rand;
+    $appPrefix = strtoupper(substr(preg_replace("/[^a-zA-Z0-9]/", "", APP_NAME), 0, 3));
+    $contract_number = $appPrefix . "-" . $prefix . "-" . $b36 . "-" . $rand;
     $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['source'] !== 'manuell' ? 'einnahme' : 'ausgabe']);
+    $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe']);
     apiResponse(201, ['id' => $db->lastInsertId(), 'contract_number' => $contract_number, 'message' => 'Vertrag angelegt.']);
 }
 
