@@ -10,29 +10,37 @@ Selbst gehostete, open-source Vertragsverwaltung für Einzelpersonen, kleine Org
 - Kommunikationsprotokoll pro Vertrag
 - Volltextsuche und Ampelstatus
 - REST API mit Token-Authentifizierung und Rate Limiting
-- Benachrichtigungssystem (SMTP)
+- Benachrichtigungssystem (E-Mail, Discord, Telegram, ntfy, Gotify, Pushover, Webhook)
 - Backup/Restore (JSON-Export/Import)
 - Benutzerverwaltung und Einstellungen
 
 ## Voraussetzungen
 
 - PHP 8.2+
+- PHP-Extension: `pdo_sqlite`
 - Composer
-- Apache mit mod_rewrite
-- SQLite 3
+- Apache mit `mod_rewrite`
 
 ## Schnellstart
 
 ```bash
+git clone https://github.com/sopima/sopima
+cd sopima
 cp .env.example .env
-# APP_SECRET setzen: openssl rand -hex 32
-# DB_DRIVER=sqlite und DB_SQLITE_PATH in .env setzen
-composer install
-php database/migrate.php
-php bin/create-admin.php
+composer install --no-dev
 ```
 
 Apache VHost DocumentRoot auf `public/` zeigen lassen, `mod_rewrite` aktivieren.
+
+Dann im Browser `https://your-domain.example.com/setup` aufrufen – der Setup-Wizard führt durch Konfiguration, Datenbank-Migration und Anlegen des ersten Admins.
+
+## Docker
+
+```bash
+docker compose up -d
+```
+
+Danach `http://localhost:8080/setup` aufrufen.
 
 ## API
 
