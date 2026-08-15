@@ -53,24 +53,13 @@ foreach ($users as $user) {
 
     $contracts = [];
     foreach ($allDays as $days) {
-        $driver = env('DB_DRIVER', 'mysql');
-        if ($driver === 'sqlite') {
-            $stmt = $pdo->prepare("SELECT c.*, cl.name AS client_name,
+        $stmt = $pdo->prepare("SELECT c.*, cl.name AS client_name,
                 CAST(julianday(c.notice_date) - julianday('now') AS INTEGER) AS days_left
                 FROM contracts c
                 LEFT JOIN clients cl ON c.client_id = cl.id
                 WHERE c.status = 'aktiv'
                   AND c.client_id IN ($in)
                   AND CAST(julianday(c.notice_date) - julianday('now') AS INTEGER) = ?");
-        } else {
-            $stmt = $pdo->prepare("SELECT c.*, cl.name AS client_name,
-                DATEDIFF(c.notice_date, CURDATE()) AS days_left
-                FROM contracts c
-                LEFT JOIN clients cl ON c.client_id = cl.id
-                WHERE c.status = 'aktiv'
-                  AND c.client_id IN ($in)
-                  AND DATEDIFF(c.notice_date, CURDATE()) = ?");
-        }
         $stmt->execute([$days]);
         foreach ($stmt->fetchAll() as $contract) {
             $contracts[] = $contract;
@@ -95,12 +84,7 @@ foreach ($users as $user) {
         $channel = $s['channel'];
 
         foreach ($contracts as $c) {
-            $driver = env('DB_DRIVER', 'mysql');
-            if ($driver === 'sqlite') {
-                $check = $pdo->prepare("SELECT id FROM notification_log WHERE user_id=? AND contract_id=? AND channel=? AND DATE(sent_at)=DATE('now')");
-            } else {
-                $check = $pdo->prepare("SELECT id FROM notification_log WHERE user_id=? AND contract_id=? AND channel=? AND DATE(sent_at)=CURDATE()");
-            }
+            $check = $pdo->prepare("SELECT id FROM notification_log WHERE user_id=? AND contract_id=? AND channel=? AND DATE(sent_at)=DATE('now')");
             $check->execute([$user['id'], $c['id'], $channel]);
             if ($check->fetch()) continue;
 

@@ -18,34 +18,22 @@ function env(string $key, mixed $default = null): mixed
     return $_ENV[$key] ?? $default;
 }
 
-$driver = env('DB_DRIVER', 'mysql');
+$path = env('DB_SQLITE_PATH', BASE_PATH . '/storage/database/sopima.sqlite');
+
+if (!is_dir(dirname($path))) {
+    mkdir(dirname($path), 0755, true);
+}
 
 try {
-    if ($driver === 'sqlite') {
-        $path = env('DB_SQLITE_PATH', BASE_PATH . '/storage/database/sopima.sqlite');
-        if (!is_dir(dirname($path))) {
-            mkdir(dirname($path), 0755, true);
-        }
-        $pdo = new PDO('sqlite:' . $path);
-        $pdo->exec("CREATE TABLE IF NOT EXISTS _migrations (
-            filename   TEXT NOT NULL PRIMARY KEY,
-            applied_at TEXT NOT NULL DEFAULT (datetime('now'))
-        )");
-    } else {
-        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
-            env('DB_HOST', 'db'),
-            env('DB_PORT', '3306'),
-            env('DB_NAME', 'sopima')
-        );
-        $pdo = new PDO($dsn, env('DB_USER'), env('DB_PASSWORD'));
-        $pdo->exec("CREATE TABLE IF NOT EXISTS _migrations (
-            filename   VARCHAR(255) NOT NULL PRIMARY KEY,
-            applied_at DATETIME NOT NULL DEFAULT NOW()
-        ) ENGINE=InnoDB");
-    }
+    $pdo = new PDO('sqlite:' . $path);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->exec('PRAGMA foreign_keys = ON;');
+    $pdo->exec("CREATE TABLE IF NOT EXISTS _migrations (
+        filename   TEXT NOT NULL PRIMARY KEY,
+        applied_at TEXT NOT NULL DEFAULT (datetime('now'))
+    )");
 } catch (PDOException $e) {
-    echo "Fehler: Datenbankverbindung fehlgeschlagen – " . $e->getMessage() . "\n";
+    echo "Fehler: " . $e->getMessage() . "\n";
     exit(1);
 }
 
@@ -65,7 +53,6 @@ $countApplied = 0;
 $countSkipped = 0;
 
 echo "Sopima Migration Runner\n";
-echo "Treiber: " . strtoupper($driver) . "\n";
 echo str_repeat('-', 50) . "\n";
 
 foreach ($files as $filepath) {
