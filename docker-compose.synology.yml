@@ -1,0 +1,12 @@
+# Synology NAS – Bind Mount Variante
+# Dateien (DB, .env, Uploads) sind direkt im Projektordner sichtbar.
+# Verwendung: docker compose -f docker-compose.synology.yml up -d
+
+services:
+  app:
+    image: ghcr.io/sopima/sopima:latest
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    volumes:
+      - ./storage:/var/www/html/storage
