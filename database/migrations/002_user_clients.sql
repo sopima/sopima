@@ -5,5 +5,3 @@ CREATE TABLE IF NOT EXISTS user_clients (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES clients(id) ON DELETE CASCADE
 );
-INSERT OR IGNORE INTO user_clients (user_id, client_id)
-SELECT 1, id FROM clients;

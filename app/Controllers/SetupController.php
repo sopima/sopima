@@ -64,6 +64,7 @@ $migrationLog = [];
 if ($step === 3) {
     try {
         $pdo = db();
+        $pdo->exec("PRAGMA foreign_keys = OFF");
         $pdo->exec("CREATE TABLE IF NOT EXISTS _migrations (
             filename   TEXT NOT NULL PRIMARY KEY,
             applied_at TEXT NOT NULL DEFAULT (datetime('now'))
