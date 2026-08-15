@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
         $env .= "MAIL_FROM={$mailFrom}\n";
         $env .= "MAIL_FROM_NAME={$mailName}\n";
 
-        if (!file_put_contents(BASE_PATH . '/.env', $env)) {
+        $envPath = BASE_PATH . '/storage/.env';
+        if (!file_put_contents($envPath, $env)) {
             $errors[] = '.env konnte nicht geschrieben werden. Schreibrechte prüfen.';
         } else {
             header('Location: /setup?step=3');
