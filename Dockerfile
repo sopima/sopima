@@ -5,14 +5,13 @@ RUN apt-get update && apt-get install -y \
     libsqlite3-dev \
     libonig-dev \
     unzip \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring fileinfo zip \
+    && docker-php-ext-install pdo pdo_sqlite mbstring fileinfo zip \
     && a2enmod rewrite \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
-
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
@@ -27,6 +26,9 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' \
     Require all granted\n\
 </Directory>' >> /etc/apache2/sites-available/000-default.conf
 
-VOLUME ["/var/www/html/storage"]
+RUN chmod +x /var/www/html/bin/entrypoint.sh
 
+VOLUME ["/var/www/html/storage"]
 EXPOSE 80
+
+ENTRYPOINT ["/var/www/html/bin/entrypoint.sh"]
