@@ -3,6 +3,7 @@
 ## [0.2.0] – 2026-08-15
 
 ### Added
+- Tarif-Feld (plan) in Vertragsübersicht und Bearbeiten-Formular ergänzt
 - `APP_NAME` als konfigurierbare `.env`-Variable – alle hardcodierten App-Namen ersetzt
 - Setup-Wizard `/setup` – Ersteinrichtung komplett im Browser (Systemprüfung, Konfiguration, Migration, Admin anlegen)
 - Auto-Redirect zu `/setup` bei Erstinstallation (kein Admin vorhanden)
@@ -36,3 +37,4 @@
 - Login mit CSRF-Schutz, Honeypot und Brute-Force-Schutz
 - Docker Image auf GHCR: `ghcr.io/sopima/sopima:latest`
 - CI/CD via GitHub Actions
+
