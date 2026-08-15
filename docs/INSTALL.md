@@ -98,11 +98,35 @@ Der Wizard führt durch:
 
 ## Docker
 
+### 1. Konfigurationsdatei anlegen
+
+```bash
+cp .env.example env
+nano env
+```
+
+Mindestens setzen:
+
+```env
+APP_NAME=Sopima
+APP_URL=http://ihre-domain.example.com:8080
+APP_SECRET=
+DB_SQLITE_PATH=/var/www/html/storage/database/sopima.sqlite
+```
+
+`APP_SECRET` kann leer gelassen werden – der Setup-Wizard generiert es automatisch.
+
+### 2. Container starten
+
 ```bash
 docker compose up -d
 ```
 
-Danach `http://localhost:8080/setup` aufrufen.
+### 3. Setup aufrufen
+
+`http://ihre-domain.example.com:8080/setup` im Browser öffnen.
+
+Der Wizard erkennt die vorhandene Konfiguration und führt durch Migration und Admin-Anlegen.
 
 ---
 
