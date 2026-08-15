@@ -201,6 +201,12 @@ $logCount     = count($comm_log ?? []);
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;">Kategorie</div>
             <div style="font-size:.9rem;"><?php echo htmlspecialchars($contract['category_name'] ?? '–'); ?></div>
         </div>
+        <?php if ($contract['plan']): ?>
+        <div>
+            <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;">Tarif</div>
+            <div style="font-size:.9rem;"><?php echo htmlspecialchars($contract['plan']); ?></div>
+        </div>
+        <?php endif; ?>
         <?php if ($contract['description']): ?>
         <div style="grid-column:span 3;">
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;">Beschreibung</div>
