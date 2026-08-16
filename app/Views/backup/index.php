@@ -6,9 +6,6 @@
     <a href="/settings?tab=general" class="btn btn-outline">
         <i class="ti ti-adjustments"></i> <?php echo __('settings.general'); ?>
     </a>
-    <a href="/settings?tab=general" class="btn btn-outline">
-        <i class="ti ti-adjustments"></i> <?php echo __('settings.general'); ?>
-    </a>
     <a href="/settings?tab=users" class="btn btn-outline">
         <i class="ti ti-users"></i><?php echo __('settings.users'); ?>
     </a>
@@ -88,7 +85,7 @@
                         <span style="font-size:.78rem;opacity:.45;">.json</span>
                         <input type="file" name="backup_file" accept=".json" required
                                style="position:absolute;width:1px;height:1px;opacity:0;"
-                               onchange="document.getElementById('file-label').textContent = this.files[0]?.name ?? '<?php echo __(\'cf.file.no_file\'); ?>';">
+                               onchange="document.getElementById('file-label').textContent = this.files[0]?.name ?? this.dataset.nofile;" data-nofile="<?php echo htmlspecialchars(__('cf.file.no_file')); ?>">
                     </label>
                     <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem;">
                         <?php echo APP_NAME; ?> <?php echo __('backup.file_hint'); ?>
