@@ -1,15 +1,15 @@
 <div class="page-header">
-    <h2>Einstellungen</h2>
+    <h2><?php echo __('settings.title'); ?></h2>
 </div>
 
 <div style="display:flex;gap:.5rem;margin-bottom:1.5rem;">
     <a href="/settings?tab=users" class="btn <?php echo $tab === 'users' ? 'btn-primary' : 'btn-outline'; ?>">
-        <i class="ti ti-users"></i> Benutzer
+        <i class="ti ti-users"></i><?php echo __('settings.users'); ?>
     </a>
     <a href="/settings?tab=tokens" class="btn <?php echo $tab === 'tokens' ? 'btn-primary' : 'btn-outline'; ?>">
-        <i class="ti ti-key"></i> API-Tokens
+        <i class="ti ti-key"></i><?php echo __('settings.tokens'); ?>
     </a>
     <a href="/backup" class="btn btn-outline">
-        <i class="ti ti-database"></i> Datensicherung
+        <i class="ti ti-database"></i><?php echo __('settings.backup'); ?>
     </a>
 </div>

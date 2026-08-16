@@ -1,6 +1,6 @@
 <div class="page-header">
-    <h2>Benutzer</h2>
-    <a href="/settings?tab=users&action=create" class="btn btn-primary"><i class="ti ti-plus"></i> Benutzer</a>
+    <h2><?php echo __('users.title'); ?></h2>
+    <a href="/settings?tab=users&action=create" class="btn btn-primary"><i class="ti ti-plus"></i><?php echo __('users.add'); ?></a>
 </div>
 
 <div class="card">
@@ -8,11 +8,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>E-Mail</th>
-                    <th>Rolle</th>
-                    <th>Mandanten</th>
-                    <th>Status</th>
+                    <th><?php echo __('users.col.name'); ?></th>
+                    <th><?php echo __('users.col.email'); ?></th>
+                    <th><?php echo __('users.col.role'); ?></th>
+                    <th><?php echo __('users.col.clients'); ?></th>
+                    <th><?php echo __('users.col.status'); ?></th>
                     <th></th>
                 </tr>
             </thead>
@@ -29,13 +29,13 @@
                     <td style="font-size:.82rem;color:var(--text-muted)"><?php echo htmlspecialchars($u['client_names'] ?? '–'); ?></td>
                     <td>
                         <span class="badge <?php echo $u['active'] ? 'badge-aktiv' : 'badge-abgelaufen'; ?>">
-                            <?php echo $u['active'] ? 'Aktiv' : 'Inaktiv'; ?>
+                            <?php echo $u['active'] ? __('users.active') : __('users.inactive'); ?>
                         </span>
                     </td>
                     <td style="white-space:nowrap;">
                         <a href="/settings?tab=users&action=edit&id=<?php echo $u['id']; ?>" class="btn btn-outline" style="padding:.3rem .6rem;"><i class="ti ti-edit"></i></a>
                         <?php if ($u['id'] != $_SESSION['user_id']): ?>
-                        <form method="POST" action="/settings?tab=users" style="display:inline;" onsubmit="return confirm('Benutzer löschen?')">
+                        <form method="POST" action="/settings?tab=users" style="display:inline;" onsubmit="return confirm(this.dataset.confirm)" data-confirm="<?php echo __('users.confirm_delete'); ?>">
                             <input type="hidden" name="action" value="delete">
                             <input type="hidden" name="id" value="<?php echo $u['id']; ?>">
                             <button type="submit" class="btn btn-danger" style="padding:.3rem .6rem;"><i class="ti ti-trash"></i></button>
