@@ -2,15 +2,15 @@
     <div class="stat-card c-indigo">
         <div class="stat-glow"></div>
         <div class="stat-icon"><i class="ti ti-file-description"></i></div>
-        <div class="stat-label">Verträge gesamt</div>
+        <div class="stat-label"><?php echo __('dashboard.contracts_total'); ?></div>
         <div class="stat-value"><?php echo $totalContracts; ?></div>
-        <div class="stat-sub">alle Mandanten</div>
+        <div class="stat-sub"><?php echo __('dashboard.all_clients'); ?></div>
         <div class="stat-accent"></div>
     </div>
     <div class="stat-card success">
         <div class="stat-glow"></div>
         <div class="stat-icon"><i class="ti ti-check"></i></div>
-        <div class="stat-label">Aktiv</div>
+        <div class="stat-label"><?php echo __('dashboard.active'); ?></div>
         <div class="stat-value"><?php echo $activeContracts; ?></div>
         <div class="stat-sub">€ <?php echo number_format($totalValue, 0, ',', '.'); ?> / Jahr</div>
         <div class="stat-accent"></div>
@@ -18,17 +18,17 @@
     <div class="stat-card warn">
         <div class="stat-glow"></div>
         <div class="stat-icon"><i class="ti ti-clock"></i></div>
-        <div class="stat-label">Läuft bald ab</div>
+        <div class="stat-label"><?php echo __('dashboard.expiring_soon'); ?></div>
         <div class="stat-value"><?php echo $expiringSoon; ?></div>
-        <div class="stat-sub">in 30 Tagen</div>
+        <div class="stat-sub"><?php echo __('dashboard.in_30_days'); ?></div>
         <div class="stat-accent"></div>
     </div>
     <div class="stat-card danger">
         <div class="stat-glow"></div>
         <div class="stat-icon"><i class="ti ti-alert-triangle"></i></div>
-        <div class="stat-label">Überfällig</div>
+        <div class="stat-label"><?php echo __('dashboard.overdue'); ?></div>
         <div class="stat-value"><?php echo $overdue; ?></div>
-        <div class="stat-sub">Kündigung verpasst</div>
+        <div class="stat-sub"><?php echo __('dashboard.missed_cancellation'); ?></div>
         <div class="stat-accent"></div>
     </div>
 </div>
@@ -36,11 +36,11 @@
 <div class="two-col">
     <div class="card">
         <div class="card-head">
-            <span><i class="ti ti-alert-triangle" style="vertical-align:-2px;margin-right:4px;color:#fbbf24"></i>Fristen</span>
-            <a href="/contracts">Alle →</a>
+            <span><i class="ti ti-alert-triangle" style="vertical-align:-2px;margin-right:4px;color:#fbbf24"></i><?php echo __('dashboard.deadlines'); ?></span>
+            <a href="/contracts"><?php echo __('dashboard.all'); ?></a>
         </div>
         <?php if (empty($deadlines)): ?>
-            <div style="padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: .88rem;">Keine anstehenden Fristen.</div>
+            <div style="padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: .88rem;"><?php echo __('dashboard.no_deadlines'); ?></div>
         <?php else: ?>
             <?php foreach ($deadlines as $d):
                 $days = (int)$d['days_left'];
@@ -51,9 +51,9 @@
                 <div class="alert-dot <?php echo $dotClass; ?>"></div>
                 <div class="alert-info">
                     <div class="alert-title"><?php echo htmlspecialchars($d['title']); ?></div>
-                    <div class="alert-meta"><?php echo htmlspecialchars($d['client_name']); ?> · Kündigung bis <?php echo $d['notice_date']; ?></div>
+                    <div class="alert-meta"><?php echo htmlspecialchars($d['client_name']); ?> · <?php echo __('dashboard.cancellation_until'); ?> <?php echo $d['notice_date']; ?></div>
                 </div>
-                <span class="badge <?php echo $badgeClass; ?>"><?php echo $days; ?> Tage</span>
+                <span class="badge <?php echo $badgeClass; ?>"><?php echo $days; ?> <?php echo __('dashboard.days'); ?></span>
             </div></a>
             <?php endforeach; ?>
         <?php endif; ?>
@@ -61,11 +61,11 @@
 
     <div class="card">
         <div class="card-head">
-            <span><i class="ti ti-eye" style="vertical-align:-2px;margin-right:4px;color:#a5b4fc"></i>Zuletzt angesehen</span>
-            <a href="/contracts?action=create">+ Vertrag</a>
+            <span><i class="ti ti-eye" style="vertical-align:-2px;margin-right:4px;color:#a5b4fc"></i><?php echo __('dashboard.recently_viewed'); ?></span>
+            <a href="/contracts?action=create"><?php echo __('dashboard.add_contract'); ?></a>
         </div>
         <?php if (empty($recentContracts)): ?>
-            <div style="padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: .88rem;">Noch keine Verträge angesehen.</div>
+            <div style="padding: 1.5rem; text-align: center; color: var(--text-muted); font-size: .88rem;"><?php echo __('dashboard.no_recent'); ?></div>
         <?php else: ?>
             <?php foreach ($recentContracts as $c): ?>
             <a href="/contracts?action=view&id=<?php echo $c['id']; ?>" style="text-decoration:none;color:inherit;"><div class="contract-row" style="cursor:pointer;">
@@ -86,18 +86,18 @@
 
 <div class="card" style="margin-top:1.5rem;">
     <div class="card-head">
-        <span><i class="ti ti-coins" style="vertical-align:-2px;margin-right:4px;color:#34d399"></i>Monatliche Kosten</span>
+        <span><i class="ti ti-coins" style="vertical-align:-2px;margin-right:4px;color:#34d399"></i><?php echo __('dashboard.monthly_costs'); ?></span>
     </div>
     <?php if (empty($costByClient)): ?>
-        <div style="padding:1.5rem;text-align:center;color:var(--text-muted);font-size:.88rem;">Keine aktiven Verträge mit laufenden Kosten.</div>
+        <div style="padding:1.5rem;text-align:center;color:var(--text-muted);font-size:.88rem;"><?php echo __('dashboard.no_costs'); ?></div>
     <?php else: ?>
         <div style="display:flex;flex-wrap:wrap;gap:1.5rem;padding:1.25rem 1.5rem;">
         <?php foreach ($costByClient as $cid => $data): ?>
             <div style="flex:1;min-width:220px;">
                 <div style="font-size:.78rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.75rem;">
-                    <?php echo htmlspecialchars($clientNames[$cid] ?? 'Mandant ' . $cid); ?>
+                    <?php echo htmlspecialchars($clientNames[$cid] ?? __('dashboard.client') . ' ' . $cid); ?>
                 </div>
-                <?php foreach (['ausgabe' => ['label' => 'Ausgaben', 'prefix' => '− € ', 'color' => '#f87171'], 'einnahme' => ['label' => 'Einnahmen', 'prefix' => '+ € ', 'color' => '#34d399']] as $dir => $cfg): ?>
+                <?php foreach (['ausgabe' => ['label' => __('dashboard.expenses'), 'prefix' => '− € ', 'color' => '#f87171'], 'einnahme' => ['label' => __('dashboard.income'), 'prefix' => '+ € ', 'color' => '#34d399']] as $dir => $cfg): ?>
                 <?php if (empty($data[$dir]['rows'])) continue; ?>
                 <div style="margin-bottom:1rem;">
                     <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin-bottom:.25rem;"><?php echo $cfg['label']; ?></div>
