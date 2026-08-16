@@ -75,13 +75,13 @@ class MailService
 
     public static function sendPasswordReset(string $toEmail, string $toName, string $resetUrl): bool
     {
-        $subject = 'Passwort zurücksetzen – ' . APP_NAME;
+        $subject = str_replace(':app', APP_NAME, __('mail.reset.subject'));
         $body    = self::wrapTemplate(
             $toName,
-            'Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts gestellt.',
-            'Passwort zurücksetzen',
-            'Klicken Sie auf den Button. Der Link ist 1 Stunde gültig.',
-            'Passwort zurücksetzen',
+            __('mail.reset.intro'),
+            __('mail.reset.btn'),
+            __('mail.reset.hint'),
+            __('mail.reset.btn'),
             $resetUrl
         );
         return self::send($toEmail, $toName, $subject, $body);

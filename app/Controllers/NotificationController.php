@@ -65,10 +65,10 @@ if (isset($_GET['action']) && $_GET['action'] === 'test' && $_SERVER['REQUEST_ME
         curl_exec($ch); $code = curl_getinfo($ch, CURLINFO_HTTP_CODE); curl_close($ch);
         $sent = $code >= 200 && $code < 300; if (!$sent) $error = "HTTP $code";
     } else {
-        $error = 'Konfiguration unvollständig – bitte zuerst speichern';
+        $error = __('notify.test.incomplete');
     }
 
-    echo json_encode(['ok' => $sent, 'msg' => $sent ? 'Testnachricht gesendet ✓' : ($error ?: 'Fehler beim Senden')]);
+    echo json_encode(['ok' => $sent, 'msg' => $sent ? __('notify.test.sent') : ($error ?: __('notify.test.error'))]);
     exit;
 }
 

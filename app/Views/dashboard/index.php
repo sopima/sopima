@@ -109,7 +109,7 @@
                     <div style="font-size:.78rem;color:var(--text-muted);cursor:pointer;margin-bottom:.25rem;user-select:none;"
                          onclick="var el=document.getElementById('<?php echo $toggleId; ?>');var arr=document.getElementById('arr-<?php echo $toggleId; ?>');el.style.display=el.style.display==='none'?'block':'none';arr.textContent=el.style.display==='none'?'▸':'▾';">
                         <span id="arr-<?php echo $toggleId; ?>">▸</span>
-                        <?php echo count($data[$dir]['rows']); ?> Vertrag<?php echo count($data[$dir]['rows']) !== 1 ? 'ä' : ''; ?>
+                        <?php echo count($data[$dir]['rows']); ?> <?php echo count($data[$dir]['rows']) !== 1 ? __('dashboard.contracts_count_pl') : __('dashboard.contracts_count'); ?>
                     </div>
                     <div id="<?php echo $toggleId; ?>" style="display:none;">
                     <?php foreach ($data[$dir]['rows'] as $r): ?>

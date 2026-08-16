@@ -510,4 +510,18 @@ return [
     'tokens.show.perms' => 'Uprawnienia',
     'tokens.show.created' => 'Utworzono',
     'tokens.show.all' => 'Wszyscy',
+
+    // Remaining strings
+    'backup.error.invalid' => 'Nieprawidłowy lub uszkodzony plik kopii zapasowej.',
+    'backup.success.import' => 'Import zakończony pomyślnie. Tokeny API muszą zostać odtworzone.',
+    'notify.test.incomplete' => 'Konfiguracja niekompletna – najpierw zapisz',
+    'notify.test.sent' => 'Wiadomość testowa wysłana ✓',
+    'notify.test.error' => 'Błąd podczas wysyłania',
+    'cf.file.no_file' => 'Wybierz plik',
+    'dashboard.contracts_count' => 'Umowa',
+    'dashboard.contracts_count_pl' => 'Umowy',
+    'mail.reset.subject' => 'Reset hasła – :app',
+    'mail.reset.intro' => 'Złożyłeś prośbę o reset hasła.',
+    'mail.reset.btn' => 'Zresetuj hasło',
+    'mail.reset.hint' => 'Kliknij przycisk. Link jest ważny przez 1 godzinę.',
 ];

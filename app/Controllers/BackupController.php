@@ -61,7 +61,7 @@ if ($action === 'import' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents($_FILES['backup_file']['tmp_name']);
         $data = json_decode($json, true);
         if (!$data || !isset($data['meta']['version'])) {
-            $errors[] = 'Ungültige oder beschädigte Backup-Datei.';
+            $errors[] = __('backup.error.invalid');
         }
     }
 
@@ -142,7 +142,7 @@ if ($action === 'import' && $_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $db->commit();
-            $success = 'Import erfolgreich abgeschlossen. API-Tokens müssen neu erstellt werden.';
+            $success = __('backup.success.import');
         } catch (Exception $e) {
             $db->rollBack();
             $errors[] = 'Fehler beim Import: ' . $e->getMessage();

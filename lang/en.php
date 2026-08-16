@@ -522,4 +522,18 @@ return [
     'tokens.show.perms' => 'Permissions',
     'tokens.show.created' => 'Created',
     'tokens.show.all' => 'All',
+
+    // Remaining strings
+    'backup.error.invalid' => 'Invalid or corrupted backup file.',
+    'backup.success.import' => 'Import completed successfully. API tokens must be recreated.',
+    'notify.test.incomplete' => 'Configuration incomplete – please save first',
+    'notify.test.sent' => 'Test message sent ✓',
+    'notify.test.error' => 'Error sending message',
+    'cf.file.no_file' => 'Choose file',
+    'dashboard.contracts_count' => 'Contract',
+    'dashboard.contracts_count_pl' => 'Contracts',
+    'mail.reset.subject' => 'Password reset – :app',
+    'mail.reset.intro' => 'You have requested a password reset.',
+    'mail.reset.btn' => 'Reset password',
+    'mail.reset.hint' => 'Click the button. The link is valid for 1 hour.',
 ];

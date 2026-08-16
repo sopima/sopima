@@ -523,4 +523,18 @@ return [
     'tokens.show.perms' => 'Berechtigungen',
     'tokens.show.created' => 'Erstellt',
     'tokens.show.all' => 'Alle',
+
+    // Remaining strings
+    'backup.error.invalid' => 'Ungültige oder beschädigte Backup-Datei.',
+    'backup.success.import' => 'Import erfolgreich abgeschlossen. API-Tokens müssen neu erstellt werden.',
+    'notify.test.incomplete' => 'Konfiguration unvollständig – bitte zuerst speichern',
+    'notify.test.sent' => 'Testnachricht gesendet ✓',
+    'notify.test.error' => 'Fehler beim Senden',
+    'cf.file.no_file' => 'Datei auswählen',
+    'dashboard.contracts_count' => 'Vertrag',
+    'dashboard.contracts_count_pl' => 'Verträge',
+    'mail.reset.subject' => 'Passwort zurücksetzen – :app',
+    'mail.reset.intro' => 'Sie haben eine Anfrage zum Zurücksetzen Ihres Passworts gestellt.',
+    'mail.reset.btn' => 'Passwort zurücksetzen',
+    'mail.reset.hint' => 'Klicken Sie auf den Button. Der Link ist 1 Stunde gültig.',
 ];

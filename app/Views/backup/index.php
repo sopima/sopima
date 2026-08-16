@@ -88,7 +88,7 @@
                         <span style="font-size:.78rem;opacity:.45;">.json</span>
                         <input type="file" name="backup_file" accept=".json" required
                                style="position:absolute;width:1px;height:1px;opacity:0;"
-                               onchange="document.getElementById('file-label').textContent = this.files[0]?.name ?? 'Datei auswählen';">
+                               onchange="document.getElementById('file-label').textContent = this.files[0]?.name ?? '<?php echo __(\'cf.file.no_file\'); ?>';">
                     </label>
                     <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem;">
                         <?php echo APP_NAME; ?> <?php echo __('backup.file_hint'); ?>

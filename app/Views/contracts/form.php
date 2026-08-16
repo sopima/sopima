@@ -339,7 +339,10 @@
 window.cf_i18n = {
     custom_label_ph: <?php echo json_encode(__('cf.ph.custom_label')); ?>,
     custom_value_ph: <?php echo json_encode(__('cf.ph.custom_value')); ?>,
-    person_role_ph:  <?php echo json_encode(__('cf.ph.person_role')); ?>
+    person_role_ph:  <?php echo json_encode(__('cf.ph.person_role')); ?>,
+    type_text:       <?php echo json_encode(__('cf.custom.text')); ?>,
+    type_number:     <?php echo json_encode(__('cf.custom.number')); ?>,
+    type_date:       <?php echo json_encode(__('cf.custom.date')); ?>
 };
 </script>
 <script>
@@ -579,7 +582,7 @@ function syncInputType(sel) {
 var editFileInput = document.getElementById("doc-file-input-edit");
 if (editFileInput) {
     editFileInput.addEventListener("change", function(){
-        var name = this.files[0] ? this.files[0].name : "Keine Datei gewählt";
+        var name = this.files[0] ? this.files[0].name : "<?php echo __('cf.doc.no_file'); ?>";
         document.getElementById("doc-file-label-edit").innerHTML = '<i class="ti ti-paperclip" style="margin-right:.3rem;"></i>' + name;
     });
 }
