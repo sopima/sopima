@@ -20,14 +20,14 @@
                 <input type="text" name="website" value="" tabindex="-1" autocomplete="off">
             </div>
             <div class="form-group">
-                <label for="email">E-Mail</label>
+                <label for="email"><?php echo __('login.email'); ?></label>
                 <input type="email" id="email" name="email" required autofocus autocomplete="email">
             </div>
             <div class="form-group">
-                <label for="password">Passwort</label>
+                <label for="password"><?php echo __('login.password'); ?></label>
                 <input type="password" id="password" name="password" required autocomplete="current-password">
             </div>
-            <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+            <button type="submit" class="btn btn-primary btn-block"><?php echo __('login.submit'); ?></button>
         </form>
     </div>
 </body>

@@ -127,4 +127,20 @@ return [
     'topbar.notifications' => 'Notifications',
     'topbar.dashboard'     => 'Dashboard',
     'topbar.search'        => 'Search contracts…',
+
+    // Login
+    'login.email'    => 'Email',
+    'login.password' => 'Password',
+    'login.submit'   => 'Sign In',
+
+    // Login
+    'login.email'    => 'Email',
+    'login.password' => 'Password',
+    'login.submit'   => 'Sign In',
+
+    // Auth errors
+    'auth.invalid_request' => 'Invalid request. Please reload the page.',
+    'auth.too_many'        => 'Too many failed login attempts. Please wait 15 minutes.',
+    'auth.empty_fields'    => 'Please enter your email and password.',
+    'auth.wrong'           => 'Email or password incorrect.',
 ];

@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // 1. CSRF prüfen
     if (empty($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
-        $error = 'Ungültige Anfrage. Bitte Seite neu laden.';
+        $error = __('auth.invalid_request');
         require __DIR__ . '/../Views/layouts/login.php';
         exit;
     }
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $attempts = (int)$stmt->fetchColumn();
 
     if ($attempts >= 5) {
-        $error = 'Zu viele fehlgeschlagene Anmeldeversuche. Bitte 15 Minuten warten.';
+        $error = __('auth.too_many');
         require __DIR__ . '/../Views/layouts/login.php';
         exit;
     }
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (empty($email) || empty($password)) {
-        $error = 'Bitte E-Mail und Passwort eingeben.';
+        $error = __('auth.empty_fields');
         require __DIR__ . '/../Views/layouts/login.php';
         exit;
     }
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Fehlversuch protokollieren
     $db->prepare("INSERT INTO login_attempts (ip, attempted_at) VALUES (?, datetime('now'))")->execute([$ip]);
-    $error = 'E-Mail oder Passwort falsch.';
+    $error = __('auth.wrong');
 }
 
 // CSRF-Token sicherstellen (nach POST-Fehler)

@@ -128,4 +128,20 @@ return [
     'topbar.notifications' => 'Benachrichtigungen',
     'topbar.dashboard'     => 'Dashboard',
     'topbar.search'        => 'Verträge suchen…',
+
+    // Login
+    'login.email'    => 'E-Mail',
+    'login.password' => 'Passwort',
+    'login.submit'   => 'Anmelden',
+
+    // Login
+    'login.email'    => 'E-Mail',
+    'login.password' => 'Passwort',
+    'login.submit'   => 'Anmelden',
+
+    // Auth errors
+    'auth.invalid_request' => 'Ungültige Anfrage. Bitte Seite neu laden.',
+    'auth.too_many'        => 'Zu viele fehlgeschlagene Anmeldeversuche. Bitte 15 Minuten warten.',
+    'auth.empty_fields'    => 'Bitte E-Mail und Passwort eingeben.',
+    'auth.wrong'           => 'E-Mail oder Passwort falsch.',
 ];
