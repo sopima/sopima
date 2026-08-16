@@ -34,11 +34,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($current as $k => $v) {
             $_ENV[$k] = $v;
         }
-        $saved = true;
+        header('Location: /settings?tab=general&saved=1');
+        exit;
     } else {
         $error = true;
     }
 }
+$saved = isset($_GET['saved']);
 
 // Aktuelle Werte laden
 $env = [];
@@ -51,6 +53,7 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
 
 <div class="page-header">
     <h2><?php echo __('settings.general.title'); ?></h2>
+    <a href="/settings" class="btn btn-outline"><i class="ti ti-arrow-left"></i> <?php echo __('cf.back'); ?></a>
 </div>
 
 <?php if ($saved): ?>

@@ -6,9 +6,6 @@
     <a href="/settings?tab=general" class="btn <?php echo $tab === 'general' ? 'btn-primary' : 'btn-outline'; ?>">
         <i class="ti ti-adjustments"></i> <?php echo __('settings.general'); ?>
     </a>
-    <a href="/settings?tab=general" class="btn <?php echo $tab === 'general' ? 'btn-primary' : 'btn-outline'; ?>">
-        <i class="ti ti-adjustments"></i> <?php echo __('settings.general'); ?>
-    </a>
     <a href="/settings?tab=users" class="btn <?php echo $tab === 'users' ? 'btn-primary' : 'btn-outline'; ?>">
         <i class="ti ti-users"></i><?php echo __('settings.users'); ?>
     </a>
