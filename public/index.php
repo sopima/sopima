@@ -26,6 +26,8 @@ require_once BASE_PATH . '/vendor/autoload.php';
 require_once BASE_PATH . '/app/Services/MailService.php';
 require_once BASE_PATH . '/app/Helpers/db.php';
 require_once BASE_PATH . '/app/Helpers/auth.php';
+require_once BASE_PATH . '/app/Helpers/i18n.php';
+load_lang(env('APP_LOCALE', 'de'));
 
 ini_set("session.gc_maxlifetime", 86400);
 session_set_cookie_params(["lifetime" => 86400, "path" => "/", "secure" => false, "httponly" => true, "samesite" => "Lax"]);

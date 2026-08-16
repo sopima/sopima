@@ -54,6 +54,18 @@ docker compose up -d
 # open APP_URL/setup in your browser
 ```
 
+## Translations
+
+The UI is currently German only. To add a new language, copy `lang/de.php` to `lang/en.php` (or your locale code) and translate the values. Set `APP_LOCALE=en` in `.env` to activate it.
+
+Translation PRs are very welcome — this is a great first contribution.
+
+## Translations
+
+The UI is currently German only. To add a new language, copy `lang/de.php` to `lang/en.php` (or your locale code) and translate the values. Set `APP_LOCALE=en` in `.env` to activate it.
+
+Translation PRs are very welcome — this is a great first contribution.
+
 ## Questions
 
 Open a GitHub Discussion or an Issue — we're happy to help.
