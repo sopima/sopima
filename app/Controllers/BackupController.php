@@ -7,7 +7,7 @@ $action = $_GET['action'] ?? 'index';
 if ($action === 'export-json' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = collectBackupData($db, $user);
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    $filename = 'contracthub-backup-' . date('Y-m-d_His') . '.json';
+    $filename = 'sopima-backup-' . date('Y-m-d_His') . '.json';
     header('Content-Type: application/json; charset=utf-8');
     header('Content-Disposition: attachment; filename="' . $filename . '"');
     header('Content-Length: ' . strlen($json));
@@ -32,7 +32,7 @@ if ($action === 'export-csv' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         fclose($fp);
     }
 
-    $zipFile = sys_get_temp_dir() . '/contracthub-backup-' . date('Y-m-d_His') . '.zip';
+    $zipFile = sys_get_temp_dir() . '/sopima-backup-' . date('Y-m-d_His') . '.zip';
     $zip = new ZipArchive();
     $zip->open($zipFile, ZipArchive::CREATE);
     foreach (glob($tmpDir . '/*.csv') as $csv) {
