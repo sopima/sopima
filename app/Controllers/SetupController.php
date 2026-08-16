@@ -34,6 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
     $mailPass  = trim($_POST['mail_pass']  ?? '');
     $mailFrom  = trim($_POST['mail_from']  ?? '');
     $mailName  = trim($_POST['mail_name']  ?? $appName);
+    $appLocale = trim($_POST['app_locale'] ?? 'de');
 
     if (empty($appUrl))    $errors[] = __('setup.error.app_url');
     if (empty($appSecret)) $errors[] = __('setup.error.app_secret');
@@ -101,7 +102,31 @@ if ($step === 3) {
             $pdo->prepare("INSERT INTO _migrations (filename) VALUES (?)")->execute([$name]);
             $migrationLog[] = ['status' => 'ok', 'name' => $name];
         }
-    } catch (Throwable $e) {
+    
+    // Seed-Daten sprachabhängig einfügen
+    $locale = $_ENV['APP_LOCALE'] ?? 'de';
+    $already = $pdo->query("SELECT COUNT(*) FROM clients")->fetchColumn();
+    if ((int)$already === 0) {
+        if ($locale === 'en') {
+            $clientSeeds = [['Private', 'privat'],['My Company', 'firma'],['My Club', 'verein']];
+            $categorySeeds = [['Insurance','#3b82f6'],['Rent','#10b981'],['Software / Subscription','#8b5cf6'],['Energy','#f59e0b'],['Telecommunications','#ef4444'],['Services','#6366f1'],['Other','#6b7280']];
+            $typeSeeds = ['Private','Company','HOA','Club'];
+        } else {
+            $clientSeeds = [['Privat', 'privat'],['Meine Firma', 'firma'],['Mein Verein', 'verein']];
+            $categorySeeds = [['Versicherung','#3b82f6'],['Miete','#10b981'],['Software / Abo','#8b5cf6'],['Energie','#f59e0b'],['Telekommunikation','#ef4444'],['Dienstleistung','#6366f1'],['Sonstiges','#6b7280']];
+            $typeSeeds = ['Privat','Firma','WEG','Verein'];
+        }
+        foreach ($clientSeeds as [$n, $t]) {
+            $pdo->prepare("INSERT INTO clients (name, type) VALUES (?, ?)")->execute([$n, $t]);
+        }
+        foreach ($categorySeeds as [$n, $c]) {
+            $pdo->prepare("INSERT INTO contract_categories (name, color) VALUES (?, ?)")->execute([$n, $c]);
+        }
+        foreach ($typeSeeds as $t) {
+            $pdo->prepare("INSERT OR IGNORE INTO client_types (name) VALUES (?)")->execute([$t]);
+        }
+    }
+} catch (Throwable $e) {
         $errors[] = 'Migration fehlgeschlagen: ' . $e->getMessage();
     }
 }
@@ -236,6 +261,20 @@ $defaultPath = BASE_PATH . '/storage/database/sopima.sqlite';
                     <input type="text" name="app_secret" id="app_secret" value="<?php echo htmlspecialchars($_POST['app_secret'] ?? $secret); ?>" required style="flex:1;font-family:monospace;font-size:.85rem;">
                     <button type="button" class="btn btn-outline" onclick="document.getElementById('app_secret').value='<?php echo bin2hex(random_bytes(32)); ?>'">↺</button>
                 </div>
+            </div>
+            <div class="form-group">
+                <label><?php echo __('setup.label.locale'); ?></label>
+                <select name="app_locale">
+                    <option value="de" <?php echo ($_POST['app_locale'] ?? 'de') === 'de' ? 'selected' : ''; ?>>Deutsch</option>
+                    <option value="en" <?php echo ($_POST['app_locale'] ?? 'de') === 'en' ? 'selected' : ''; ?>>English</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label><?php echo __('setup.label.locale'); ?></label>
+                <select name="app_locale">
+                    <option value="de" <?php echo ($_POST['app_locale'] ?? 'de') === 'de' ? 'selected' : ''; ?>>Deutsch</option>
+                    <option value="en" <?php echo ($_POST['app_locale'] ?? 'de') === 'en' ? 'selected' : ''; ?>>English</option>
+                </select>
             </div>
             <div class="form-group">
                 <label><?php echo __('setup.label.sqlite_path'); ?></label>

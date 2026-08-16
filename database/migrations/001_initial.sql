@@ -66,15 +66,3 @@ CREATE TABLE IF NOT EXISTS sessions (
     created_at TEXT DEFAULT (datetime('now')),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
-INSERT INTO contract_categories (name, color) VALUES
-('Versicherung', '#3b82f6'),
-('Miete', '#10b981'),
-('Software / Abo', '#8b5cf6'),
-('Energie', '#f59e0b'),
-('Telekommunikation', '#ef4444'),
-('Dienstleistung', '#6366f1'),
-('Sonstiges', '#6b7280');
-INSERT INTO clients (name, type) VALUES
-('Privat', 'privat'),
-('Meine Firma', 'firma'),
-('Mein Verein', 'verein');

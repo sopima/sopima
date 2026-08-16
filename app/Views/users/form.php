@@ -1,6 +1,6 @@
 <div class="page-header">
-    <h2><?php echo $editUser ? 'Benutzer bearbeiten' : 'Neuer Benutzer'; ?></h2>
-    <a href="/settings?tab=users" class="btn btn-outline"><i class="ti ti-arrow-left"></i> Zurück</a>
+    <h2><?php echo $editUser ? __('users.form.edit') : __('users.form.new'); ?></h2>
+    <a href="/settings?tab=users" class="btn btn-outline"><i class="ti ti-arrow-left"></i><?php echo __('users.form.back'); ?></a>
 </div>
 
 <div class="card" style="padding: 1.5rem;">
@@ -12,22 +12,22 @@
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-                <label>Name *</label>
+                <label><?php echo __('users.form.name'); ?></label>
                 <input type="text" name="name" required value="<?php echo htmlspecialchars($editUser['name'] ?? ''); ?>">
             </div>
             <div class="form-group">
-                <label>E-Mail *</label>
+                <label><?php echo __('users.form.email'); ?></label>
                 <input type="email" name="email" required value="<?php echo htmlspecialchars($editUser['email'] ?? ''); ?>">
             </div>
             <div class="form-group">
-                <label><?php echo $editUser ? 'Neues Passwort (leer = unverändert)' : 'Passwort *'; ?></label>
+                <label><?php echo $editUser ? __('users.form.password_edit') : __('users.form.password'); ?></label>
                 <input type="password" name="password" <?php echo $editUser ? '' : 'required'; ?>>
             </div>
             <div class="form-group">
-                <label>Rolle *</label>
+                <label><?php echo __('users.form.role'); ?></label>
                 <select name="role" required>
-                    <option value="user"  <?php echo ($editUser['role'] ?? 'user') === 'user'  ? 'selected' : ''; ?>>Benutzer</option>
-                    <option value="admin" <?php echo ($editUser['role'] ?? '')      === 'admin' ? 'selected' : ''; ?>>Admin</option>
+                    <option value="user"  <?php echo ($editUser['role'] ?? 'user') === 'user'  ? 'selected' : ''; ?>><?php echo __('users.form.role_user'); ?></option>
+                    <option value="admin" <?php echo ($editUser['role'] ?? '')      === 'admin' ? 'selected' : ''; ?>><?php echo __('users.form.role_admin'); ?></option>
                 </select>
             </div>
         </div>
@@ -36,13 +36,13 @@
         <div class="form-group">
             <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--text-muted);">
                 <input type="checkbox" name="active" value="1" <?php echo $editUser['active'] ? 'checked' : ''; ?> style="width:auto;">
-                Benutzer aktiv
+                <?php echo __('users.form.active'); ?>
             </label>
         </div>
         <?php endif; ?>
 
         <div class="form-group" style="margin-top:.5rem;">
-            <label>Mandanten-Zugriff</label>
+            <label><?php echo __('users.form.clients'); ?></label>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.5rem;margin-top:.5rem;">
                 <?php foreach ($allClients as $cl): ?>
                 <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--text-muted);background:rgba(255,255,255,.05);padding:.5rem .75rem;border-radius:8px;border:1px solid rgba(255,255,255,.1);">
@@ -57,8 +57,8 @@
         </div>
 
         <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1rem;">
-            <a href="/settings?tab=users" class="btn btn-outline">Abbrechen</a>
-            <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i> Speichern</button>
+            <a href="/settings?tab=users" class="btn btn-outline"><?php echo __('users.form.cancel'); ?></a>
+            <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i><?php echo __('users.form.save'); ?></button>
         </div>
     </form>
 </div>
