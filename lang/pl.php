@@ -480,4 +480,22 @@ return [
     'cd.comm.dir.eingehend' => 'Przychodzące',
     'cd.comm.ph.subject' => 'np. Wypowiedzenie potwierdzone telefonicznie',
     'cd.comm.ph.note' => 'Treść rozmowy, wynik, następne kroki…',
+
+    // Settings general
+    'settings.general' => 'Ogólne',
+    'settings.general.title' => 'Ustawienia ogólne',
+    'settings.app_name' => 'Nazwa aplikacji',
+    'settings.app_url' => 'URL aplikacji',
+    'settings.app_locale' => 'Język',
+    'settings.smtp_title' => 'E-mail / SMTP',
+    'settings.smtp_host' => 'Host SMTP',
+    'settings.smtp_port' => 'Port',
+    'settings.smtp_user' => 'Użytkownik SMTP',
+    'settings.smtp_pass' => 'Hasło SMTP',
+    'settings.smtp_pass_hint' => 'Zostaw puste aby zachować',
+    'settings.mail_from' => 'E-mail nadawcy',
+    'settings.mail_name' => 'Nazwa nadawcy',
+    'settings.save' => 'Zapisz',
+    'settings.saved' => 'Ustawienia zapisane.',
+    'settings.error' => 'Nie można zapisać pliku .env.',
 ];

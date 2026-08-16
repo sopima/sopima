@@ -10,6 +10,8 @@ require __DIR__ . "/../Views/layouts/main.php";
 
 if ($tab === "tokens") {
     require __DIR__ . "/TokenController.php";
+} elseif ($tab === "general") {
+    require __DIR__ . "/../Views/settings/general.php";
 } else {
     $tab = "users";
     require __DIR__ . "/UserController.php";

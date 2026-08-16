@@ -493,4 +493,22 @@ return [
     'cd.comm.dir.eingehend' => 'Eingehend',
     'cd.comm.ph.subject' => 'z.B. Kündigung telefonisch bestätigt',
     'cd.comm.ph.note' => 'Gesprächsinhalt, Ergebnis, nächste Schritte…',
+
+    // Settings general
+    'settings.general' => 'Allgemein',
+    'settings.general.title' => 'Allgemeine Einstellungen',
+    'settings.app_name' => 'App-Name',
+    'settings.app_url' => 'App-URL',
+    'settings.app_locale' => 'Sprache',
+    'settings.smtp_title' => 'E-Mail / SMTP',
+    'settings.smtp_host' => 'SMTP-Host',
+    'settings.smtp_port' => 'Port',
+    'settings.smtp_user' => 'SMTP-Benutzername',
+    'settings.smtp_pass' => 'SMTP-Passwort',
+    'settings.smtp_pass_hint' => 'Leer lassen um beizubehalten',
+    'settings.mail_from' => 'Absender-E-Mail',
+    'settings.mail_name' => 'Absender-Name',
+    'settings.save' => 'Speichern',
+    'settings.saved' => 'Einstellungen gespeichert.',
+    'settings.error' => '.env konnte nicht geschrieben werden.',
 ];

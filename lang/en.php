@@ -492,4 +492,22 @@ return [
     'cd.comm.dir.eingehend' => 'Incoming',
     'cd.comm.ph.subject' => 'e.g. Cancellation confirmed by phone',
     'cd.comm.ph.note' => 'Content, result, next steps…',
+
+    // Settings general
+    'settings.general' => 'General',
+    'settings.general.title' => 'General Settings',
+    'settings.app_name' => 'App Name',
+    'settings.app_url' => 'App URL',
+    'settings.app_locale' => 'Language',
+    'settings.smtp_title' => 'Email / SMTP',
+    'settings.smtp_host' => 'SMTP Host',
+    'settings.smtp_port' => 'Port',
+    'settings.smtp_user' => 'SMTP Username',
+    'settings.smtp_pass' => 'SMTP Password',
+    'settings.smtp_pass_hint' => 'Leave blank to keep current',
+    'settings.mail_from' => 'Sender Email',
+    'settings.mail_name' => 'Sender Name',
+    'settings.save' => 'Save',
+    'settings.saved' => 'Settings saved.',
+    'settings.error' => 'Could not write .env file.',
 ];
