@@ -1,46 +1,48 @@
-# Sopima API – Dokumentation
+# Sopima API – Documentation
 
-## Übersicht
+## Overview
 
-Die Sopima API ermöglicht externen Systemen den Zugriff auf Verträge, Mandanten und Kategorien. Die API folgt REST-Prinzipien und kommuniziert ausschließlich über JSON.
+The Sopima API allows external systems to access contracts, clients and categories. The API follows REST principles and communicates exclusively via JSON.
 
 Base URL: `https://your-domain.example.com/api`
 
 ---
 
-## Authentifizierung
+## Authentication
 
-Alle API-Anfragen (außer `/api/health`) erfordern einen gültigen Bearer-Token im Authorization-Header:
+All API requests (except `/api/health`) require a valid Bearer token in the Authorization header:
 
     Authorization: Bearer <token>
 
-Tokens werden in Sopima unter Einstellungen > API-Tokens verwaltet.
+Tokens are managed in Sopima under Settings > API Tokens.
 
-### Berechtigungen
+### Permissions
 
-| Permission        | Beschreibung           |
-|-------------------|------------------------|
-| contracts.read    | Verträge abrufen       |
-| contracts.write   | Verträge anlegen       |
-| clients.read      | Mandanten abrufen      |
-| categories.read   | Kategorien abrufen     |
+| Permission        | Description              |
+|-------------------|--------------------------|
+| contracts.read    | Read contracts           |
+| contracts.write   | Create/update contracts  |
+| contracts.delete  | Delete contracts         |
+| clients.read      | Read clients             |
+| clients.write     | Create clients           |
+| categories.read   | Read categories          |
 
-### Fehler-Antworten Authentifizierung
+### Authentication errors
 
-Auth- und Berechtigungsfehler geben bewusst keinen Body zurück:
+Auth and permission errors intentionally return no body:
 
-    HTTP 401  (kein Token oder ungültiger Token)
-    HTTP 403  (fehlende Berechtigung)
+    HTTP 401  (no token or invalid token)
+    HTTP 403  (missing permission)
 
 ---
 
-## Endpunkte
+## Endpoints
 
 ---
 
 ### GET /api/health
 
-Health-Check für Uptime-Monitoring. Keine Authentifizierung erforderlich.
+Health check for uptime monitoring. No authentication required.
 
 Request:
     curl -s https://your-domain.example.com/api/health
@@ -52,9 +54,9 @@ Response 200:
 
 ### GET /api/clients
 
-Gibt alle aktiven Mandanten zurück.
+Returns all active clients.
 
-Berechtigung: clients.read
+Permission: clients.read
 
 Request:
     curl -s \
@@ -64,8 +66,8 @@ Request:
 Response 200:
     {
         "data": [
-            {"id": 1, "name": "Privat",      "type": "Privat",  "active": 1},
-            {"id": 2, "name": "Meine Firma", "type": "Firma",   "active": 1}
+            {"id": 1, "name": "Private",    "type": "Private", "active": 1},
+            {"id": 2, "name": "My Company", "type": "Company", "active": 1}
         ]
     }
 
@@ -73,32 +75,32 @@ Response 200:
 
 ### POST /api/clients
 
-Legt einen neuen Mandanten an.
+Creates a new client.
 
-Berechtigung: clients.write
+Permission: clients.write
 
-Pflichtfelder:
-| Feld | Typ    | Beschreibung   |
-|------|--------|----------------|
-| name | string | Mandantenname  |
+Required fields:
+| Field | Type   | Description |
+|-------|--------|-------------|
+| name  | string | Client name |
 
 Request:
     curl -s -X POST \
       -H "Authorization: Bearer <token>" \
       -H "Content-Type: application/json" \
-      -d '{"name": "Neuer Mandant", "type": "Firma"}' \
+      -d '{"name": "New Client", "type": "Company"}' \
       https://your-domain.example.com/api/clients
 
 Response 201:
-    {"id": 3, "message": "Mandant angelegt."}
+    {"id": 3, "message": "Client created."}
 
 ---
 
 ### GET /api/categories
 
-Gibt alle Vertragskategorien zurück.
+Returns all contract categories.
 
-Berechtigung: categories.read
+Permission: categories.read
 
 Request:
     curl -s \
@@ -108,8 +110,8 @@ Request:
 Response 200:
     {
         "data": [
-            {"id": 1, "name": "Versicherung", "color": "#3b82f6"},
-            {"id": 2, "name": "Miete",        "color": "#10b981"}
+            {"id": 1, "name": "Insurance", "color": "#3b82f6"},
+            {"id": 2, "name": "Rent",      "color": "#10b981"}
         ]
     }
 
@@ -117,15 +119,15 @@ Response 200:
 
 ### GET /api/contracts
 
-Gibt Verträge zurück. Unterstützt Filter per Query-Parameter.
+Returns contracts. Supports filtering via query parameters.
 
-Berechtigung: contracts.read
+Permission: contracts.read
 
-Query-Parameter:
-| Parameter  | Typ    | Beschreibung                              |
-|------------|--------|-------------------------------------------|
-| client_id  | int    | Filter auf einen Mandanten                |
-| status     | string | aktiv, gekuendigt, abgelaufen, pausiert   |
+Query parameters:
+| Parameter  | Type   | Description                                    |
+|------------|--------|------------------------------------------------|
+| client_id  | int    | Filter by client                               |
+| status     | string | aktiv, gekuendigt, abgelaufen, pausiert        |
 
 Request:
     curl -s \
@@ -139,8 +141,8 @@ Response 200:
                 "id": 1,
                 "client_id": 1,
                 "category_id": 1,
-                "title": "Haftpflichtversicherung",
-                "partner": "Musterversicherung AG",
+                "title": "Liability Insurance",
+                "partner": "Example Insurance AG",
                 "description": null,
                 "start_date": "2026-01-01",
                 "end_date": "2027-01-01",
@@ -152,8 +154,8 @@ Response 200:
                 "notes": null,
                 "created_at": "2026-08-15 10:00:00",
                 "updated_at": "2026-08-15 10:00:00",
-                "client_name": "Privat",
-                "category_name": "Versicherung"
+                "client_name": "Private",
+                "category_name": "Insurance"
             }
         ]
     }
@@ -162,70 +164,70 @@ Response 200:
 
 ### GET /api/contracts/{id}
 
-Gibt einen einzelnen Vertrag zurück.
+Returns a single contract.
 
-Berechtigung: contracts.read
+Permission: contracts.read
 
 Request:
     curl -s \
       -H "Authorization: Bearer <token>" \
       https://your-domain.example.com/api/contracts/1
 
-Response 200: (gleiche Struktur wie einzelnes Objekt aus GET /api/contracts)
+Response 200: (same structure as a single object from GET /api/contracts)
 
-Response 404: (kein Body)
+Response 404: (no body)
 
 ---
 
 ### POST /api/contracts
 
-Legt einen neuen Vertrag an.
+Creates a new contract.
 
-Berechtigung: contracts.write
+Permission: contracts.write
 
-Pflichtfelder:
-| Feld      | Typ    | Beschreibung        |
-|-----------|--------|---------------------|
-| title     | string | Vertragsbezeichnung |
-| client_id | int    | ID des Mandanten    |
+Required fields:
+| Field     | Type   | Description      |
+|-----------|--------|------------------|
+| title     | string | Contract title   |
+| client_id | int    | Client ID        |
 
-Optionale Felder:
-| Feld             | Typ    | Standard  | Beschreibung                                  |
-|------------------|--------|-----------|-----------------------------------------------|
-| partner          | string | null      | Vertragspartner                               |
-| description      | string | null      | Beschreibung                                  |
-| category_id      | int    | null      | Kategorie-ID                                  |
-| start_date       | date   | null      | Startdatum (YYYY-MM-DD)                       |
-| end_date         | date   | null      | Enddatum (YYYY-MM-DD)                         |
-| notice_date      | date   | null      | Kündigungsfrist (YYYY-MM-DD)                  |
-| value            | float  | null      | Vertragswert in Euro                          |
-| billing_interval | string | jaehrlich | einmalig, monatlich, quartalsweise, jaehrlich |
-| status           | string | aktiv     | aktiv, gekuendigt, abgelaufen, pausiert       |
-| notes            | string | null      | Interne Notizen                               |
+Optional fields:
+| Field            | Type   | Default   | Description                                    |
+|------------------|--------|-----------|------------------------------------------------|
+| partner          | string | null      | Contract partner                               |
+| description      | string | null      | Description                                    |
+| category_id      | int    | null      | Category ID                                    |
+| start_date       | date   | null      | Start date (YYYY-MM-DD)                        |
+| end_date         | date   | null      | End date (YYYY-MM-DD)                          |
+| notice_date      | date   | null      | Cancellation deadline (YYYY-MM-DD)             |
+| value            | float  | null      | Contract value in euros                        |
+| billing_interval | string | jaehrlich | einmalig, monatlich, quartalsweise, jaehrlich  |
+| status           | string | aktiv     | aktiv, gekuendigt, abgelaufen, pausiert        |
+| notes            | string | null      | Internal notes                                 |
 
 Request:
     curl -s -X POST \
       -H "Authorization: Bearer <token>" \
       -H "Content-Type: application/json" \
-      -d '{"client_id": 1, "title": "Haftpflichtversicherung", "partner": "Musterversicherung AG", "start_date": "2026-01-01", "value": 120, "billing_interval": "jaehrlich", "status": "aktiv"}' \
+      -d '{"client_id": 1, "title": "Liability Insurance", "partner": "Example AG", "start_date": "2026-01-01", "value": 120, "billing_interval": "jaehrlich", "status": "aktiv"}' \
       https://your-domain.example.com/api/contracts
 
 Response 201:
-    {"id": 2, "contract_number": "SOP-MEIN-tjkfc7-ae", "message": "Vertrag angelegt."}
+    {"id": 2, "contract_number": "SOP-MEIN-tjkfc7-ae", "message": "Contract created."}
 
 Response 422:
-    {"error": "Titel fehlt."}
+    {"error": "Title missing."}
 
 Response 400:
-    {"error": "Ungültiger JSON-Body."}
+    {"error": "Invalid JSON body."}
 
 ---
 
 ### PUT /api/contracts/{id}
 
-Aktualisiert einen bestehenden Vertrag (nur übergebene Felder werden aktualisiert).
+Updates an existing contract (only provided fields are updated).
 
-Berechtigung: contracts.write
+Permission: contracts.write
 
 Request:
     curl -s -X PUT \
@@ -235,17 +237,17 @@ Request:
       https://your-domain.example.com/api/contracts/2
 
 Response 200:
-    {"message": "Vertrag aktualisiert."}
+    {"message": "Contract updated."}
 
-Response 404: (kein Body)
+Response 404: (no body)
 
 ---
 
 ### DELETE /api/contracts/{id}
 
-Löscht einen Vertrag.
+Deletes a contract.
 
-Berechtigung: contracts.write
+Permission: contracts.delete
 
 Request:
     curl -s -X DELETE \
@@ -253,45 +255,43 @@ Request:
       https://your-domain.example.com/api/contracts/2
 
 Response 200:
-    {"message": "Vertrag gelöscht."}
+    {"message": "Contract deleted."}
 
-Response 404: (kein Body)
-
----
-
-## Mandanten-gebundene Tokens
-
-Wenn ein Token an einen bestimmten Mandanten gebunden ist, wird client_id bei allen
-Requests automatisch auf diesen Mandanten gesetzt — unabhängig davon was im
-Request-Body oder Query-Parameter angegeben wird.
+Response 404: (no body)
 
 ---
 
-## Fehler-Referenz
+## Client-bound tokens
 
-| HTTP-Code | Bedeutung                        |
+If a token is bound to a specific client, `client_id` is automatically set to that client for all requests — regardless of what is specified in the request body or query parameters.
+
+---
+
+## Error reference
+
+| HTTP code | Meaning                          |
 |-----------|----------------------------------|
-| 200       | Erfolg                           |
-| 201       | Ressource angelegt               |
-| 400       | Ungültiger Request (kein JSON)   |
-| 401       | Nicht authentifiziert (kein Body)|
-| 403       | Keine Berechtigung (kein Body)   |
-| 404       | Nicht gefunden                   |
-| 422       | Pflichtfeld fehlt                |
-| 429       | Rate Limit erreicht              |
+| 200       | Success                          |
+| 201       | Resource created                 |
+| 400       | Invalid request (no JSON)        |
+| 401       | Unauthenticated (no body)        |
+| 403       | No permission (no body)          |
+| 404       | Not found                        |
+| 422       | Required field missing           |
+| 429       | Rate limit exceeded              |
 
 ---
 
-## Rate Limiting
+## Rate limiting
 
-60 Requests pro 60 Sekunden pro Token. Bei Überschreitung:
+60 requests per 60 seconds per token. When exceeded:
 
     HTTP 429
     Retry-After: 60
 
 ---
 
-## Versionierung
+## Versioning
 
-Die API ist aktuell in Version v1 (implicit).
-Eine explizite Versionierung (/api/v1/) wird bei Breaking Changes eingeführt.
+The API is currently at version v1 (implicit).
+Explicit versioning (/api/v1/) will be introduced for breaking changes.

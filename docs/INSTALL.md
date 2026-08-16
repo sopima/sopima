@@ -1,19 +1,19 @@
 # Installation
 
-## Voraussetzungen
+## Requirements
 
-- PHP 8.2 oder höher
-- PHP-Extensions: `pdo_sqlite`, `mbstring`, `fileinfo`, `zip`
+- PHP 8.2 or higher
+- PHP extensions: `pdo_sqlite`, `mbstring`, `fileinfo`, `zip`
 - Composer
-- Apache 2.4 mit `mod_rewrite`
+- Apache 2.4 with `mod_rewrite`
 
-### PHP-Extensions prüfen
+### Check PHP extensions
 
 ```bash
 php -m | grep -E "pdo_sqlite|mbstring|fileinfo|zip"
 ```
 
-### mod_rewrite aktivieren
+### Enable mod_rewrite
 
 ```bash
 a2enmod rewrite
@@ -24,37 +24,37 @@ systemctl reload apache2
 
 ## Installation
 
-### 1. Repository klonen
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/sopima/sopima.git
 cd sopima
 ```
 
-### 2. Abhängigkeiten installieren
+### 2. Install dependencies
 
 ```bash
 composer install --no-dev --optimize-autoloader
 ```
 
-### 3. Konfiguration anlegen
+### 3. Create configuration
 
 ```bash
 cp .env.example .env
 ```
 
-`.env` anpassen:
+Edit `.env`:
 
 ```env
 APP_NAME=Sopima
-APP_URL=https://ihre-domain.example.com
+APP_URL=https://your-domain.example.com
 APP_SECRET=
-DB_SQLITE_PATH=/pfad/zu/sopima/storage/database/sopima.sqlite
+DB_SQLITE_PATH=/path/to/sopima/storage/database/sopima.sqlite
 ```
 
-`APP_SECRET` wird automatisch im Setup-Wizard generiert.
+`APP_SECRET` is generated automatically by the setup wizard.
 
-### 4. Storage-Verzeichnis vorbereiten
+### 4. Prepare storage directory
 
 ```bash
 mkdir -p storage/database storage/uploads
@@ -62,13 +62,13 @@ chown -R www-data:www-data storage/
 chmod 755 storage/database storage/uploads
 ```
 
-### 5. Apache VHost einrichten
+### 5. Configure Apache VHost
 
 ```apache
 <VirtualHost *:80>
-    ServerName ihre-domain.example.com
-    DocumentRoot /pfad/zu/sopima/public
-    <Directory /pfad/zu/sopima/public>
+    ServerName your-domain.example.com
+    DocumentRoot /path/to/sopima/public
+    <Directory /path/to/sopima/public>
         Options -Indexes +FollowSymLinks
         AllowOverride All
         Require all granted
@@ -78,55 +78,55 @@ chmod 755 storage/database storage/uploads
 </VirtualHost>
 ```
 
-### 6. Apache neu laden
+### 6. Reload Apache
 
 ```bash
 systemctl reload apache2
 ```
 
-### 7. Setup-Wizard aufrufen
+### 7. Run the setup wizard
 
-Im Browser `https://ihre-domain.example.com/setup` aufrufen.
+Open `https://your-domain.example.com/setup` in your browser.
 
-Der Wizard führt durch:
-- Systemprüfung (PHP, Extensions, Schreibrechte)
-- APP_SECRET generieren
-- Datenbank-Migration
-- Ersten Admin anlegen
+The wizard guides you through:
+- System check (PHP, extensions, write permissions)
+- Generating `APP_SECRET`
+- Database migration
+- Creating the first admin account
 
 ---
 
 ## Docker
 
-### 1. Konfigurationsdatei anlegen
+### 1. Create configuration file
 
 ```bash
-cp .env.example env
-nano env
+cp .env.example .env
+nano .env
 ```
 
-Mindestens setzen:
+Set at minimum:
 
 ```env
 APP_NAME=Sopima
-APP_URL=http://ihre-domain.example.com:8080
+APP_URL=http://your-domain.example.com:8080
 APP_SECRET=
 DB_SQLITE_PATH=/var/www/html/storage/database/sopima.sqlite
 ```
 
-`APP_SECRET` kann leer gelassen werden – der Setup-Wizard generiert es automatisch.
+`APP_SECRET` can be left blank – the setup wizard generates it automatically.
 
-### 2. Container starten
+### 2. Start the container
 
 ```bash
 docker compose up -d
 ```
 
-### 3. Setup aufrufen
+### 3. Run setup
 
-`http://ihre-domain.example.com:8080/setup` im Browser öffnen.
+Open `http://your-domain.example.com:8080/setup` in your browser.
 
-Der Wizard erkennt die vorhandene Konfiguration und führt durch Migration und Admin-Anlegen.
+The wizard detects the existing configuration and guides you through migration and admin creation.
 
 ---
 
@@ -138,21 +138,21 @@ composer install --no-dev --optimize-autoloader
 php database/migrate.php
 ```
 
-Neue Migrationen werden automatisch erkannt und eingespielt.
+New migrations are detected and applied automatically.
 
 ---
 
 ## Troubleshooting
 
 **500 Internal Server Error**
-- Apache-Log prüfen: `tail -50 /var/log/apache2/sopima_error.log`
-- PHP-Syntaxfehler: `php -l public/index.php`
-- `mod_rewrite` aktiv? `apache2ctl -M | grep rewrite`
+- Check Apache log: `tail -50 /var/log/apache2/sopima_error.log`
+- PHP syntax error: `php -l public/index.php`
+- Is `mod_rewrite` active? `apache2ctl -M | grep rewrite`
 
-**Datenbankfehler**
-- Schreibrechte prüfen: `ls -la storage/database/`
-- Migration nochmal ausführen: `php database/migrate.php`
+**Database error**
+- Check write permissions: `ls -la storage/database/`
+- Run migration again: `php database/migrate.php`
 
-**Login schlägt fehl**
-- Setup nochmal aufrufen: `/setup` (nur wenn noch kein Admin vorhanden)
-- SQLite-Datei vorhanden? `ls -la storage/database/`
+**Login fails**
+- Run setup again: `/setup` (only if no admin exists yet)
+- SQLite file present? `ls -la storage/database/`
