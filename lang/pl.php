@@ -216,16 +216,16 @@ return [
 
     // Backup
     'backup.export_title'    => 'Eksportuj dane',
-    'backup.export_desc'     => 'Exports all contracts, notes, contacts and fields for this client. Document files and API tokens are not included.',
-    'backup.export_json'     => 'Eksportuj JSON',
-    'backup.export_csv'      => 'Eksportuj CSV (ZIP)',
-    'backup.import_title'    => 'Importuj dane',
-    'backup.import_warning'  => 'Uwaga: Wszystkie istniejące umowy tego klienta zostaną usunięte i zastąpione kopią zapasową. Tej operacji nie można cofnąć.',
-    'backup.file_label'      => 'Plik kopii zapasowej (JSON)',
-    'backup.file_drop'       => 'Wybierz plik lub przeciągnij tutaj',
-    'backup.file_hint'       => 'Tylko kopie zapasowe JSON. Tokeny API muszą zostać odtworzone po imporcie.',
-    'backup.import_btn'      => 'Rozpocznij import',
-    'backup.confirm_import'  => 'Na pewno importować? Wszystkie istniejące umowy zostaną trwale zastąpione.',
+    'backup.export_desc' => 'Eksportuje wszystkie umowy, notatki, kontakty i pola tego klienta. Pliki dokumentów i tokeny API nie są uwzględniane.',
+    'backup.export_json' => 'Eksportuj JSON',
+    'backup.export_csv' => 'Eksportuj CSV (ZIP)',
+    'backup.import_title' => 'Importuj dane',
+    'backup.import_warning' => 'Uwaga: Wszystkie istniejące umowy tego klienta zostaną usunięte i zastąpione kopią zapasową. Tej operacji nie można cofnąć.',
+    'backup.file_label' => 'Plik kopii zapasowej (JSON)',
+    'backup.file_drop' => 'Wybierz plik lub przeciągnij tutaj',
+    'backup.file_hint' => 'Tylko kopie zapasowe JSON. Tokeny API muszą zostać odtworzone po imporcie.',
+    'backup.import_btn' => 'Rozpocznij import',
+    'backup.confirm_import' => 'Na pewno importować? Wszystkie istniejące umowy zostaną trwale zastąpione.',
 
     // Users form
     'users.form.edit' => 'Edytuj użytkownika',
