@@ -1,68 +1,57 @@
 # Sopima
 
-> ⚠️ **Alpha-Stadium** – Sopima befindet sich in aktiver Entwicklung. Funktionen können sich ändern, Fehler sind möglich. Nicht für produktionskritische Daten empfohlen. Feedback willkommen.
+> ⚠️ **Alpha** – Sopima is under active development. Features may change, bugs are possible. Not recommended for production-critical data. Feedback welcome.
 
-Selbst gehostete, open-source Vertragsverwaltung für Einzelpersonen, kleine Organisationen und Teams.
+> 🇩🇪 [Deutsche Version](README.de.md)
 
-## Funktionen
+Self-hosted, open-source contract management for individuals, small organizations and teams.
 
-- Multi-tenant Vertragsverwaltung (CRUD)
-- Vertragstypen mit typspezifischen Feldern (Versicherung, Mobilfunk, Darlehen, Sonstiges)
-- Dokumentenverwaltung mit mandantengetrennter Speicherung
-- Kommunikationsprotokoll pro Vertrag
-- Volltextsuche und Ampelstatus
-- REST API mit Token-Authentifizierung und Rate Limiting
-- Benachrichtigungssystem (E-Mail, Discord, Telegram, ntfy, Gotify, Pushover, Webhook)
-- Backup/Restore (JSON-Export/Import)
-- Benutzerverwaltung und Einstellungen
+## Features
 
-## Voraussetzungen
+- Multi-tenant contract management (CRUD)
+- Contract types with type-specific fields (insurance, mobile, loan, misc.)
+- Document management with tenant-separated storage
+- Communication log per contract
+- Full-text search and traffic-light status
+- REST API with Bearer token authentication and rate limiting
+- Notification system (Email, Discord, Telegram, ntfy, Gotify, Pushover, Webhook)
+- Backup/Restore (JSON export/import)
+- User management and settings
+
+## Requirements
 
 - PHP 8.2+
-- PHP-Extension: `pdo_sqlite`
+- PHP extension: `pdo_sqlite`
 - Composer
-- Apache mit `mod_rewrite`
+- Apache with `mod_rewrite`
 
-## Schnellstart
+## Quick Start
 
-```bash
-git clone https://github.com/sopima/sopima
-cd sopima
-cp .env.example .env
-composer install --no-dev
-```
-
-Apache VHost DocumentRoot auf `public/` zeigen lassen, `mod_rewrite` aktivieren.
-
-Dann im Browser `https://your-domain.example.com/setup` aufrufen – der Setup-Wizard führt durch Konfiguration, Datenbank-Migration und Anlegen des ersten Admins.
+Point your Apache VHost DocumentRoot to `public/` and enable `mod_rewrite`.
+Then open `https://your-domain.example.com/setup` in your browser.
 
 ## Docker
 
-```bash
-docker compose up -d
-```
-
-Danach `http://localhost:8080/setup` aufrufen.
+Run `docker compose up -d`, then open `http://localhost:8080/setup`.
 
 ## API
 
-Siehe [docs/API.md](docs/API.md) für alle Endpunkte, Authentifizierung und Rate Limiting.
+See [docs/API.md](docs/API.md) for all endpoints, authentication and rate limiting.
 
-## Mitmachen
+## Notifications (Cron Job)
 
-Sopima ist ein Community-Projekt. Issues und Pull Requests sind willkommen.
-Bitte vor größeren Änderungen kurz ein Issue öffnen.
-
-## Benachrichtigungen (Cronjob)
-
-Bei direkter PHP/Apache-Installation: `bin/notify.php` als Cronjob einrichten:
+For bare-metal installations, set up a cron job:
 
 ```
 0 8 * * * php /path/to/sopima/bin/notify.php >> /var/log/sopima_notify.log 2>&1
 ```
 
-Im Docker-Betrieb kann ein separater Cronjob-Container oder ein Host-Cronjob genutzt werden.
+For Docker, use a separate cron container or a host-level cron job.
 
-## Lizenz
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## License
 
 MIT
