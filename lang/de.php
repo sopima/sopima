@@ -144,4 +144,17 @@ return [
     'auth.too_many'        => 'Zu viele fehlgeschlagene Anmeldeversuche. Bitte 15 Minuten warten.',
     'auth.empty_fields'    => 'Bitte E-Mail und Passwort eingeben.',
     'auth.wrong'           => 'E-Mail oder Passwort falsch.',
+
+    // Clients
+    'clients.title'          => 'Mandanten',
+    'clients.add'            => 'Mandant',
+    'clients.empty'          => 'Keine Mandanten gefunden.',
+    'clients.col.name'       => 'Name',
+    'clients.col.type'       => 'Typ',
+    'clients.col.contracts'  => 'Verträge',
+    'clients.col.status'     => 'Status',
+    'clients.col.desc'       => 'Beschreibung',
+    'clients.active'         => 'Aktiv',
+    'clients.inactive'       => 'Inaktiv',
+    'clients.confirm_delete' => 'Mandant deaktivieren?',
 ];

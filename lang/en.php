@@ -143,4 +143,17 @@ return [
     'auth.too_many'        => 'Too many failed login attempts. Please wait 15 minutes.',
     'auth.empty_fields'    => 'Please enter your email and password.',
     'auth.wrong'           => 'Email or password incorrect.',
+
+    // Clients
+    'clients.title'          => 'Clients',
+    'clients.add'            => 'Client',
+    'clients.empty'          => 'No clients found.',
+    'clients.col.name'       => 'Name',
+    'clients.col.type'       => 'Type',
+    'clients.col.contracts'  => 'Contracts',
+    'clients.col.status'     => 'Status',
+    'clients.col.desc'       => 'Description',
+    'clients.active'         => 'Active',
+    'clients.inactive'       => 'Inactive',
+    'clients.confirm_delete' => 'Deactivate client?',
 ];
