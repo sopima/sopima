@@ -511,4 +511,16 @@ return [
     'settings.save' => 'Speichern',
     'settings.saved' => 'Einstellungen gespeichert.',
     'settings.error' => '.env konnte nicht geschrieben werden.',
+
+    // Tokens show
+    'tokens.show.title' => 'Token erstellt',
+    'tokens.show.back' => 'Zurück',
+    'tokens.show.warning' => 'Nur einmal sichtbar – jetzt kopieren!',
+    'tokens.show.copy' => 'Kopieren',
+    'tokens.show.copied' => 'Kopiert!',
+    'tokens.show.name' => 'Name',
+    'tokens.show.client' => 'Mandant',
+    'tokens.show.perms' => 'Berechtigungen',
+    'tokens.show.created' => 'Erstellt',
+    'tokens.show.all' => 'Alle',
 ];

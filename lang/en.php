@@ -510,4 +510,16 @@ return [
     'settings.save' => 'Save',
     'settings.saved' => 'Settings saved.',
     'settings.error' => 'Could not write .env file.',
+
+    // Tokens show
+    'tokens.show.title' => 'Token Created',
+    'tokens.show.back' => 'Back',
+    'tokens.show.warning' => 'Only visible once – copy now!',
+    'tokens.show.copy' => 'Copy',
+    'tokens.show.copied' => 'Copied!',
+    'tokens.show.name' => 'Name',
+    'tokens.show.client' => 'Client',
+    'tokens.show.perms' => 'Permissions',
+    'tokens.show.created' => 'Created',
+    'tokens.show.all' => 'All',
 ];
