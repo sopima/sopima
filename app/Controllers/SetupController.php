@@ -17,6 +17,8 @@ if (setupIsComplete()) {
     exit;
 }
 
+load_lang(env('APP_LOCALE', 'de'));
+load_lang(env('APP_LOCALE', 'de'));
 $step   = (int)($_GET['step'] ?? 1);
 $errors = [];
 
@@ -33,8 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 2) {
     $mailFrom  = trim($_POST['mail_from']  ?? '');
     $mailName  = trim($_POST['mail_name']  ?? $appName);
 
-    if (empty($appUrl))    $errors[] = 'APP_URL ist erforderlich.';
-    if (empty($appSecret)) $errors[] = 'APP_SECRET ist erforderlich.';
+    if (empty($appUrl))    $errors[] = __('setup.error.app_url');
+    if (empty($appSecret)) $errors[] = __('setup.error.app_secret');
 
     if (empty($errors)) {
         $env  = "APP_NAME={$appName}\n";
@@ -111,11 +113,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $step === 4) {
     $password = trim($_POST['password'] ?? '');
     $password2 = trim($_POST['password2'] ?? '');
 
-    if (empty($name))               $errors[] = 'Name ist erforderlich.';
-    if (empty($email))              $errors[] = 'E-Mail ist erforderlich.';
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'E-Mail ungültig.';
-    if (strlen($password) < 8)      $errors[] = 'Passwort muss mindestens 8 Zeichen haben.';
-    if ($password !== $password2)   $errors[] = 'Passwörter stimmen nicht überein.';
+    if (empty($name))               $errors[] = __('setup.error.name');
+    if (empty($email))              $errors[] = __('setup.error.email');
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = __('setup.error.email_invalid');
+    if (strlen($password) < 8)      $errors[] = __('setup.error.password_short');
+    if ($password !== $password2)   $errors[] = __('setup.error.password_match');
 
     if (empty($errors)) {
         try {
@@ -167,7 +169,7 @@ $defaultPath = BASE_PATH . '/storage/database/sopima.sqlite';
 <div class="setup-wrap">
     <div style="text-align:center;margin-bottom:2rem;">
         <div class="logo" style="font-size:1.5rem;font-weight:700;"><?php echo APP_NAME; ?></div>
-        <div style="color:var(--text-muted);margin-top:.3rem;">Ersteinrichtung</div>
+        <div style="color:var(--text-muted);margin-top:.3rem;"><?php echo __('setup.title'); ?></div>
     </div>
 
     <div class="setup-steps">
@@ -194,14 +196,14 @@ $defaultPath = BASE_PATH . '/storage/database/sopima.sqlite';
             'mbstring'            => extension_loaded('mbstring'),
             'fileinfo'            => extension_loaded('fileinfo'),
             'zip'                 => extension_loaded('zip'),
-            'storage/ beschreibbar'          => is_writable(BASE_PATH . '/storage'),
-            'storage/database/ beschreibbar' => is_writable(BASE_PATH . '/storage/database') || (!is_dir(BASE_PATH . '/storage/database') && is_writable(BASE_PATH . '/storage')),
-            'storage/uploads/ beschreibbar'  => is_writable(BASE_PATH . '/storage/uploads')  || (!is_dir(BASE_PATH . '/storage/uploads')  && is_writable(BASE_PATH . '/storage')),
-            '.env beschreibbar'              => is_writable(BASE_PATH . '/storage'),
+            __('setup.check.storage')          => is_writable(BASE_PATH . '/storage'),
+            __('setup.check.storage_db') => is_writable(BASE_PATH . '/storage/database') || (!is_dir(BASE_PATH . '/storage/database') && is_writable(BASE_PATH . '/storage')),
+            __('setup.check.storage_uploads')  => is_writable(BASE_PATH . '/storage/uploads')  || (!is_dir(BASE_PATH . '/storage/uploads')  && is_writable(BASE_PATH . '/storage')),
+            __('setup.check.env')              => is_writable(BASE_PATH . '/storage'),
         ];
         $allOk = !in_array(false, $checks, true);
         ?>
-        <h2>Systemprüfung</h2>
+        <h2><?php echo __('setup.system_check'); ?></h2>
         <?php foreach ($checks as $label => $ok): ?>
             <div style="margin-bottom:.5rem;">
                 <span class="<?php echo $ok ? 'check' : 'fail'; ?>"><?php echo $ok ? '✓' : '✗'; ?></span>
@@ -210,62 +212,62 @@ $defaultPath = BASE_PATH . '/storage/database/sopima.sqlite';
         <?php endforeach; ?>
         <div style="margin-top:2rem;">
             <?php if ($allOk): ?>
-                <a href="/setup?step=2" class="btn btn-primary" style="width:100%;display:block;text-align:center;">Weiter →</a>
+                <a href="/setup?step=2" class="btn btn-primary" style="width:100%;display:block;text-align:center;"><?php echo __('setup.next'); ?></a>
             <?php else: ?>
-                <div style="color:var(--text-muted);font-size:.9rem;margin-bottom:1rem;">Bitte die fehlgeschlagenen Prüfungen beheben und neu laden.</div>
-                <a href="/setup?step=1" class="btn btn-outline" style="width:100%;display:block;text-align:center;">Neu prüfen</a>
+                <div style="color:var(--text-muted);font-size:.9rem;margin-bottom:1rem;"><?php echo __('setup.fix_checks'); ?></div>
+                <a href="/setup?step=1" class="btn btn-outline" style="width:100%;display:block;text-align:center;"><?php echo __('setup.recheck'); ?></a>
             <?php endif; ?>
         </div>
 
     <?php elseif ($step === 2): ?>
-        <h2>Konfiguration</h2>
+        <h2><?php echo __('setup.configuration'); ?></h2>
         <form method="post" action="/setup?step=2">
             <div class="form-group">
-                <label>App-Name</label>
+                <label><?php echo __('setup.label.app_name'); ?></label>
                 <input type="text" name="app_name" value="<?php echo htmlspecialchars($_POST['app_name'] ?? 'Sopima'); ?>" required>
             </div>
             <div class="form-group">
-                <label>App-URL</label>
+                <label><?php echo __('setup.label.app_url'); ?></label>
                 <input type="url" name="app_url" value="<?php echo htmlspecialchars($_POST['app_url'] ?? ''); ?>" placeholder="https://ihre-domain.example.com" required>
             </div>
             <div class="form-group">
-                <label>App-Secret</label>
+                <label><?php echo __('setup.label.app_secret'); ?></label>
                 <div style="display:flex;gap:.5rem;">
                     <input type="text" name="app_secret" id="app_secret" value="<?php echo htmlspecialchars($_POST['app_secret'] ?? $secret); ?>" required style="flex:1;font-family:monospace;font-size:.85rem;">
                     <button type="button" class="btn btn-outline" onclick="document.getElementById('app_secret').value='<?php echo bin2hex(random_bytes(32)); ?>'">↺</button>
                 </div>
             </div>
             <div class="form-group">
-                <label>SQLite-Datenbankpfad</label>
+                <label><?php echo __('setup.label.sqlite_path'); ?></label>
                 <input type="text" name="sqlite_path" value="<?php echo htmlspecialchars($_POST['sqlite_path'] ?? $defaultPath); ?>" required style="font-family:monospace;font-size:.85rem;">
             </div>
             <hr style="margin:1.5rem 0;border-color:var(--border);">
-            <div style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem;">Mail (optional – kann später in den Einstellungen konfiguriert werden)</div>
+            <div style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem;"><?php echo __('setup.mail_optional'); ?></div>
             <div style="display:grid;grid-template-columns:1fr auto;gap:.5rem;">
-                <div class="form-group" style="margin:0;"><label>SMTP-Host</label><input type="text" name="mail_host" value="<?php echo htmlspecialchars($_POST['mail_host'] ?? ''); ?>"></div>
-                <div class="form-group" style="margin:0;"><label>Port</label><input type="number" name="mail_port" value="<?php echo htmlspecialchars($_POST['mail_port'] ?? '587'); ?>" style="width:80px;"></div>
+                <div class="form-group" style="margin:0;"><label><?php echo __('setup.label.smtp_host'); ?></label><input type="text" name="mail_host" value="<?php echo htmlspecialchars($_POST['mail_host'] ?? ''); ?>"></div>
+                <div class="form-group" style="margin:0;"><label><?php echo __('setup.label.port'); ?></label><input type="number" name="mail_port" value="<?php echo htmlspecialchars($_POST['mail_port'] ?? '587'); ?>" style="width:80px;"></div>
             </div>
             <div class="form-group">
-                <label>SMTP-Benutzername</label>
+                <label><?php echo __('setup.label.smtp_user'); ?></label>
                 <input type="text" name="mail_user" value="<?php echo htmlspecialchars($_POST['mail_user'] ?? ''); ?>">
             </div>
             <div class="form-group">
-                <label>SMTP-Passwort</label>
+                <label><?php echo __('setup.label.smtp_pass'); ?></label>
                 <input type="password" name="mail_pass" value="">
             </div>
             <div class="form-group">
-                <label>Absender-E-Mail</label>
+                <label><?php echo __('setup.label.mail_from'); ?></label>
                 <input type="email" name="mail_from" value="<?php echo htmlspecialchars($_POST['mail_from'] ?? ''); ?>">
             </div>
             <div class="form-group">
-                <label>Absender-Name</label>
+                <label><?php echo __('setup.label.mail_name'); ?></label>
                 <input type="text" name="mail_name" value="<?php echo htmlspecialchars($_POST['mail_name'] ?? ''); ?>">
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;">Speichern & Weiter →</button>
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;"><?php echo __('setup.save_next'); ?></button>
         </form>
 
     <?php elseif ($step === 3): ?>
-        <h2>Datenbank einrichten</h2>
+        <h2><?php echo __('setup.database'); ?></h2>
         <?php if (empty($errors)): ?>
             <div class="migration-log">
                 <?php foreach ($migrationLog as $m): ?>
@@ -277,39 +279,39 @@ $defaultPath = BASE_PATH . '/storage/database/sopima.sqlite';
                     </span>
                 <?php endforeach; ?>
             </div>
-            <a href="/setup?step=4" class="btn btn-primary" style="width:100%;display:block;text-align:center;margin-top:1.5rem;">Weiter →</a>
+            <a href="/setup?step=4" class="btn btn-primary" style="width:100%;display:block;text-align:center;margin-top:1.5rem;"><?php echo __('setup.next'); ?></a>
         <?php else: ?>
-            <a href="/setup?step=3" class="btn btn-outline" style="width:100%;display:block;text-align:center;margin-top:1rem;">Erneut versuchen</a>
+            <a href="/setup?step=3" class="btn btn-outline" style="width:100%;display:block;text-align:center;margin-top:1rem;"><?php echo __('setup.retry'); ?></a>
         <?php endif; ?>
 
     <?php elseif ($step === 4): ?>
-        <h2>Admin-Konto anlegen</h2>
+        <h2><?php echo __('setup.admin'); ?></h2>
         <form method="post" action="/setup?step=4">
             <div class="form-group">
-                <label>Name</label>
+                <label><?php echo __('setup.label.name'); ?></label>
                 <input type="text" name="name" value="<?php echo htmlspecialchars($_POST['name'] ?? ''); ?>" required>
             </div>
             <div class="form-group">
-                <label>E-Mail</label>
+                <label><?php echo __('setup.label.email'); ?></label>
                 <input type="email" name="email" value="<?php echo htmlspecialchars($_POST['email'] ?? ''); ?>" required>
             </div>
             <div class="form-group">
-                <label>Passwort</label>
+                <label><?php echo __('setup.label.password'); ?></label>
                 <input type="password" name="password" required>
             </div>
             <div class="form-group">
-                <label>Passwort wiederholen</label>
+                <label><?php echo __('setup.label.password2'); ?></label>
                 <input type="password" name="password2" required>
             </div>
-            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;">Admin anlegen →</button>
+            <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;"><?php echo __('setup.create_admin'); ?></button>
         </form>
 
     <?php elseif ($step === 5): ?>
-        <h2>Einrichtung abgeschlossen</h2>
+        <h2><?php echo __('setup.done'); ?></h2>
         <div style="text-align:center;padding:1rem 0;">
             <div style="font-size:3rem;margin-bottom:1rem;">✓</div>
-            <p style="color:var(--text-muted);margin-bottom:2rem;"><?php echo APP_NAME; ?> ist einsatzbereit.</p>
-            <a href="/login" class="btn btn-primary" style="display:inline-block;padding:.75rem 2rem;">Zum Login →</a>
+            <p style="color:var(--text-muted);margin-bottom:2rem;"><?php echo APP_NAME; ?><?php echo __('setup.ready'); ?></p>
+            <a href="/login" class="btn btn-primary" style="display:inline-block;padding:.75rem 2rem;"><?php echo __('setup.to_login'); ?></a>
         </div>
     <?php endif; ?>
 
