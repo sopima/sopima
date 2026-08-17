@@ -21,7 +21,7 @@ return [
     'dashboard.no_costs'            => 'Brak aktywnych umów z kosztami cyklicznymi.',
     'dashboard.expenses'            => 'Wydatki',
     'dashboard.income'              => 'Przychody',
-    'dashboard.per_month'           => '/ miesiąc',
+    'dashboard.per_month' => 'Miesiąc',
     'dashboard.client'              => 'Klient',
     'dashboard.contracts_plural'    => 'Umowy',
     'dashboard.contract_singular'   => 'Umowa',

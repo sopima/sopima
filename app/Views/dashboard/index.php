@@ -1,36 +1,43 @@
-<div class="stat-grid">
+<div class="stat-grid-info">
     <div class="stat-card c-indigo">
         <div class="stat-glow"></div>
-        <div class="stat-icon"><i class="ti ti-file-description"></i></div>
-        <div class="stat-label"><?php echo __('dashboard.contracts_total'); ?></div>
+        <div class="stat-header"><div class="stat-icon"><i class="ti ti-file-description"></i></div>        <div class="stat-label"><?php echo __('dashboard.contracts_total'); ?></div></div>
         <div class="stat-value"><?php echo $totalContracts; ?></div>
         <div class="stat-sub"><?php echo __('dashboard.all_clients'); ?></div>
         <div class="stat-accent"></div>
     </div>
-    <div class="stat-card success">
-        <div class="stat-glow"></div>
-        <div class="stat-icon"><i class="ti ti-check"></i></div>
-        <div class="stat-label"><?php echo __('dashboard.active'); ?></div>
-        <div class="stat-value"><?php echo $activeContracts; ?></div>
-        <div class="stat-sub">€ <?php echo number_format($totalValue, 0, ',', '.'); ?> / Jahr</div>
-        <div class="stat-accent"></div>
-    </div>
     <div class="stat-card warn">
         <div class="stat-glow"></div>
-        <div class="stat-icon"><i class="ti ti-clock"></i></div>
-        <div class="stat-label"><?php echo __('dashboard.expiring_soon'); ?></div>
+        <div class="stat-header"><div class="stat-icon"><i class="ti ti-clock"></i></div>        <div class="stat-label"><?php echo __('dashboard.expiring_soon'); ?></div></div>
         <div class="stat-value"><?php echo $expiringSoon; ?></div>
         <div class="stat-sub"><?php echo __('dashboard.in_30_days'); ?></div>
         <div class="stat-accent"></div>
     </div>
     <div class="stat-card danger">
         <div class="stat-glow"></div>
-        <div class="stat-icon"><i class="ti ti-alert-triangle"></i></div>
-        <div class="stat-label"><?php echo __('dashboard.overdue'); ?></div>
+        <div class="stat-header"><div class="stat-icon"><i class="ti ti-alert-triangle"></i></div>        <div class="stat-label"><?php echo __('dashboard.overdue'); ?></div></div>
         <div class="stat-value"><?php echo $overdue; ?></div>
         <div class="stat-sub"><?php echo __('dashboard.missed_cancellation'); ?></div>
         <div class="stat-accent"></div>
     </div>
+</div>
+<div class="stat-grid-finance">
+    <div class="stat-card danger">
+        <div class="stat-glow"></div>
+        <div class="stat-header"><div class="stat-icon"><i class="ti ti-trending-down"></i></div>        <div class="stat-label"><?php echo __('dashboard.expenses'); ?></div></div>
+        <div class="stat-value"><?php echo $activeExpenses; ?></div>
+        <div class="stat-sub">− € <?php echo number_format($totalExpenses, 2, ',', '.'); ?> / <?php echo __('dashboard.per_month'); ?></div>
+        <div class="stat-accent"></div>
+    </div>
+    <?php if ($totalIncome > 0): ?>
+    <div class="stat-card success">
+        <div class="stat-glow"></div>
+        <div class="stat-header"><div class="stat-icon"><i class="ti ti-trending-up"></i></div>        <div class="stat-label"><?php echo __('dashboard.income'); ?></div></div>
+        <div class="stat-value"><?php echo $activeIncome; ?></div>
+        <div class="stat-sub">+ € <?php echo number_format($totalIncome, 2, ',', '.'); ?> / <?php echo __('dashboard.per_month'); ?></div>
+        <div class="stat-accent"></div>
+    </div>
+    <?php endif; ?>
 </div>
 
 <div class="two-col">

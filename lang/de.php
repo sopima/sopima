@@ -22,7 +22,7 @@ return [
     'dashboard.no_costs'            => 'Keine aktiven Verträge mit laufenden Kosten.',
     'dashboard.expenses'            => 'Ausgaben',
     'dashboard.income'              => 'Einnahmen',
-    'dashboard.per_month'           => '/ Monat',
+    'dashboard.per_month' => 'Monat',
     'dashboard.client'              => 'Mandant',
     'dashboard.contracts_plural'    => 'Verträge',
     'dashboard.contract_singular'   => 'Vertrag',

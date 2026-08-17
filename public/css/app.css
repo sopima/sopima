@@ -129,6 +129,8 @@ body::after {
 
 /* Stat Cards */
 .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 12px; margin-bottom: 1.5rem; }
+.stat-grid-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
+.stat-grid-finance { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 1.5rem; }
 .stat-card {
     background: rgba(255,255,255,.08);
     backdrop-filter: blur(20px);
@@ -142,10 +144,11 @@ body::after {
 }
 .stat-card:hover { transform: translateY(-2px); }
 .stat-glow { position: absolute; width: 80px; height: 80px; border-radius: 50%; opacity: .35; top: -20px; right: -20px; filter: blur(20px); pointer-events: none; }
-.stat-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: .75rem; }
-.stat-icon i { font-size: 20px; }
-.stat-label { font-size: .72rem; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .35rem; }
-.stat-value { font-size: 1.8rem; font-weight: 700; line-height: 1; margin-bottom: .25rem; }
+.stat-header { display: flex; align-items: center; gap: .6rem; margin-bottom: .5rem; }
+.stat-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.stat-icon i { font-size: 17px; }
+.stat-label { font-size: .72rem; font-weight: 600; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .08em; }
+.stat-value { font-size: 1.6rem; font-weight: 700; line-height: 1; margin-bottom: .2rem; }
 .stat-sub { font-size: .72rem; color: rgba(255,255,255,.35); }
 .stat-accent { position: absolute; bottom: 0; left: 0; right: 0; height: 2px; }
 

@@ -21,7 +21,7 @@ return [
     'dashboard.no_costs'            => 'No active contracts with recurring costs.',
     'dashboard.expenses'            => 'Expenses',
     'dashboard.income'              => 'Income',
-    'dashboard.per_month'           => '/ month',
+    'dashboard.per_month' => 'Month',
     'dashboard.client'              => 'Client',
     'dashboard.contracts_plural'    => 'Contracts',
     'dashboard.contract_singular'   => 'Contract',

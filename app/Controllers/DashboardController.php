@@ -6,8 +6,11 @@ $ids = allowedClientIds();
 $in  = $ids ? implode(',', array_map('intval', $ids)) : '0';
 
 $totalContracts  = $db->query("SELECT COUNT(*) FROM contracts WHERE client_id IN ($in)")->fetchColumn();
-$activeContracts = $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
-$totalValue      = $db->query("SELECT COALESCE(SUM(value),0) FROM contracts WHERE status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
+$activeContracts  = $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
+$activeExpenses  = $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id IN ($in)")->fetchColumn();
+$activeIncome    = $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id IN ($in)")->fetchColumn();
+$totalExpenses   = $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id IN ($in)")->fetchColumn();
+$totalIncome     = $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id IN ($in)")->fetchColumn();
 $expiringSoon    = $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date BETWEEN date('now') AND date('now', '+30 days') AND status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
 $overdue         = $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date < date('now') AND status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
 
