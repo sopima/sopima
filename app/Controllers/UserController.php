@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Mandanten zuweisen
         if (!empty($_POST['clients'])) {
             foreach ($_POST['clients'] as $cid) {
-                $db->prepare("INSERT IGNORE INTO user_clients (user_id, client_id) VALUES (?,?)")->execute([$newId, $cid]);
+                $db->prepare("INSERT OR IGNORE INTO user_clients (user_id, client_id) VALUES (?,?)")->execute([$newId, $cid]);
             }
         }
         header('Location: /settings?tab=users');
@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $db->prepare("DELETE FROM user_clients WHERE user_id=?")->execute([$_POST['id']]);
         if (!empty($_POST['clients'])) {
             foreach ($_POST['clients'] as $cid) {
-                $db->prepare("INSERT IGNORE INTO user_clients (user_id, client_id) VALUES (?,?)")->execute([$_POST['id'], $cid]);
+                $db->prepare("INSERT OR IGNORE INTO user_clients (user_id, client_id) VALUES (?,?)")->execute([$_POST['id'], $cid]);
             }
         }
         header('Location: /settings?tab=users');
