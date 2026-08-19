@@ -73,7 +73,11 @@ $token  = apiAuth();
 
 if ($apiUri === '/clients' && $method === 'GET') {
     apiCan($token, 'clients.read');
-    $clients = $db->query("SELECT id, name, type, active FROM clients WHERE active = 1 ORDER BY name")->fetchAll();
+    $where = ['active = 1']; $params = [];
+    if ($token['client_id']) { $where[] = 'id = ?'; $params[] = $token['client_id']; }
+    $stmt = $db->prepare("SELECT id, name, type, active FROM clients WHERE " . implode(' AND ', $where) . " ORDER BY name");
+    $stmt->execute($params);
+    $clients = $stmt->fetchAll();
     apiResponse(200, ['data' => $clients]);
 }
 
