@@ -37,6 +37,75 @@ When a new contract is created via the API (`POST /api/contracts`), Sopima autom
 
 ---
 
+### Cancellation Deadline Overview
+- Dedicated page listing all contracts with calculated cancellation deadlines
+- Sortable by urgency, filterable by client, time range (30/60/90 days), contract type
+- Columns: contract name, partner, client, end date, notice period, cancel-by date, status
+- Cancel-by date calculated automatically (end date minus notice period)
+- No new database fields required - purely calculated from existing data
+- Exportable as CSV/PDF
+
+---
+
+### Price History per Contract
+- Track historical price changes per contract (date, amount, optional note)
+- Table view + line chart (Chart.js)
+- Useful for recurring contracts: utilities, insurance, SaaS subscriptions
+- Shows cost trends and when price increases occurred
+- Database: `contract_price_history` (id, contract_id, valid_from, amount, notes)
+
+---
+
+### Cancellation Wizard
+- Select contract -> automatically check cancellation deadline
+- Letter templates with placeholders (cancellation, information request, custom)
+- Output: PDF cancellation letter or email draft
+- Step-by-step guided flow
+
+---
+
+### Quick Contract Entry
+- Modal with required fields only, no full form
+- For fast data capture without leaving the current view
+
+---
+
+### Emergency PDF
+- One click: compact PDF with all key contract data for a client
+- Useful as an offline backup or for handover
+
+---
+
+### CSV / Excel Export
+- Export contract list per client or globally
+- Filterable before export (status, category, date range)
+
+---
+
+### Global Search (Ctrl+K)
+- Fast overlay search across all fields (title, partner, notes, tags)
+- Keyboard-driven navigation
+
+---
+
+### Favourites / Pinned Contracts
+- Pin frequently accessed contracts to the top
+- Per-user setting
+
+---
+
+### Audit Log
+- Track who changed what and when per contract
+- Read-only log, stored in `contract_audit_log` table
+
+---
+
+### Calendar / Timeline View
+- Calendar view for all contract durations and deadlines
+- Horizontal timeline bars per contract, coloured by status
+
+---
+
 ### Tauri Desktop Build
 - No-Docker distribution for desktop environments
 - Single binary, no server setup required
