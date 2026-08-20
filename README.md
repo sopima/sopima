@@ -6,6 +6,11 @@
 
 Self-hosted, open-source contract management for individuals, small organizations and teams.
 
+## Screenshots
+
+![Dashboard](docs/screenshots/dashboard.png)
+![Contracts](docs/screenshots/contracts.png)
+
 ## Features
 
 - Multi-tenant contract management (CRUD)
