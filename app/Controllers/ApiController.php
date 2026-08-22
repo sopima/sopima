@@ -140,7 +140,32 @@ if ($apiUri === '/contracts' && $method === 'POST') {
     $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe', $body['plan'] ?? null]);
     $newId = $db->lastInsertId();
-    if (!empty($body['email']) && filter_var($body['email'], FILTER_VALIDATE_EMAIL)) {
+    // Kontakt anlegen wenn mitgegeben
+    $contact = $body['contact'] ?? null;
+    if (!empty($contact) && is_array($contact)) {
+        $cs = $db->prepare("INSERT INTO contract_contacts (contract_id, company, first_name, last_name, email, phone, mobile, street, zip, city, iban, bank, bic) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $cs->execute([
+            $newId,
+            $contact['company']    ?? null,
+            $contact['first_name'] ?? null,
+            $contact['last_name']  ?? null,
+            $contact['email']      ?? null,
+            $contact['phone']      ?? null,
+            $contact['mobile']     ?? null,
+            $contact['street']     ?? null,
+            $contact['zip']        ?? null,
+            $contact['city']       ?? null,
+            $contact['iban']       ?? null,
+            $contact['bank']       ?? null,
+            $contact['bic']        ?? null,
+        ]);
+        // Mail an Kontakt-Email senden
+        $contactEmail = $contact['email'] ?? null;
+        if ($contactEmail && filter_var($contactEmail, FILTER_VALIDATE_EMAIL)) {
+            MailService::sendContractCreated($contactEmail, array_merge($body, ['contract_number' => $contract_number]));
+        }
+    } elseif (!empty($body['email']) && filter_var($body['email'], FILTER_VALIDATE_EMAIL)) {
+        // Fallback: direktes email-Feld
         MailService::sendContractCreated($body['email'], array_merge($body, ['contract_number' => $contract_number]));
     }
     apiResponse(201, ['id' => $newId, 'contract_number' => $contract_number, 'message' => 'Vertrag angelegt.']);

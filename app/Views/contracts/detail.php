@@ -95,7 +95,7 @@ if ($contract['deductible'])             $extFields[] = ['label'=>__('cd.ef.dedu
 if ($contract['service_interval_months']) $extFields[] = ['label'=>__('cd.ef.service_interval'),        'value'=>$contract['service_interval_months'].' Monate'];
 
 $hasDetails = !empty($extFields) || !empty($custom_fields)
-    || (isset($contact) && $contact && strtolower($contract['client_type'] ?? '') !== 'privat');
+    || (isset($contact) && $contact);
 $personsCount = count($persons ?? []);
 $docsCount    = count($documents ?? []);
 $logCount     = count($comm_log ?? []);
@@ -265,7 +265,19 @@ $logCount     = count($comm_log ?? []);
 </div>
 <?php endif; ?>
 
-<?php if (isset($contact) && $contact && strtolower($contract['client_type'] ?? '') !== 'privat'): ?>
+
+<?php if (empty($extFields) && empty($custom_fields)): ?>
+<div class="card" style="padding:2.5rem 1.5rem;max-width:1100px;margin:0 auto;text-align:center;color:var(--text-muted);font-size:.85rem;">
+    <i class="ti ti-list-details" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.3;"></i>
+    <?php echo __('cd.no_details'); ?>
+</div>
+<?php endif; ?>
+
+<?php endif; ?>
+
+<!-- ===== TAB: ANSPRECHPARTNER ===== -->
+<?php if ($activeTab === 'ansprechpartner'): ?>
+<?php if (isset($contact) && $contact): ?>
 <div class="card" style="padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto 1rem;">
     <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;"><?php echo __('cd.contact'); ?></div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem 1.5rem;">
@@ -299,18 +311,6 @@ $logCount     = count($comm_log ?? []);
     </div>
 </div>
 <?php endif; ?>
-
-<?php if (empty($extFields) && empty($custom_fields) && !(isset($contact) && $contact && strtolower($contract['client_type'] ?? '') !== 'privat')): ?>
-<div class="card" style="padding:2.5rem 1.5rem;max-width:1100px;margin:0 auto;text-align:center;color:var(--text-muted);font-size:.85rem;">
-    <i class="ti ti-list-details" style="font-size:2rem;display:block;margin-bottom:.5rem;opacity:.3;"></i>
-    <?php echo __('cd.no_details'); ?>
-</div>
-<?php endif; ?>
-
-<?php endif; ?>
-
-<!-- ===== TAB: ANSPRECHPARTNER ===== -->
-<?php if ($activeTab === 'ansprechpartner'): ?>
 
 <?php if (!empty($persons)): ?>
 <div class="card" style="padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto;">
