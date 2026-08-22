@@ -237,3 +237,9 @@ tr:hover td { background: rgba(255,255,255,.04); }
 .ampel-amber  { background:#fbbf24; box-shadow:0 0 6px rgba(251,191,36,.5); }
 .ampel-green  { background:#34d399; box-shadow:0 0 6px rgba(52,211,153,.5); }
 .ampel-grey   { background:rgba(255,255,255,.2); }
+
+/* --- Mandanten-Tabs --- */
+.tab-bar { display:flex; gap:.25rem; margin-bottom:1.75rem; flex-wrap:wrap; }
+.tab-item { padding:.35rem .9rem; font-size:.83rem; color:var(--text-muted); text-decoration:none; border-radius:6px; border:1px solid transparent; transition:color .15s,background .15s; white-space:nowrap; }
+.tab-item:hover { color:var(--text-primary); background:rgba(255,255,255,.06); }
+.tab-active { color:var(--text-primary) !important; background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.1); }
