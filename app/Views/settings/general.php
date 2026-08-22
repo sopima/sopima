@@ -125,3 +125,15 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
         <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i> <?php echo __('settings.save'); ?></button>
     </div>
 </form>
+<div style="display:flex;justify-content:flex-start;align-items:center;margin-top:.75rem;gap:1rem;">
+    <form method="POST" action="/settings?tab=general&action=smtp_test" style="margin:0;">
+        <button type="submit" class="btn btn-outline"><i class="ti ti-mail"></i> <?php echo __('settings.smtp_test'); ?></button>
+    </form>
+    <?php if (isset($_GET['smtp_test'])): ?>
+        <?php if ($_GET['smtp_test'] === '1'): ?>
+        <span style="font-size:.83rem;color:#34d399;"><i class="ti ti-check"></i> <?php echo __('settings.smtp_test_ok'); ?></span>
+        <?php else: ?>
+        <span style="font-size:.83rem;color:#f87171;"><i class="ti ti-alert-circle"></i> <?php echo __('settings.smtp_test_fail'); ?></span>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>

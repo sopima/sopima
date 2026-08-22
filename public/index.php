@@ -21,6 +21,14 @@ function env(string $key, mixed $default = null): mixed
 }
 
 define('APP_NAME', env('APP_NAME', 'Sopima'));
+define('APP_URL',         env('APP_URL', ''));
+define('SMTP_HOST',       env('MAIL_HOST', ''));
+define('SMTP_PORT',       (int)env('MAIL_PORT', 587));
+define('SMTP_USERNAME',   env('MAIL_USERNAME', ''));
+define('SMTP_PASSWORD',   env('MAIL_PASSWORD', ''));
+define('SMTP_ENCRYPTION', env('MAIL_ENCRYPTION', 'tls'));
+define('SMTP_FROM_EMAIL', env('MAIL_FROM', ''));
+define('SMTP_FROM_NAME',  env('MAIL_FROM_NAME', env('APP_NAME', 'Sopima')));
 
 require_once BASE_PATH . '/vendor/autoload.php';
 require_once BASE_PATH . '/app/Services/MailService.php';
