@@ -254,8 +254,12 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- ===== TAB: ANSPRECHPARTNER ===== -->
+    <div id="tab-ansprechpartner" class="card" style="padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto;display:none;">
         <!-- Kontaktdaten (nur nicht-private Mandanten) -->
-        <div id="contact-block" style="display:none;">
+        <div id="contact-block">
             <div style="height:1.25rem;"></div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;">Kontaktdaten</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
@@ -279,10 +283,7 @@
                 <div class="form-group" style="margin:0;"><label><?php echo __('cf.bic'); ?></label><input type="text" name="cc_bic" value="<?php echo htmlspecialchars($contact['bic'] ?? ''); ?>" placeholder="DEUTDEDB"></div>
             </div>
         </div>
-    </div>
-
-    <!-- ===== TAB: ANSPRECHPARTNER ===== -->
-    <div id="tab-ansprechpartner" class="card" style="padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto;display:none;">
+        <div style="height:1.25rem;"></div>
         <div id="persons-list">
             <?php foreach (($persons ?? []) as $i => $p): ?>
             <div class="person-row" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.75rem;margin-bottom:.75rem;">
@@ -529,23 +530,7 @@ function showTypeFields() {
 var ctSel = document.getElementById('contract_type_sel');
 if (ctSel) { ctSel.addEventListener('change', showTypeFields); showTypeFields(); }
 
-// Kontaktdaten-Block
-(function(){
-    var sel   = document.getElementById('client_id_sel');
-    var block = document.getElementById('contact-block');
-    var privateIds = <?php
-        $db = db();
-        $rows = $db->query("SELECT id FROM clients WHERE LOWER(type)='privat'")->fetchAll(PDO::FETCH_COLUMN);
-        echo json_encode(array_map('intval', $rows));
-    ?>;
-    function toggle(){
-        if (!sel || !block) return;
-        var val = parseInt(sel.value);
-        block.style.display = (val && privateIds.indexOf(val) === -1) ? '' : 'none';
-    }
-    if (sel) sel.addEventListener('change', toggle);
-    toggle();
-})();
+// Kontaktdaten-Block immer sichtbar
 
 function addPerson() {
     var tpl = '<div class="person-row" style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.75rem;margin-bottom:.75rem;">'+
