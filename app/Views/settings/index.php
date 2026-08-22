@@ -12,6 +12,9 @@
     <a href="/settings?tab=tokens" class="btn <?php echo $tab === 'tokens' ? 'btn-primary' : 'btn-outline'; ?>">
         <i class="ti ti-key"></i><?php echo __('settings.tokens'); ?>
     </a>
+    <a href="/settings?tab=mail" class="btn <?php echo $tab === 'mail' ? 'btn-primary' : 'btn-outline'; ?>">
+        <i class="ti ti-mail"></i><?php echo __('settings.mail_templates'); ?>
+    </a>
     <a href="/backup" class="btn btn-outline">
         <i class="ti ti-database"></i><?php echo __('settings.backup'); ?>
     </a>

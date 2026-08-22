@@ -95,31 +95,33 @@ class MailService
 
     public static function sendContractCreated(string $toEmail, array $contract): bool
     {
-        $subject = APP_NAME . ': Neuer Vertrag angelegt – ' . $contract['title'];
-        $details = '<table style="width:100%;font-size:14px;border-collapse:collapse;">';
-        $fields = [
-            'Titel'       => $contract['title'] ?? '–',
-            'Partner'     => $contract['partner'] ?? '–',
-            'Beginn'      => $contract['start_date'] ?? '–',
-            'Ende'        => $contract['end_date'] ?? '–',
-            'Kündigung'   => $contract['notice_date'] ?? '–',
-            'Wert'        => isset($contract['value']) ? number_format((float)$contract['value'], 2, ',', '.') . ' €' : '–',
-            'Intervall'   => $contract['billing_interval'] ?? '–',
-            'Status'      => $contract['status'] ?? '–',
+        $db = \db();
+        $tpl = $db->prepare("SELECT subject, body, active FROM mail_templates WHERE event = 'contract.created' LIMIT 1");
+        $tpl->execute();
+        $row = $tpl->fetch();
+        if (!$row || !$row['active']) return false;
+
+        $placeholders = [
+            '{{title}}',          '{{partner}}',       '{{start_date}}',
+            '{{end_date}}',       '{{notice_date}}',   '{{value}}',
+            '{{billing_interval}}', '{{status}}',      '{{app_name}}',
         ];
-        foreach ($fields as $label => $value) {
-            $details .= '<tr><td style="padding:4px 8px 4px 0;color:#888;white-space:nowrap;">' . htmlspecialchars($label) . ':</td>';
-            $details .= '<td style="padding:4px 0;">' . htmlspecialchars((string)$value) . '</td></tr>';
-        }
-        $details .= '</table>';
-        $body = self::wrapTemplate(
-            '',
-            'Ein neuer Vertrag wurde über die API angelegt.',
-            htmlspecialchars($contract['title']),
-            $details,
-            'Vertrag ansehen',
-            APP_URL . '/contracts'
-        );
-        return self::send($toEmail, $toEmail, $subject, $body);
+        $values = [
+            $contract['title']            ?? '–',
+            $contract['partner']          ?? '–',
+            $contract['start_date']       ?? '–',
+            $contract['end_date']         ?? '–',
+            $contract['notice_date']      ?? '–',
+            isset($contract['value']) ? number_format((float)$contract['value'], 2, ',', '.') . ' €' : '–',
+            $contract['billing_interval'] ?? '–',
+            $contract['status']           ?? '–',
+            APP_NAME,
+        ];
+
+        $subject = str_replace($placeholders, $values, $row['subject']);
+        $bodyText = str_replace($placeholders, $values, $row['body']);
+        $bodyHtml = self::wrapTemplate('', '', $subject, nl2br(htmlspecialchars($bodyText)), 'Verträge ansehen', APP_URL . '/contracts');
+
+        return self::send($toEmail, $toEmail, $subject, $bodyHtml);
     }
 }
