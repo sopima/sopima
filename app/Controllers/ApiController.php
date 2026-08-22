@@ -139,7 +139,11 @@ if ($apiUri === '/contracts' && $method === 'POST') {
     $contract_number = $appPrefix . "-" . $prefix . "-" . $b36 . "-" . $rand;
     $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe', $body['plan'] ?? null]);
-    apiResponse(201, ['id' => $db->lastInsertId(), 'contract_number' => $contract_number, 'message' => 'Vertrag angelegt.']);
+    $newId = $db->lastInsertId();
+    if (!empty($body['email']) && filter_var($body['email'], FILTER_VALIDATE_EMAIL)) {
+        MailService::sendContractCreated($body['email'], array_merge($body, ['contract_number' => $contract_number]));
+    }
+    apiResponse(201, ['id' => $newId, 'contract_number' => $contract_number, 'message' => 'Vertrag angelegt.']);
 }
 
 if (preg_match('#^/contracts/(\d+)$#', $apiUri, $m) && $method === 'PUT') {
