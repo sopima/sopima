@@ -1,6 +1,18 @@
 # Changelog
 
 ## [0.3.2] – 2026-08-23
+### Added
+- Mail events `contract.updated`, `contract.cancelled`, `contract.expiring` – triggered via API and cronjob
+- `bin/notify-expiring.php` – daily cronjob for end-date notifications via mail templates
+- `bin/cron.php` – central cron runner with auto-discovery of all `bin/*.php` jobs
+- `app/bootstrap.php` – shared bootstrap for CLI scripts
+- `notify_expiring_days` configurable in Settings (General tab), stored in `settings` table
+- `settings` table (migration 021) for persistent app configuration
+- Mail templates for `contract.expiring`, `contract.cancelled`, `contract.updated` (migration 020)
+- PDF templates refactored: freely named templates per tenant, accordion UI, add/delete support (migration 019)
+- Settings General tab: tab navigation now correctly rendered
+### Changed
+- `bin/notify.php` refactored to use `app/bootstrap.php` instead of self-contained bootstrap
 ### Fixed
 - Mail template save broken due to `header()` called after HTML output – all POST redirects in SettingsController moved before layout render
 - Mail template editor (contenteditable) displayed body as single line – newlines now converted to `<br>` on load, stripped back on save
