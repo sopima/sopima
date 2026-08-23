@@ -137,10 +137,18 @@ if ($apiUri === '/contracts' && $method === 'POST') {
     $rand = bin2hex(random_bytes(1));
     $appPrefix = strtoupper(substr(preg_replace("/[^a-zA-Z0-9]/", "", APP_NAME), 0, 3));
     $contract_number = $appPrefix . "-" . $prefix . "-" . $b36 . "-" . $rand;
-    // Status normalisieren: englische -> deutsche Werte
-$statusMap = ['active' => 'aktiv', 'cancelled' => 'gekuendigt', 'expired' => 'abgelaufen', 'paused' => 'pausiert'];
-$body['status'] = $statusMap[$body['status'] ?? ''] ?? ($body['status'] ?? 'aktiv');
+    // Englische API-Werte auf interne deutsche Werte mappen
+$statusMap   = ['active' => 'aktiv', 'cancelled' => 'gekuendigt', 'expired' => 'abgelaufen', 'paused' => 'pausiert'];
+$intervalMap = ['yearly' => 'jaehrlich', 'monthly' => 'monatlich', 'quarterly' => 'vierteljaehrlich', 'biannual' => 'halbjaehrlich'];
+$directionMap = ['expense' => 'ausgabe', 'income' => 'einnahme'];
+$sourceMap   = ['manual' => 'manuell'];
+$body['status']           = $statusMap[$body['status'] ?? '']           ?? ($body['status'] ?? 'aktiv');
+$body['billing_interval'] = $intervalMap[$body['billing_interval'] ?? ''] ?? ($body['billing_interval'] ?? 'jaehrlich');
+$body['direction']        = $directionMap[$body['direction'] ?? '']       ?? ($body['direction'] ?? 'ausgabe');
+$body['source']           = $sourceMap[$body['source'] ?? '']             ?? ($body['source'] ?? 'manuell');
 if (!in_array($body['status'], ['aktiv','gekuendigt','abgelaufen','pausiert'])) $body['status'] = 'aktiv';
+if (!in_array($body['billing_interval'], ['jaehrlich','monatlich','vierteljaehrlich','halbjaehrlich'])) $body['billing_interval'] = 'jaehrlich';
+if (!in_array($body['direction'], ['ausgabe','einnahme'])) $body['direction'] = 'ausgabe';
 
 $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe', $body['plan'] ?? null]);
@@ -186,11 +194,21 @@ if (preg_match('#^/contracts/(\d+)$#', $apiUri, $m) && $method === 'PUT') {
     $check = $db->prepare("SELECT id FROM contracts WHERE " . implode(' AND ', $where));
     $check->execute($params);
     if (!$check->fetch()) apiResponse(404, ['error' => 'Vertrag nicht gefunden.']);
-    // Status normalisieren
-    $statusMap = ['active' => 'aktiv', 'cancelled' => 'gekuendigt', 'expired' => 'abgelaufen', 'paused' => 'pausiert'];
+    // Englische API-Werte auf interne deutsche Werte mappen
+    $statusMap   = ['active' => 'aktiv', 'cancelled' => 'gekuendigt', 'expired' => 'abgelaufen', 'paused' => 'pausiert'];
+    $intervalMap = ['yearly' => 'jaehrlich', 'monthly' => 'monatlich', 'quarterly' => 'vierteljaehrlich', 'biannual' => 'halbjaehrlich'];
+    $directionMap = ['expense' => 'ausgabe', 'income' => 'einnahme'];
     if (isset($body['status'])) {
         $body['status'] = $statusMap[$body['status']] ?? $body['status'];
         if (!in_array($body['status'], ['aktiv','gekuendigt','abgelaufen','pausiert'])) unset($body['status']);
+    }
+    if (isset($body['billing_interval'])) {
+        $body['billing_interval'] = $intervalMap[$body['billing_interval']] ?? $body['billing_interval'];
+        if (!in_array($body['billing_interval'], ['jaehrlich','monatlich','vierteljaehrlich','halbjaehrlich'])) unset($body['billing_interval']);
+    }
+    if (isset($body['direction'])) {
+        $body['direction'] = $directionMap[$body['direction']] ?? $body['direction'];
+        if (!in_array($body['direction'], ['ausgabe','einnahme'])) unset($body['direction']);
     }
     $fields = []; $vals = [];
     foreach (['title','partner','description','start_date','end_date','notice_date','value','billing_interval','status','category_id','notes','plan'] as $f) {

@@ -127,12 +127,12 @@ Query parameters:
 | Parameter  | Type   | Description                                    |
 |------------|--------|------------------------------------------------|
 | client_id  | int    | Filter by client                               |
-| status     | string | aktiv, gekuendigt, abgelaufen, pausiert        |
+| status     | string | active, cancelled, expired, paused             |
 
 Request:
     curl -s \
       -H "Authorization: Bearer <token>" \
-      "https://your-domain.example.com/api/contracts?client_id=1&status=aktiv"
+      "https://your-domain.example.com/api/contracts?client_id=1&status=active"
 
 Response 200:
     {
@@ -148,8 +148,8 @@ Response 200:
                 "end_date": "2027-01-01",
                 "notice_date": "2026-10-01",
                 "value": "120.00",
-                "billing_interval": "jaehrlich",
-                "status": "aktiv",
+                "billing_interval": "yearly",
+                "status": "active",
                 "contract_number": "SOP-MEIN-tjkfc7-ae",
                 "notes": null,
                 "created_at": "2026-08-15 10:00:00",
@@ -201,15 +201,15 @@ Optional fields:
 | end_date         | date   | null      | End date (YYYY-MM-DD)                          |
 | notice_date      | date   | null      | Cancellation deadline (YYYY-MM-DD)             |
 | value            | float  | null      | Contract value in euros                        |
-| billing_interval | string | jaehrlich | einmalig, monatlich, quartalsweise, jaehrlich  |
-| status           | string | aktiv     | aktiv, gekuendigt, abgelaufen, pausiert        |
+| billing_interval | string | yearly    | yearly, monthly, quarterly, biannual           |
+| status           | string | active    | active, cancelled, expired, paused             |
 | notes            | string | null      | Internal notes                                 |
 
 Request:
     curl -s -X POST \
       -H "Authorization: Bearer <token>" \
       -H "Content-Type: application/json" \
-      -d '{"client_id": 1, "title": "Liability Insurance", "partner": "Example AG", "start_date": "2026-01-01", "value": 120, "billing_interval": "jaehrlich", "status": "aktiv"}' \
+      -d '{"client_id": 1, "title": "Liability Insurance", "partner": "Example AG", "start_date": "2026-01-01", "value": 120, "billing_interval": "yearly", "status": "active"}' \
       https://your-domain.example.com/api/contracts
 
 Response 201:
@@ -233,7 +233,7 @@ Request:
     curl -s -X PUT \
       -H "Authorization: Bearer <token>" \
       -H "Content-Type: application/json" \
-      -d '{"status": "gekuendigt", "notice_date": "2026-12-31"}' \
+      -d '{"status": "cancelled", "notice_date": "2026-12-31"}' \
       https://your-domain.example.com/api/contracts/2
 
 Response 200:
