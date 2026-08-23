@@ -5,7 +5,8 @@
     "license": "MIT",
     "require": {
         "php": ">=8.2",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "dompdf/dompdf": "^3.1"
     },
     "autoload": {
         "psr-4": {

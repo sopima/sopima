@@ -547,4 +547,25 @@ return [
     'settings.smtp_test' => 'Send test mail',
     'settings.smtp_test_ok' => 'Test mail sent successfully.',
     'settings.smtp_test_fail' => 'Test mail failed. Check SMTP configuration.',
+    // clients address
+    'clients.form.address' => 'Address',
+    'clients.form.street'  => 'Street',
+    'clients.form.zip'     => 'ZIP',
+    'clients.form.city'    => 'City',
+    'clients.form.email'   => 'E-Mail',
+    'clients.form.phone'   => 'Phone',
+    'clients.form.website' => 'Website',
+
+    // pdf templates
+    'settings.pdf_templates'        => 'PDF Templates',
+    'settings.pdf.saved'            => 'Changes saved.',
+    'settings.pdf.mandant'          => 'Tenant',
+    'settings.pdf.type_datenschutz' => 'Privacy Policy',
+    'settings.pdf.type_agb'         => 'Terms & Conditions',
+    'settings.pdf.type_vertrag'     => 'Contract',
+    'settings.pdf.attach'           => 'Attach',
+    'settings.pdf.title'            => 'Title',
+    'settings.pdf.body'             => 'Content (HTML)',
+    'settings.pdf.placeholders'     => 'Placeholders',
+    'settings.pdf.save'             => 'Save',
 ];

@@ -37,6 +37,33 @@ if ($tab === "tokens") {
     }
     require __DIR__ . "/../Views/settings/index.php";
     require __DIR__ . "/../Views/settings/mail_templates.php";
+} elseif ($tab === "pdf") {
+    $clients = $db->query("SELECT id, name FROM clients WHERE active=1 ORDER BY name")->fetchAll();
+    $client_id = (int)($_GET["client_id"] ?? ($clients[0]["id"] ?? 0));
+    if ($action === "save" && $_SERVER["REQUEST_METHOD"] === "POST") {
+        $client_id = (int)($_POST["client_id"] ?? 0);
+        $type      = $_POST["type"] ?? "";
+        $title     = trim($_POST["title"] ?? "");
+        $body      = trim($_POST["body"] ?? "");
+        $attach    = isset($_POST["attach"]) ? 1 : 0;
+        $active    = isset($_POST["active"]) ? 1 : 0;
+        if ($client_id && $type && $title) {
+            $stmt = $db->prepare("INSERT INTO pdf_templates (client_id, type, title, body, attach, active) VALUES (?,?,?,?,?,?)
+                ON CONFLICT(client_id, type) DO UPDATE SET title=excluded.title, body=excluded.body, attach=excluded.attach, active=excluded.active, updated_at=datetime('now')");
+            $stmt->execute([$client_id, $type, $title, $body, $attach, $active]);
+        }
+        header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
+        exit;
+    }
+    $types = ["datenschutz", "agb", "vertrag"];
+    $templates = [];
+    foreach ($types as $type) {
+        $stmt = $db->prepare("SELECT * FROM pdf_templates WHERE client_id=? AND type=?");
+        $stmt->execute([$client_id, $type]);
+        $templates[$type] = $stmt->fetch() ?: ["client_id" => $client_id, "type" => $type, "title" => "", "body" => "", "attach" => 0, "active" => 1];
+    }
+    require __DIR__ . "/../Views/settings/index.php";
+    require __DIR__ . "/../Views/settings/pdf_templates.php";
 } else {
     $tab = "users";
     require __DIR__ . "/UserController.php";

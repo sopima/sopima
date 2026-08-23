@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_SESSION['role'] !== 'admin') {
             http_response_code(403); die('Zugriff verweigert.');
         }
-        $stmt = $db->prepare("INSERT INTO clients (name, type, description) VALUES (?,?,?)");
-        $stmt->execute([$_POST['name'], $_POST['type'], $_POST['description']]);
+        $stmt = $db->prepare("INSERT INTO clients (name, type, description, street, zip, city, email, phone, website) VALUES (?,?,?,?,?,?,?,?,?)");
+        $stmt->execute([$_POST['name'], $_POST['type'], $_POST['description'], $_POST['street'] ?? null, $_POST['zip'] ?? null, $_POST['city'] ?? null, $_POST['email'] ?? null, $_POST['phone'] ?? null, $_POST['website'] ?? null]);
         $newId = $db->lastInsertId();
         $db->prepare("INSERT INTO user_clients (user_id, client_id) VALUES (?,?)")->execute([$_SESSION['user_id'], $newId]);
         header('Location: /clients');
@@ -28,11 +28,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!clientAllowed((int)$_POST['id'])) {
             http_response_code(403); die('Zugriff verweigert.');
         }
-        $stmt = $db->prepare("UPDATE clients SET name=?, type=?, description=?, active=? WHERE id=? AND id IN ($in)");
+        $stmt = $db->prepare("UPDATE clients SET name=?, type=?, description=?, street=?, zip=?, city=?, email=?, phone=?, website=?, active=? WHERE id=? AND id IN ($in)");
         $stmt->execute([
             $_POST['name'],
             $_POST['type'],
             $_POST['description'],
+            $_POST['street'] ?? null,
+            $_POST['zip'] ?? null,
+            $_POST['city'] ?? null,
+            $_POST['email'] ?? null,
+            $_POST['phone'] ?? null,
+            $_POST['website'] ?? null,
             isset($_POST['active']) ? 1 : 0,
             $_POST['id'],
         ]);

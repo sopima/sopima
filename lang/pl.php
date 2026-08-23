@@ -535,4 +535,25 @@ return [
     'settings.smtp_test' => 'Wyślij e-mail testowy',
     'settings.smtp_test_ok' => 'E-mail testowy wysłany pomyślnie.',
     'settings.smtp_test_fail' => 'Wysyłanie nieudane. Sprawdź konfigurację SMTP.',
+    // clients address
+    'clients.form.address' => 'Adres',
+    'clients.form.street'  => 'Ulica',
+    'clients.form.zip'     => 'Kod pocztowy',
+    'clients.form.city'    => 'Miasto',
+    'clients.form.email'   => 'E-Mail',
+    'clients.form.phone'   => 'Telefon',
+    'clients.form.website' => 'Strona internetowa',
+
+    // pdf templates
+    'settings.pdf_templates'        => 'Szablony PDF',
+    'settings.pdf.saved'            => 'Zmiany zapisane.',
+    'settings.pdf.mandant'          => 'Klient',
+    'settings.pdf.type_datenschutz' => 'Polityka prywatności',
+    'settings.pdf.type_agb'         => 'Regulamin',
+    'settings.pdf.type_vertrag'     => 'Umowa',
+    'settings.pdf.attach'           => 'Załącz',
+    'settings.pdf.title'            => 'Tytuł',
+    'settings.pdf.body'             => 'Treść (HTML)',
+    'settings.pdf.placeholders'     => 'Zmienne',
+    'settings.pdf.save'             => 'Zapisz',
 ];

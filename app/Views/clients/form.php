@@ -37,6 +37,40 @@
             <textarea name="description" rows="3"><?php echo htmlspecialchars($client['description'] ?? ''); ?></textarea>
         </div>
 
+
+        <div class="form-group" style="margin-top:1rem;">
+            <label style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.75rem;display:block;"><?php echo __('clients.form.address'); ?></label>
+            <div style="display:grid;grid-template-columns:1fr;gap:1rem;">
+                <div class="form-group">
+                    <label><?php echo __('clients.form.street'); ?></label>
+                    <input type="text" name="street" value="<?php echo htmlspecialchars($client['street'] ?? ''); ?>">
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 2fr;gap:1rem;margin-top:1rem;">
+                <div class="form-group">
+                    <label><?php echo __('clients.form.zip'); ?></label>
+                    <input type="text" name="zip" value="<?php echo htmlspecialchars($client['zip'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label><?php echo __('clients.form.city'); ?></label>
+                    <input type="text" name="city" value="<?php echo htmlspecialchars($client['city'] ?? ''); ?>">
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-top:1rem;">
+                <div class="form-group">
+                    <label><?php echo __('clients.form.email'); ?></label>
+                    <input type="email" name="email" value="<?php echo htmlspecialchars($client['email'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label><?php echo __('clients.form.phone'); ?></label>
+                    <input type="text" name="phone" value="<?php echo htmlspecialchars($client['phone'] ?? ''); ?>">
+                </div>
+                <div class="form-group">
+                    <label><?php echo __('clients.form.website'); ?></label>
+                    <input type="text" name="website" value="<?php echo htmlspecialchars($client['website'] ?? ''); ?>">
+                </div>
+            </div>
+        </div>
         <?php if ($client): ?>
         <div class="form-group">
             <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--text-muted);">

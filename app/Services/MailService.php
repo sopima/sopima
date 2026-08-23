@@ -122,6 +122,54 @@ class MailService
         $bodyText = str_replace($placeholders, $values, $row['body']);
         $bodyHtml = self::wrapTemplate('', '', $subject, nl2br(htmlspecialchars($bodyText)), 'Verträge ansehen', APP_URL . '/contracts');
 
-        return self::send($toEmail, $toEmail, $subject, $bodyHtml);
+        $attachments = [];
+        try {
+            require_once __DIR__ . '/PdfService.php';
+            $attachments = PdfService::generateForContract($contract, $db);
+        } catch (\Throwable $e) {
+            error_log('PdfService Fehler: ' . $e->getMessage());
+        }
+
+        return self::sendWithAttachments($toEmail, $toEmail, $subject, $bodyHtml, $attachments);
+    }
+
+    public static function sendWithAttachments(string $toEmail, string $toName, string $subject, string $body, array $attachments = []): bool
+    {
+        if (!defined('SMTP_HOST') || empty(SMTP_HOST)) {
+            error_log('MailService: SMTP nicht konfiguriert.');
+            return false;
+        }
+
+        try {
+            $mail = new PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host       = SMTP_HOST;
+            $mail->Port       = SMTP_PORT;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = SMTP_USERNAME;
+            $mail->Password   = SMTP_PASSWORD;
+            $mail->SMTPSecure = match(SMTP_ENCRYPTION) {
+                'ssl'  => PHPMailer::ENCRYPTION_SMTPS,
+                'none' => '',
+                default => PHPMailer::ENCRYPTION_STARTTLS,
+            };
+            $mail->CharSet = 'UTF-8';
+            $mail->isHTML(true);
+            $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+            $mail->addAddress($toEmail, $toName);
+            $mail->Subject = $subject;
+            $mail->Body    = $body;
+            $mail->AltBody = strip_tags($body);
+
+            foreach ($attachments as $att) {
+                $mail->addStringAttachment($att['content'], $att['filename'], 'base64', 'application/pdf');
+            }
+
+            $mail->send();
+            return true;
+        } catch (Exception $e) {
+            error_log('MailService Fehler: ' . $mail->ErrorInfo);
+            return false;
+        }
     }
 }
