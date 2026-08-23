@@ -99,12 +99,21 @@ class PdfService
 
         $attachments = [];
         foreach ($templates as $tpl) {
-            $body = self::replacePlaceholders($tpl['body'], $contract, $client, $contact);
-            $pdf  = self::render($body, $tpl['title']);
-            $attachments[] = [
-                'filename' => strtolower(str_replace(' ', '_', $tpl['title'])) . '.pdf',
-                'content'  => $pdf,
-            ];
+            $filename = strtolower(str_replace(' ', '_', $tpl['title'])) . '.pdf';
+            if (!empty($tpl['file_path']) && file_exists($tpl['file_path'])) {
+                // Hochgeladene PDF direkt verwenden
+                $attachments[] = [
+                    'filename' => $filename,
+                    'content'  => file_get_contents($tpl['file_path']),
+                ];
+            } elseif (!empty($tpl['body'])) {
+                // HTML-Template on-the-fly generieren
+                $body = self::replacePlaceholders($tpl['body'], $contract, $client, $contact);
+                $attachments[] = [
+                    'filename' => $filename,
+                    'content'  => self::render($body, $tpl['title']),
+                ];
+            }
         }
         return $attachments;
     }

@@ -569,4 +569,9 @@ return [
     'settings.pdf.body'             => 'Inhalt (HTML)',
     'settings.pdf.placeholders'     => 'Platzhalter',
     'settings.pdf.save'             => 'Speichern',
+
+    // pdf upload
+    'settings.pdf.upload'      => 'PDF-Datei hochladen',
+    'settings.pdf.upload_hint' => 'Hochgeladene PDF wird bevorzugt. Ohne Datei wird das HTML-Template verwendet.',
+    'settings.pdf.delete_file' => 'Datei entfernen',
 ];

@@ -1,0 +1,1 @@
+ALTER TABLE pdf_templates ADD COLUMN file_path VARCHAR(500) DEFAULT NULL;

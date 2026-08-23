@@ -48,9 +48,43 @@ if ($tab === "tokens") {
         $attach    = isset($_POST["attach"]) ? 1 : 0;
         $active    = isset($_POST["active"]) ? 1 : 0;
         if ($client_id && $type && $title) {
-            $stmt = $db->prepare("INSERT INTO pdf_templates (client_id, type, title, body, attach, active) VALUES (?,?,?,?,?,?)
-                ON CONFLICT(client_id, type) DO UPDATE SET title=excluded.title, body=excluded.body, attach=excluded.attach, active=excluded.active, updated_at=datetime('now')");
-            $stmt->execute([$client_id, $type, $title, $body, $attach, $active]);
+            // Bestehendes Template laden
+            $existing = $db->prepare("SELECT file_path FROM pdf_templates WHERE client_id=? AND type=?");
+            $existing->execute([$client_id, $type]);
+            $existing = $existing->fetch();
+            $file_path = $existing["file_path"] ?? null;
+
+            // PDF hochladen
+            if (!empty($_FILES["pdf_file"]["tmp_name"])) {
+                $dir = "storage/uploads/pdf_templates/" . $client_id . "/";
+                if (!is_dir($dir)) mkdir($dir, 0775, true);
+                $filename = $type . "_" . time() . ".pdf";
+                $dest = $dir . $filename;
+                if (move_uploaded_file($_FILES["pdf_file"]["tmp_name"], $dest)) {
+                    // altes File löschen
+                    if ($file_path && file_exists($file_path)) unlink($file_path);
+                    $file_path = $dest;
+                }
+            }
+
+            $stmt = $db->prepare("INSERT INTO pdf_templates (client_id, type, title, body, attach, active, file_path) VALUES (?,?,?,?,?,?,?)
+                ON CONFLICT(client_id, type) DO UPDATE SET title=excluded.title, body=excluded.body, attach=excluded.attach, active=excluded.active, file_path=excluded.file_path, updated_at=datetime('now')");
+            $stmt->execute([$client_id, $type, $title, $body, $attach, $active, $file_path]);
+        }
+        header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
+        exit;
+    }
+    if ($action === "delete_file") {
+        $client_id = (int)($_GET["client_id"] ?? 0);
+        $type      = $_GET["type"] ?? "";
+        if ($client_id && $type && clientAllowed($client_id)) {
+            $row = $db->prepare("SELECT file_path FROM pdf_templates WHERE client_id=? AND type=?");
+            $row->execute([$client_id, $type]);
+            $row = $row->fetch();
+            if ($row && $row["file_path"] && file_exists($row["file_path"])) {
+                unlink($row["file_path"]);
+            }
+            $db->prepare("UPDATE pdf_templates SET file_path=NULL WHERE client_id=? AND type=?")->execute([$client_id, $type]);
         }
         header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
         exit;

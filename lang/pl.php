@@ -556,4 +556,9 @@ return [
     'settings.pdf.body'             => 'Treść (HTML)',
     'settings.pdf.placeholders'     => 'Zmienne',
     'settings.pdf.save'             => 'Zapisz',
+
+    // pdf upload
+    'settings.pdf.upload'      => 'Prześlij plik PDF',
+    'settings.pdf.upload_hint' => 'Przesłany PDF ma pierwszeństwo. Bez pliku używany jest szablon HTML.',
+    'settings.pdf.delete_file' => 'Usuń plik',
 ];

@@ -35,7 +35,7 @@ $types_label = [
             <?php echo __('settings.pdf.attach'); ?>
         </label>
     </div>
-    <form id="pdf-form-<?php echo $type; ?>" method="POST" action="/settings?tab=pdf&action=save" style="padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1rem;">
+    <form id="pdf-form-<?php echo $type; ?>" method="POST" action="/settings?tab=pdf&action=save" enctype="multipart/form-data" style="padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1rem;">
         <input type="hidden" name="client_id" value="<?php echo $client_id; ?>">
         <input type="hidden" name="type" value="<?php echo $type; ?>">
         <input type="hidden" name="active" value="1">
@@ -51,6 +51,18 @@ $types_label = [
             </label>
             <textarea name="body" rows="14"
                 style="width:100%;padding:.5rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.85rem;font-family:monospace;box-sizing:border-box;resize:vertical;"><?php echo htmlspecialchars($tpl['body']); ?></textarea>
+        </div>
+        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:1rem;margin-top:.5rem;">
+            <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;"><?php echo __('settings.pdf.upload'); ?></label>
+            <?php if (!empty($tpl['file_path']) && file_exists($tpl['file_path'])): ?>
+            <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.75rem;">
+                <span style="font-size:.83rem;color:#34d399;"><i class="ti ti-file-check"></i> <?php echo htmlspecialchars(basename($tpl['file_path'])); ?></span>
+                <a href="/settings?tab=pdf&action=delete_file&client_id=<?php echo $client_id; ?>&type=<?php echo $type; ?>" style="font-size:.8rem;color:#f87171;"><?php echo __('settings.pdf.delete_file'); ?></a>
+            </div>
+            <?php endif; ?>
+            <input type="file" name="pdf_file" accept="application/pdf"
+                style="font-size:.85rem;color:var(--text-muted);">
+            <p style="font-size:.78rem;color:var(--text-muted);margin:.4rem 0 0;"><?php echo __('settings.pdf.upload_hint'); ?></p>
         </div>
         <div>
             <button type="submit" class="btn btn-primary" style="font-size:.85rem;">

@@ -568,4 +568,9 @@ return [
     'settings.pdf.body'             => 'Content (HTML)',
     'settings.pdf.placeholders'     => 'Placeholders',
     'settings.pdf.save'             => 'Save',
+
+    // pdf upload
+    'settings.pdf.upload'      => 'Upload PDF file',
+    'settings.pdf.upload_hint' => 'Uploaded PDF takes priority. Without a file, the HTML template is used.',
+    'settings.pdf.delete_file' => 'Remove file',
 ];
