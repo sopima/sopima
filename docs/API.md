@@ -254,8 +254,13 @@ Optional fields:
 | notes            | string | null     | Internal notes                           |
 | external_id      | string | null     | External reference ID                    |
 | source           | string | manual   | Origin of the contract (e.g. api)        |
-| plan             | string | null     | Plan or tier information                 |
-| email            | string | null     | Fallback email for mail notification     |
+| plan                     | string  | null     | Plan or tier information                 |
+| email                    | string  | null     | Fallback email for mail notification     |
+| auto_renewal             | boolean | false    | Whether contract renews automatically    |
+| minimum_term_months      | int     | null     | Minimum contract term in months          |
+| cancellation_period_days | int     | null     | Cancellation period in days              |
+| cancellation_deadline    | date    | null     | Calculated cancellation deadline (YYYY-MM-DD) |
+| payment_method           | string  | null     | Payment method (e.g. sepa, invoice)      |
 
 Contact person (optional, nested object):
 
@@ -334,7 +339,12 @@ Updatable fields:
 | direction        | string | expense, income                          |
 | status           | string | active, cancelled, expired, paused       |
 | notes            | string | Internal notes                           |
-| plan             | string | Plan or tier information                 |
+| plan                     | string  | Plan or tier information                 |
+| auto_renewal             | boolean | Whether contract renews automatically    |
+| minimum_term_months      | int     | Minimum contract term in months          |
+| cancellation_period_days | int     | Cancellation period in days              |
+| cancellation_deadline    | date    | Calculated cancellation deadline (YYYY-MM-DD) |
+| payment_method           | string  | Payment method (e.g. sepa, invoice)      |
 
 Request:
 

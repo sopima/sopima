@@ -150,8 +150,8 @@ if (!in_array($body['status'], ['aktiv','gekuendigt','abgelaufen','pausiert'])) 
 if (!in_array($body['billing_interval'], ['jaehrlich','monatlich','vierteljaehrlich','halbjaehrlich'])) $body['billing_interval'] = 'jaehrlich';
 if (!in_array($body['direction'], ['ausgabe','einnahme'])) $body['direction'] = 'ausgabe';
 
-$stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-    $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe', $body['plan'] ?? null]);
+$stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan, auto_renewal, cancellation_period_days, cancellation_deadline, payment_method, minimum_term_months) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe', $body['plan'] ?? null, isset($body['auto_renewal']) ? (int)(bool)$body['auto_renewal'] : 0, $body['cancellation_period_days'] ?? null, $body['cancellation_deadline'] ?? null, $body['payment_method'] ?? null, $body['minimum_term_months'] ?? null]);
     $newId = $db->lastInsertId();
     // Kontakt anlegen wenn mitgegeben
     $contact = $body['contact'] ?? null;
@@ -211,8 +211,12 @@ if (preg_match('#^/contracts/(\d+)$#', $apiUri, $m) && $method === 'PUT') {
         if (!in_array($body['direction'], ['ausgabe','einnahme'])) unset($body['direction']);
     }
     $fields = []; $vals = [];
-    foreach (['title','partner','description','start_date','end_date','notice_date','value','billing_interval','status','category_id','notes','plan'] as $f) {
+    foreach (['title','partner','description','start_date','end_date','notice_date','value','billing_interval','status','category_id','notes','plan','cancellation_period_days','cancellation_deadline','payment_method','minimum_term_months'] as $f) {
         if (isset($body[$f])) { $fields[] = "$f = ?"; $vals[] = $body[$f]; }
+    }
+    if (isset($body['auto_renewal'])) {
+        $fields[] = "auto_renewal = ?";
+        $vals[] = (int)(bool)$body['auto_renewal'];
     }
     if (empty($fields)) apiResponse(422, ['error' => 'Keine Felder zum Aktualisieren.']);
     $vals[] = $id;
