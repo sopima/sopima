@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.1] – 2026-08-22
+### Added
+- Per-tenant tabs on dashboard – one tab per Mandant showing the same widgets filtered by `client_id`; overall summary remains as the first tab
+- Webhook mail Phase 1: send mail automatically on `POST /api/contracts` if `email` is provided
+- Webhook mail Phase 2: configurable mail templates per event (subject + body with placeholders) in Settings
+- SMTP test button in Settings
+- Contact person (`Ansprechpartner`) manageable via API; contact block moved to dedicated tab in form and detail view
+- `ROADMAP.md` with planned features
+
+### Fixed
+- `GET /api/clients` now correctly filtered by `client_id` when token is bound to a tenant
+- `INSERT IGNORE` replaced with `INSERT OR IGNORE` for SQLite compatibility
+- Dashboard widget layout and financial calculation corrected
+- Backup filename prefix renamed from `contracthub` to `sopima`
+- Backup view syntax error in `onchange` attribute fixed
+
+### Docs
+- Screenshots added to README
+- ROADMAP expanded with additional planned features
+- INSTALL and API documentation translated to English
+
 ## [0.3.0] – 2026-08-16
 ### Added
 - Internationalization (i18n) – full multilingual support across the entire UI
