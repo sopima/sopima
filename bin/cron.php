@@ -6,20 +6,14 @@
  * Cronjob (täglich): 0 7 * * * php /var/www/html/bin/cron.php
  */
 $binDir = __DIR__;
-$jobs = [
-    'notify.php',
-    'notify-expiring.php',
-];
 
 echo "[" . date('Y-m-d H:i:s') . "] Sopima Cron Runner gestartet\n";
 echo "---------------------------------------------------\n";
 
-foreach ($jobs as $job) {
-    $file = $binDir . '/' . $job;
-    if (!file_exists($file)) {
-        echo "[SKIP] {$job} – Datei nicht gefunden\n";
-        continue;
-    }
+$jobs = glob($binDir . '/*.php');
+foreach ($jobs as $file) {
+    if (basename($file) === 'cron.php') continue;
+    $job = basename($file);
     echo "[RUN]  {$job}\n";
     passthru(PHP_BINARY . ' ' . escapeshellarg($file), $rc);
     echo "[DONE] {$job} – Exit-Code: {$rc}\n";
