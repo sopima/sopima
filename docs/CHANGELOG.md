@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.2] – 2026-08-23
 ### Fixed
 - Mail template save broken due to `header()` called after HTML output – all POST redirects in SettingsController moved before layout render
 - Mail template editor (contenteditable) displayed body as single line – newlines now converted to `<br>` on load, stripped back on save
