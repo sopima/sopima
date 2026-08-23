@@ -202,6 +202,7 @@ Optional fields:
 | notice_date      | date   | null      | Cancellation deadline (YYYY-MM-DD)             |
 | value            | float  | null      | Contract value in euros                        |
 | billing_interval | string | yearly    | yearly, monthly, quarterly, biannual           |
+| direction        | string | expense   | expense, income                                |
 | status           | string | active    | active, cancelled, expired, paused             |
 | notes            | string | null      | Internal notes                                 |
 
@@ -209,7 +210,7 @@ Request:
     curl -s -X POST \
       -H "Authorization: Bearer <token>" \
       -H "Content-Type: application/json" \
-      -d '{"client_id": 1, "title": "Liability Insurance", "partner": "Example AG", "start_date": "2026-01-01", "value": 120, "billing_interval": "yearly", "status": "active"}' \
+      -d '{"client_id": 1, "title": "Liability Insurance", "partner": "Example AG", "start_date": "2026-01-01", "value": 120, "billing_interval": "yearly", "status": "active", "direction": "expense"}' \
       https://your-domain.example.com/api/contracts
 
 Response 201:
