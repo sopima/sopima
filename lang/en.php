@@ -558,6 +558,9 @@ return [
 
     // pdf templates
     'settings.pdf_templates'        => 'PDF Templates',
+    'settings.pdf.new' => 'New Template',
+    'settings.pdf.untitled' => 'Untitled Template',
+    'settings.pdf.confirm_delete' => 'Really delete this template?',
     'settings.pdf.saved'            => 'Changes saved.',
     'settings.pdf.mandant'          => 'Tenant',
     'settings.pdf.type_datenschutz' => 'Privacy Policy',

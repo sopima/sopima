@@ -559,6 +559,9 @@ return [
 
     // pdf templates
     'settings.pdf_templates'        => 'PDF-Templates',
+    'settings.pdf.new' => 'Neues Template',
+    'settings.pdf.untitled' => 'Unbenanntes Template',
+    'settings.pdf.confirm_delete' => 'Template wirklich löschen?',
     'settings.pdf.saved'            => 'Änderungen gespeichert.',
     'settings.pdf.mandant'          => 'Mandant',
     'settings.pdf.type_datenschutz' => 'Datenschutzerklärung',

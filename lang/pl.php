@@ -546,6 +546,9 @@ return [
 
     // pdf templates
     'settings.pdf_templates'        => 'Szablony PDF',
+    'settings.pdf.new' => 'Nowy szablon',
+    'settings.pdf.untitled' => 'Szablon bez nazwy',
+    'settings.pdf.confirm_delete' => 'Czy na pewno usunąć szablon?',
     'settings.pdf.saved'            => 'Zmiany zapisane.',
     'settings.pdf.mandant'          => 'Klient',
     'settings.pdf.type_datenschutz' => 'Polityka prywatności',
