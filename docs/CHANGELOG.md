@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.3.2] – 2026-08-23
 ### Added
 - API: English values for `status` (active/cancelled/expired/paused), `billing_interval` (yearly/monthly/quarterly/biannual), `direction` (expense/income) – mapped internally
 - API: additional general fields: `auto_renewal`, `minimum_term_months`, `cancellation_period_days`, `cancellation_deadline`, `payment_method`
