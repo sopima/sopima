@@ -188,6 +188,31 @@ if (preg_match('#^/contracts/(\d+)$#', $apiUri, $m) && $method === 'PUT') {
     if (empty($fields)) apiResponse(422, ['error' => 'Keine Felder zum Aktualisieren.']);
     $vals[] = $id;
     $db->prepare("UPDATE contracts SET " . implode(', ', $fields) . " WHERE id = ?")->execute($vals);
+
+    // Mail-Events nach Update
+    $updated = $db->prepare("SELECT c.*, cat.name as category FROM contracts c LEFT JOIN categories cat ON c.category_id = cat.id WHERE c.id = ?");
+    $updated->execute([$id]);
+    $contract = $updated->fetch();
+    if ($contract) {
+        // Empfänger ermitteln: Kontakt-Email oder body['email']
+        $toEmail = null;
+        $cont = $db->prepare("SELECT email FROM contacts WHERE contract_id = ? AND email IS NOT NULL AND email != '' LIMIT 1");
+        $cont->execute([$id]);
+        $cRow = $cont->fetch();
+        if ($cRow && filter_var($cRow['email'], FILTER_VALIDATE_EMAIL)) {
+            $toEmail = $cRow['email'];
+        } elseif (!empty($body['email']) && filter_var($body['email'], FILTER_VALIDATE_EMAIL)) {
+            $toEmail = $body['email'];
+        }
+        if ($toEmail) {
+            // contract.cancelled: notice_date wurde neu gesetzt
+            if (isset($body['notice_date']) && !empty($body['notice_date'])) {
+                MailService::sendContractEvent('contract.cancelled', $toEmail, (array)$contract);
+            } else {
+                MailService::sendContractEvent('contract.updated', $toEmail, (array)$contract);
+            }
+        }
+    }
     apiResponse(200, ['message' => 'Vertrag aktualisiert.']);
 }
 

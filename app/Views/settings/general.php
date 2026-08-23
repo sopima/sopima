@@ -34,6 +34,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($current as $k => $v) {
             $_ENV[$k] = $v;
         }
+        // Benachrichtigungseinstellungen in DB speichern
+        $db = db();
+        $days = (int)($_POST['notify_expiring_days'] ?? 30);
+        $db->prepare("INSERT INTO settings (key, value, updated_at) VALUES ('notify_expiring_days', ?, datetime('now')) ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated_at=excluded.updated_at")
+           ->execute([$days]);
         header('Location: /settings?tab=general&saved=1');
         exit;
     } else {
@@ -41,6 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 $saved = isset($_GET['saved']);
+
+// Benachrichtigungseinstellungen laden
+$db = db();
+$notifyDays = (int)($db->query("SELECT value FROM settings WHERE key='notify_expiring_days'")->fetchColumn() ?: 30);
 
 // Aktuelle Werte laden
 $env = [];
@@ -117,6 +126,16 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('settings.mail_name'); ?></label>
                 <input type="text" name="mail_name" value="<?php echo htmlspecialchars($env['MAIL_FROM_NAME'] ?? ''); ?>">
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="padding:1.5rem;margin-bottom:1rem;">
+        <h3 style="font-size:.88rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:1rem;"><?php echo __('settings.notify_title'); ?></h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div class="form-group" style="margin:0;">
+                <label><?php echo __('settings.notify_expiring_days'); ?></label>
+                <input type="number" name="notify_expiring_days" min="1" max="365" value="<?php echo $notifyDays; ?>" style="width:120px;">
             </div>
         </div>
     </div>

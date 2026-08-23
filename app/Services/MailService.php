@@ -133,6 +133,35 @@ class MailService
         return self::sendWithAttachments($toEmail, $toEmail, $subject, $bodyHtml, $attachments);
     }
 
+    public static function sendContractEvent(string $event, string $toEmail, array $contract): bool
+    {
+        $db = \db();
+        $tpl = $db->prepare("SELECT subject, body, active FROM mail_templates WHERE event = ? LIMIT 1");
+        $tpl->execute([$event]);
+        $row = $tpl->fetch();
+        if (!$row || !$row['active']) return false;
+        $placeholders = [
+            '{{title}}',          '{{partner}}',       '{{start_date}}',
+            '{{end_date}}',       '{{notice_date}}',   '{{value}}',
+            '{{billing_interval}}', '{{status}}',      '{{app_name}}',
+        ];
+        $values = [
+            $contract['title']            ?? '–',
+            $contract['partner']          ?? '–',
+            $contract['start_date']       ?? '–',
+            $contract['end_date']         ?? '–',
+            $contract['notice_date']      ?? '–',
+            isset($contract['value']) ? number_format((float)$contract['value'], 2, ',', '.') . ' €' : '–',
+            $contract['billing_interval'] ?? '–',
+            $contract['status']           ?? '–',
+            APP_NAME,
+        ];
+        $subject  = str_replace($placeholders, $values, $row['subject']);
+        $bodyText = str_replace($placeholders, $values, $row['body']);
+        $bodyHtml = self::wrapTemplate('', '', $subject, nl2br(htmlspecialchars($bodyText)), 'Verträge ansehen', APP_URL . '/contracts');
+        return self::sendWithAttachments($toEmail, $toEmail, $subject, $bodyHtml, []);
+    }
+
     public static function sendWithAttachments(string $toEmail, string $toName, string $subject, string $body, array $attachments = []): bool
     {
         if (!defined('SMTP_HOST') || empty(SMTP_HOST)) {

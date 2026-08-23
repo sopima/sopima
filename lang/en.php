@@ -507,6 +507,8 @@ return [
     'settings.smtp_pass_hint' => 'Leave blank to keep current',
     'settings.mail_from' => 'Sender Email',
     'settings.mail_name' => 'Sender Name',
+    'settings.notify_title' => 'Notifications',
+    'settings.notify_expiring_days' => 'Days before expiry to notify',
     'settings.save' => 'Save',
     'settings.saved' => 'Settings saved.',
     'settings.error' => 'Could not write .env file.',

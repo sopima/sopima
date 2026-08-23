@@ -495,6 +495,8 @@ return [
     'settings.smtp_pass_hint' => 'Zostaw puste aby zachować',
     'settings.mail_from' => 'E-mail nadawcy',
     'settings.mail_name' => 'Nazwa nadawcy',
+    'settings.notify_title' => 'Powiadomienia',
+    'settings.notify_expiring_days' => 'Dni przed wygaśnięciem',
     'settings.save' => 'Zapisz',
     'settings.saved' => 'Ustawienia zapisane.',
     'settings.error' => 'Nie można zapisać pliku .env.',

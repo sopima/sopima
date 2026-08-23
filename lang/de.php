@@ -508,6 +508,8 @@ return [
     'settings.smtp_pass_hint' => 'Leer lassen um beizubehalten',
     'settings.mail_from' => 'Absender-E-Mail',
     'settings.mail_name' => 'Absender-Name',
+    'settings.notify_title' => 'Benachrichtigungen',
+    'settings.notify_expiring_days' => 'Tage vor Ablauf benachrichtigen',
     'settings.save' => 'Speichern',
     'settings.saved' => 'Einstellungen gespeichert.',
     'settings.error' => '.env konnte nicht geschrieben werden.',
