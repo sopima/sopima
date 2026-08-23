@@ -8,6 +8,13 @@
 - SMTP test button in Settings
 - Contact person (`Ansprechpartner`) manageable via API; contact block moved to dedicated tab in form and detail view
 - `ROADMAP.md` with planned features
+- WYSIWYG editor (contenteditable + execCommand toolbar) for mail templates and PDF templates
+- PDF templates per tenant: upload static PDF files or compose via HTML editor
+- PDF attachments on `contract.created` mail – uploaded PDF takes priority, HTML template as fallback (rendered via dompdf)
+- `pdf_templates` table with per-tenant, per-type storage (Datenschutz, AGB, Vertrag)
+- `clients` table extended with address fields (street, zip, city, email, phone, website)
+- PDF template placeholders: contract data, tenant address, contact person data
+- Settings tab "PDF-Templates" with per-tenant dropdown and attach toggle
 
 ### Fixed
 - `GET /api/clients` now correctly filtered by `client_id` when token is bound to a tenant
