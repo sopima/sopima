@@ -38,6 +38,36 @@ class PdfService
         return $dompdf->output();
     }
 
+
+    public static function autoFormat(string $text): string
+    {
+        // Wenn bereits HTML-Tags vorhanden, direkt zurückgeben
+        if (strip_tags($text) !== $text) {
+            return $text;
+        }
+
+        $lines = explode("\n", $text);
+        $html = "";
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === "") {
+                continue;
+            }
+            // Nummerierte Überschriften: "1. Titel", "2. Titel" etc.
+            if (preg_match('/^(\d+)\.\s+(.+)$/', $line, $m)) {
+                $html .= "<h2>" . htmlspecialchars($m[1] . ". " . $m[2]) . "</h2>\n";
+            }
+            // Aufzählungspunkte
+            elseif (preg_match('/^[-•]\s+(.+)$/', $line, $m)) {
+                $html .= "<li>" . htmlspecialchars($m[1]) . "</li>\n";
+            }
+            // Normaler Text
+            else {
+                $html .= "<p>" . htmlspecialchars($line) . "</p>\n";
+            }
+        }
+        return $html;
+    }
     public static function replacePlaceholders(string $text, array $contract, array $client, array $contact): string
     {
         $placeholders = [
@@ -109,6 +139,7 @@ class PdfService
             } elseif (!empty($tpl['body'])) {
                 // HTML-Template on-the-fly generieren
                 $body = self::replacePlaceholders($tpl['body'], $contract, $client, $contact);
+                $body = self::autoFormat($body);
                 $attachments[] = [
                     'filename' => $filename,
                     'content'  => self::render($body, $tpl['title']),

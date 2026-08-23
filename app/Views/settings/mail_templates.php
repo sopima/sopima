@@ -25,12 +25,42 @@ $saved = $_GET['saved'] ?? '';
                 style="width:100%;padding:.5rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.88rem;box-sizing:border-box;">
         </div>
         <div>
-            <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;">
-                <?php echo __('settings.mail_body'); ?>
-                <span style="margin-left:.75rem;opacity:.6;"><?php echo __('settings.mail_placeholders'); ?>: {{title}} {{partner}} {{start_date}} {{end_date}} {{notice_date}} {{value}} {{billing_interval}} {{status}} {{app_name}}</span>
-            </label>
-            <textarea name="body" rows="10"
-                style="width:100%;padding:.5rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.85rem;font-family:monospace;box-sizing:border-box;resize:vertical;"><?php echo htmlspecialchars($tpl['body']); ?></textarea>
+            <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;"><?php echo __('settings.mail_body'); ?></label>
+            <div style="display:flex;gap:.3rem;margin-bottom:.3rem;flex-wrap:wrap;padding:.4rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-bottom:none;border-radius:6px 6px 0 0;">
+                <button type="button" onclick="mailFmt(<?php echo $tpl['id']; ?>,'bold')" style="padding:.2rem .55rem;font-weight:700;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">B</button>
+                <button type="button" onclick="mailFmt(<?php echo $tpl['id']; ?>,'italic')" style="padding:.2rem .55rem;font-style:italic;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">I</button>
+                <button type="button" onclick="mailFmt(<?php echo $tpl['id']; ?>,'underline')" style="padding:.2rem .55rem;text-decoration:underline;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">U</button>
+                <span style="border-left:1px solid rgba(255,255,255,.15);margin:0 .2rem"></span>
+                <button type="button" onclick="mailFmt(<?php echo $tpl['id']; ?>,'justifyLeft')" title="Linksbündig" style="padding:.2rem .55rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">&#8676;</button>
+                <button type="button" onclick="mailFmt(<?php echo $tpl['id']; ?>,'justifyCenter')" title="Zentriert" style="padding:.2rem .55rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">&#8596;</button>
+                <button type="button" onclick="mailFmt(<?php echo $tpl['id']; ?>,'justifyRight')" title="Rechtsbündig" style="padding:.2rem .55rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">&#8677;</button>
+                <span style="border-left:1px solid rgba(255,255,255,.15);margin:0 .2rem"></span>
+                <select onchange="mailFmtSize(<?php echo $tpl['id']; ?>,this.value);this.selectedIndex=0;" style="padding:.2rem .4rem;background:#2d3748;border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:3px;font-size:.8rem;">
+                    <option value="">Größe</option>
+                    <option value="1">Klein</option>
+                    <option value="3">Normal</option>
+                    <option value="5">Groß</option>
+                    <option value="7">Sehr groß</option>
+                </select>
+                <span style="border-left:1px solid rgba(255,255,255,.15);margin:0 .2rem"></span>
+                <select onchange="mailInsertPH(<?php echo $tpl['id']; ?>,this.value);this.selectedIndex=0;" style="padding:.2rem .4rem;background:#2d3748;border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:3px;font-size:.8rem;">
+                    <option value="">+ Platzhalter</option>
+                    <option value="{{title}}">{{title}}</option>
+                    <option value="{{partner}}">{{partner}}</option>
+                    <option value="{{start_date}}">{{start_date}}</option>
+                    <option value="{{end_date}}">{{end_date}}</option>
+                    <option value="{{notice_date}}">{{notice_date}}</option>
+                    <option value="{{value}}">{{value}}</option>
+                    <option value="{{billing_interval}}">{{billing_interval}}</option>
+                    <option value="{{status}}">{{status}}</option>
+                    <option value="{{app_name}}">{{app_name}}</option>
+                </select>
+            </div>
+            <div id="mail-editor-<?php echo $tpl['id']; ?>"
+                 contenteditable="true"
+                 style="min-height:220px;background:#fff;color:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 6px 6px;padding:.75rem;font-size:11pt;line-height:1.7;font-family:Arial,Helvetica,sans-serif;overflow-y:auto;"
+            ><?php echo $tpl['body']; ?></div>
+            <input type="hidden" name="body" id="mail-body-<?php echo $tpl['id']; ?>">
         </div>
         <div>
             <button type="submit" class="btn btn-primary" style="font-size:.85rem;">
@@ -40,3 +70,27 @@ $saved = $_GET['saved'] ?? '';
     </form>
 </div>
 <?php endforeach; ?>
+<script>
+function mailFmt(id, cmd) {
+    document.getElementById("mail-editor-" + id).focus();
+    document.execCommand(cmd, false, null);
+}
+function mailFmtSize(id, size) {
+    document.getElementById("mail-editor-" + id).focus();
+    document.execCommand("fontSize", false, size);
+}
+function mailInsertPH(id, ph) {
+    if (!ph) return;
+    document.getElementById("mail-editor-" + id).focus();
+    document.execCommand("insertText", false, ph);
+}
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll("form[id^='form-']").forEach(function(form) {
+        var id = form.id.replace("form-", "");
+        form.addEventListener("submit", function() {
+            document.getElementById("mail-body-" + id).value =
+                document.getElementById("mail-editor-" + id).innerHTML;
+        });
+    });
+});
+</script>
