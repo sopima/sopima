@@ -137,7 +137,12 @@ if ($apiUri === '/contracts' && $method === 'POST') {
     $rand = bin2hex(random_bytes(1));
     $appPrefix = strtoupper(substr(preg_replace("/[^a-zA-Z0-9]/", "", APP_NAME), 0, 3));
     $contract_number = $appPrefix . "-" . $prefix . "-" . $b36 . "-" . $rand;
-    $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    // Status normalisieren: englische -> deutsche Werte
+$statusMap = ['active' => 'aktiv', 'cancelled' => 'gekuendigt', 'expired' => 'abgelaufen', 'paused' => 'pausiert'];
+$body['status'] = $statusMap[$body['status'] ?? ''] ?? ($body['status'] ?? 'aktiv');
+if (!in_array($body['status'], ['aktiv','gekuendigt','abgelaufen','pausiert'])) $body['status'] = 'aktiv';
+
+$stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, title, partner, description, start_date, end_date, notice_date, value, billing_interval, status, source, external_id, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     $stmt->execute([$contract_number, $body['client_id'], $body['category_id'] ?? null, $body['title'], $body['partner'] ?? null, $body['description'] ?? null, $body['start_date'] ?? null, $body['end_date'] ?? null, $body['notice_date'] ?? null, $body['value'] ?? null, $body['billing_interval'] ?? 'jaehrlich', $body['status'] ?? 'aktiv', $body['source'] ?? 'manuell', $body['external_id'] ?? null, $body['notes'] ?? null, $body['direction'] ?? 'ausgabe', $body['plan'] ?? null]);
     $newId = $db->lastInsertId();
     // Kontakt anlegen wenn mitgegeben
@@ -181,6 +186,12 @@ if (preg_match('#^/contracts/(\d+)$#', $apiUri, $m) && $method === 'PUT') {
     $check = $db->prepare("SELECT id FROM contracts WHERE " . implode(' AND ', $where));
     $check->execute($params);
     if (!$check->fetch()) apiResponse(404, ['error' => 'Vertrag nicht gefunden.']);
+    // Status normalisieren
+    $statusMap = ['active' => 'aktiv', 'cancelled' => 'gekuendigt', 'expired' => 'abgelaufen', 'paused' => 'pausiert'];
+    if (isset($body['status'])) {
+        $body['status'] = $statusMap[$body['status']] ?? $body['status'];
+        if (!in_array($body['status'], ['aktiv','gekuendigt','abgelaufen','pausiert'])) unset($body['status']);
+    }
     $fields = []; $vals = [];
     foreach (['title','partner','description','start_date','end_date','notice_date','value','billing_interval','status','category_id','notes','plan'] as $f) {
         if (isset($body[$f])) { $fields[] = "$f = ?"; $vals[] = $body[$f]; }
