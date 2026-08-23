@@ -69,6 +69,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 }
+if ($tab === "pdf" && $action === "delete_template") {
+    $tpl_id    = (int)($_GET["id"] ?? 0);
+    $client_id = (int)($_GET["client_id"] ?? 0);
+    if ($tpl_id && $client_id && clientAllowed($client_id)) {
+        $row = $db->prepare("SELECT file_path FROM pdf_templates WHERE id=? AND client_id=?");
+        $row->execute([$tpl_id, $client_id]);
+        $row = $row->fetch();
+        if ($row && $row["file_path"] && file_exists($row["file_path"])) {
+            unlink($row["file_path"]);
+        }
+        $db->prepare("DELETE FROM pdf_templates WHERE id=? AND client_id=?")->execute([$tpl_id, $client_id]);
+    }
+    header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
+    exit;
+}
 if ($tab === "pdf" && $action === "delete_file") {
     $client_id = (int)($_GET["client_id"] ?? 0);
     $type      = $_GET["type"] ?? "";
