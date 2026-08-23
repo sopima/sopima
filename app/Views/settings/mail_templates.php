@@ -59,7 +59,7 @@ $saved = $_GET['saved'] ?? '';
             <div id="mail-editor-<?php echo $tpl['id']; ?>"
                  contenteditable="true"
                  style="min-height:220px;background:#fff;color:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 6px 6px;padding:.75rem;font-size:11pt;line-height:1.7;font-family:Arial,Helvetica,sans-serif;overflow-y:auto;"
-            ><?php echo $tpl['body']; ?></div>
+            ><?php echo nl2br(htmlspecialchars($tpl['body'])); ?></div>
             <input type="hidden" name="body" id="mail-body-<?php echo $tpl['id']; ?>">
         </div>
         <div>

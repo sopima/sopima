@@ -6,12 +6,9 @@ $tab    = $_GET["tab"] ?? "users";
 $action = $_GET["action"] ?? "index";
 $id     = (int)($_GET["id"] ?? 0);
 
-require __DIR__ . "/../Views/layouts/main.php";
-
-if ($tab === "tokens") {
-    require __DIR__ . "/TokenController.php";
-} elseif ($tab === "general") {
-    if ($action === "smtp_test" && $_SERVER["REQUEST_METHOD"] === "POST") {
+// Alle POST-Redirects VOR dem HTML-Output
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if ($tab === "general" && $action === "smtp_test") {
         $ok = MailService::send(
             SMTP_FROM_EMAIL,
             SMTP_FROM_NAME,
@@ -21,9 +18,7 @@ if ($tab === "tokens") {
         header("Location: /settings?tab=general&smtp_test=" . ($ok ? "1" : "0"));
         exit;
     }
-    require __DIR__ . "/../Views/settings/general.php";
-} elseif ($tab === "mail") {
-    if ($action === "save" && $_SERVER["REQUEST_METHOD"] === "POST") {
+    if ($tab === "mail" && $action === "save") {
         $id      = (int)($_POST["id"] ?? 0);
         $subject = trim($_POST["subject"] ?? "");
         $body    = trim($_POST["body"] ?? "");
@@ -35,12 +30,7 @@ if ($tab === "tokens") {
         header("Location: /settings?tab=mail&saved=1");
         exit;
     }
-    require __DIR__ . "/../Views/settings/index.php";
-    require __DIR__ . "/../Views/settings/mail_templates.php";
-} elseif ($tab === "pdf") {
-    $clients = $db->query("SELECT id, name FROM clients WHERE active=1 ORDER BY name")->fetchAll();
-    $client_id = (int)($_GET["client_id"] ?? ($clients[0]["id"] ?? 0));
-    if ($action === "save" && $_SERVER["REQUEST_METHOD"] === "POST") {
+    if ($tab === "pdf" && $action === "save") {
         $client_id = (int)($_POST["client_id"] ?? 0);
         $type      = $_POST["type"] ?? "";
         $title     = trim($_POST["title"] ?? "");
@@ -48,20 +38,17 @@ if ($tab === "tokens") {
         $attach    = isset($_POST["attach"]) ? 1 : 0;
         $active    = isset($_POST["active"]) ? 1 : 0;
         if ($client_id && $type && $title) {
-            // Bestehendes Template laden
             $existing = $db->prepare("SELECT file_path FROM pdf_templates WHERE client_id=? AND type=?");
             $existing->execute([$client_id, $type]);
             $existing = $existing->fetch();
             $file_path = $existing["file_path"] ?? null;
 
-            // PDF hochladen
             if (!empty($_FILES["pdf_file"]["tmp_name"])) {
                 $dir = "storage/uploads/pdf_templates/" . $client_id . "/";
                 if (!is_dir($dir)) mkdir($dir, 0775, true);
                 $filename = $type . "_" . time() . ".pdf";
                 $dest = $dir . $filename;
                 if (move_uploaded_file($_FILES["pdf_file"]["tmp_name"], $dest)) {
-                    // altes File löschen
                     if ($file_path && file_exists($file_path)) unlink($file_path);
                     $file_path = $dest;
                 }
@@ -74,21 +61,35 @@ if ($tab === "tokens") {
         header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
         exit;
     }
-    if ($action === "delete_file") {
-        $client_id = (int)($_GET["client_id"] ?? 0);
-        $type      = $_GET["type"] ?? "";
-        if ($client_id && $type && clientAllowed($client_id)) {
-            $row = $db->prepare("SELECT file_path FROM pdf_templates WHERE client_id=? AND type=?");
-            $row->execute([$client_id, $type]);
-            $row = $row->fetch();
-            if ($row && $row["file_path"] && file_exists($row["file_path"])) {
-                unlink($row["file_path"]);
-            }
-            $db->prepare("UPDATE pdf_templates SET file_path=NULL WHERE client_id=? AND type=?")->execute([$client_id, $type]);
+}
+if ($tab === "pdf" && $action === "delete_file") {
+    $client_id = (int)($_GET["client_id"] ?? 0);
+    $type      = $_GET["type"] ?? "";
+    if ($client_id && $type && clientAllowed($client_id)) {
+        $row = $db->prepare("SELECT file_path FROM pdf_templates WHERE client_id=? AND type=?");
+        $row->execute([$client_id, $type]);
+        $row = $row->fetch();
+        if ($row && $row["file_path"] && file_exists($row["file_path"])) {
+            unlink($row["file_path"]);
         }
-        header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
-        exit;
+        $db->prepare("UPDATE pdf_templates SET file_path=NULL WHERE client_id=? AND type=?")->execute([$client_id, $type]);
     }
+    header("Location: /settings?tab=pdf&client_id=" . $client_id . "&saved=1");
+    exit;
+}
+
+require __DIR__ . "/../Views/layouts/main.php";
+
+if ($tab === "tokens") {
+    require __DIR__ . "/TokenController.php";
+} elseif ($tab === "general") {
+    require __DIR__ . "/../Views/settings/general.php";
+} elseif ($tab === "mail") {
+    require __DIR__ . "/../Views/settings/index.php";
+    require __DIR__ . "/../Views/settings/mail_templates.php";
+} elseif ($tab === "pdf") {
+    $clients = $db->query("SELECT id, name FROM clients WHERE active=1 ORDER BY name")->fetchAll();
+    $client_id = (int)($_GET["client_id"] ?? ($clients[0]["id"] ?? 0));
     $types = ["datenschutz", "agb", "vertrag"];
     $templates = [];
     foreach ($types as $type) {
