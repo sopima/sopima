@@ -8,15 +8,19 @@ $saved = $_GET['saved'] ?? '';
 </div>
 <?php endif; ?>
 <?php foreach ($templates as $tpl): ?>
-<div class="card" style="margin-bottom:1.5rem;">
-    <div class="card-head">
-        <span><i class="ti ti-mail" style="vertical-align:-2px;margin-right:4px;color:#a5b4fc"></i>
-        <?php echo __('settings.mail_event'); ?>: <code style="background:rgba(255,255,255,.07);padding:.1rem .4rem;border-radius:4px;font-size:.83rem;"><?php echo htmlspecialchars($tpl['event']); ?></code></span>
-        <label style="display:flex;align-items:center;gap:.4rem;font-size:.83rem;color:var(--text-muted);">
+<div class="card" style="margin-bottom:1rem;">
+    <div class="card-head" style="cursor:pointer;" onclick="toggleMail(<?php echo $tpl['id']; ?>)">
+        <span>
+            <i class="ti ti-chevron-right" id="mail-chevron-<?php echo $tpl['id']; ?>" style="vertical-align:-2px;margin-right:4px;transition:transform .2s;"></i>
+            <i class="ti ti-mail" style="vertical-align:-2px;margin-right:4px;color:#a5b4fc"></i>
+            <?php echo htmlspecialchars($tpl['event']); ?>
+        </span>
+        <label style="display:flex;align-items:center;gap:.4rem;font-size:.83rem;color:var(--text-muted);" onclick="event.stopPropagation()">
             <input type="checkbox" form="form-<?php echo $tpl['id']; ?>" name="active" value="1" <?php echo $tpl['active'] ? 'checked' : ''; ?>>
             <?php echo __('settings.mail_active'); ?>
         </label>
     </div>
+    <div id="mail-wrap-<?php echo $tpl['id']; ?>" style="display:none;">
     <form id="form-<?php echo $tpl['id']; ?>" method="POST" action="/settings?tab=mail&action=save" style="padding:1.25rem 1.5rem;display:flex;flex-direction:column;gap:1rem;">
         <input type="hidden" name="id" value="<?php echo $tpl['id']; ?>">
         <div>
@@ -68,9 +72,17 @@ $saved = $_GET['saved'] ?? '';
             </button>
         </div>
     </form>
+    </div>
 </div>
 <?php endforeach; ?>
 <script>
+function toggleMail(id) {
+    var wrap = document.getElementById("mail-wrap-" + id);
+    var chev = document.getElementById("mail-chevron-" + id);
+    var open = wrap.style.display === "block";
+    wrap.style.display = open ? "none" : "block";
+    chev.style.transform = open ? "" : "rotate(90deg)";
+}
 function mailFmt(id, cmd) {
     document.getElementById("mail-editor-" + id).focus();
     document.execCommand(cmd, false, null);
