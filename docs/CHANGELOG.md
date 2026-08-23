@@ -1,5 +1,24 @@
 # Changelog
 
+## [Unreleased]
+### Added
+- API: English values for `status` (active/cancelled/expired/paused), `billing_interval` (yearly/monthly/quarterly/biannual), `direction` (expense/income) – mapped internally
+- API: additional general fields: `auto_renewal`, `minimum_term_months`, `cancellation_period_days`, `cancellation_deadline`, `payment_method`
+- API documentation: complete rewrite with all fields, contact block, mail notification notes, full response examples
+- `app/bootstrap.php` – shared bootstrap for CLI scripts
+- `bin/cron.php` – central cron runner with auto-discovery of `bin/*.php` jobs
+- `bin/notify-expiring.php` – cronjob for contract end-date mail notifications
+- Mail events: `contract.updated`, `contract.cancelled`, `contract.expiring` with templates (migration 020)
+- `settings` table (migration 021) for persistent app configuration
+- `notify_expiring_days` configurable in Settings > General
+- PDF templates: freely named, accordion UI, add/delete per tenant (migration 019)
+- Mail templates: accordion UI
+### Fixed
+- API `status` values from external sources (e.g. `active`) normalized to internal values
+- Settings General tab: tab navigation was missing
+### Changed
+- `bin/notify.php` refactored to use `app/bootstrap.php`
+
 ## [0.3.2] – 2026-08-23
 ### Added
 - Mail events `contract.updated`, `contract.cancelled`, `contract.expiring` – triggered via API and cronjob
