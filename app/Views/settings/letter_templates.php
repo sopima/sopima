@@ -2,6 +2,10 @@
 $user = currentUser();
 require BASE_PATH . '/app/Views/layouts/main.php';
 ?>
+<div class="page-header">
+    <h2><?php echo __('settings.title'); ?></h2>
+</div>
+<?php require BASE_PATH . '/app/Views/settings/tabs.php'; ?>
 
 <?php if (isset($_GET['saved'])): ?>
 <div class="alert alert-success" style="margin-bottom:1rem;padding:.75rem 1rem;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34d399;font-size:.88rem;">
