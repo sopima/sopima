@@ -4,3 +4,4 @@ storage/uploads/
 vendor/
 *.log
 .DS_Store
+public/pdfjs/web/
