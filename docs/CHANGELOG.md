@@ -1,18 +1,20 @@
 # Changelog
 
+## [0.4.1] - 2026-08-24
+### Fixed
+- Settings tab navigation refactored into shared include (letter-templates, backup)
+
 ## [0.4.0] - 2026-08-24
-
 ### Added
-- Briefgenerator: Briefvorlagen anlegen, bearbeiten, löschen (Settings)
-- Briefgenerator: PDF-Generierung via dompdf
-- Briefgenerator: PDF-Vorschau mit PDF.js (lokal, nur build/)
-- Briefgenerator: Button in Vertragsdetail- und Bearbeitungsansicht
-- Briefgenerator: Kündigungsvorlage als Seed (Migration 023)
-- Briefgenerator: Platzhalter {{contract_ref}}, {{partner_contract_number}}, {{external_id}}
-- Neues Feld `partner_contract_number` in Verträgen (Migration 024)
-- APP_DEBUG-Flag in .env für Fehleranzeige
-- i18n: Briefgenerator-Strings in de/en/pl
-
+- Letter generator: create, edit, delete letter templates in Settings
+- Letter generator: PDF generation via dompdf
+- Letter generator: PDF preview with PDF.js (local, build/ only)
+- Letter generator: button in contract detail and edit view
+- Letter generator: termination letter template as seed (migration 023)
+- Letter generator: placeholders {{contract_ref}}, {{partner_contract_number}}, {{external_id}}
+- New field `partner_contract_number` on contracts (migration 024)
+- `APP_DEBUG` flag in `.env` for PHP error output
+- i18n: letter generator strings in de/en/pl
 
 ## [0.3.2] – 2026-08-23
 ### Added
