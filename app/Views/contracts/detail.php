@@ -9,6 +9,7 @@ $activeTab = $_GET['tab'] ?? 'uebersicht';
 <div class="page-header">
     <h2><?php echo htmlspecialchars($contract['title']); ?></h2>
     <div style="display:flex;gap:.5rem;">
+        <a href="/contracts/<?php echo $contract['id']; ?>/letter" class="btn btn-outline"><i class="ti ti-file-text"></i> <?php echo __('letter.title'); ?></a>
         <a href="/contracts?action=edit&id=<?php echo $contract['id']; ?>" class="btn btn-outline"><i class="ti ti-edit"></i> <?php echo __('cd.edit'); ?></a>
         <a href="/contracts" class="btn btn-outline"><i class="ti ti-arrow-left"></i> <?php echo __('cd.back'); ?></a>
     </div>
@@ -173,6 +174,12 @@ $logCount     = count($comm_log ?? []);
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.partner'); ?></div>
             <div style="font-size:.9rem;"><?php echo htmlspecialchars($contract['partner'] ?? '–'); ?></div>
         </div>
+        <?php if (!empty($contract['partner_contract_number'])): ?>
+        <div>
+            <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.partner_contract_number'); ?></div>
+            <div style="font-size:.9rem;"><?php echo htmlspecialchars($contract['partner_contract_number']); ?></div>
+        </div>
+        <?php endif; ?>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.status'); ?></div>
             <div style="font-size:.9rem;color:<?php echo $color; ?>;"><?php echo ucfirst($contract['status']); ?></div>

@@ -20,6 +20,11 @@ function env(string $key, mixed $default = null): mixed
     return $_ENV[$key] ?? $default;
 }
 
+if (env('APP_DEBUG', 'false') === 'true') {
+    ini_set('display_errors', '1');
+    error_reporting(E_ALL);
+}
+
 define('APP_NAME', env('APP_NAME', 'Sopima'));
 define('APP_URL',         env('APP_URL', ''));
 define('SMTP_HOST',       env('MAIL_HOST', ''));
@@ -106,6 +111,48 @@ if ($uri !== '/setup') {
 if ($uri === '/logout') {
     session_destroy();
     header('Location: /login');
+    exit;
+}
+
+// Letter-Routen: /contracts/{id}/letter und /contracts/{id}/letter/{tid}/pdf
+if (preg_match('#^/contracts/(\d+)/letter$#', $uri, $m)) {
+    middleware(['auth' => true, 'admin' => false]);
+    require BASE_PATH . '/app/Controllers/LetterController.php';
+    $ctrl = new Sopima\Controllers\LetterController(db());
+    $ctrl->selectTemplate((int)$m[1]);
+    exit;
+}
+if (preg_match('#^/contracts/(\d+)/letter/(\d+)/preview$#', $uri, $m)) {
+    middleware(['auth' => true, 'admin' => false]);
+    require BASE_PATH . '/app/Controllers/LetterController.php';
+    $ctrl = new Sopima\Controllers\LetterController(db());
+    $ctrl->previewPdf((int)$m[1], (int)$m[2]);
+    exit;
+}
+if (preg_match('#^/contracts/(\d+)/letter/(\d+)/pdf$#', $uri, $m)) {
+    middleware(['auth' => true, 'admin' => false]);
+    require BASE_PATH . '/app/Controllers/LetterController.php';
+    $ctrl = new Sopima\Controllers\LetterController(db());
+    $ctrl->downloadPdf((int)$m[1], (int)$m[2]);
+    exit;
+}
+// Settings: Briefvorlagen
+if (preg_match('#^/settings/letter-templates(/(\d+))?$#', $uri, $m)) {
+    middleware(['auth' => true, 'admin' => true]);
+    require BASE_PATH . '/app/Controllers/LetterController.php';
+    $ctrl = new Sopima\Controllers\LetterController(db());
+    $id = isset($m[2]) ? (int)$m[2] : null;
+    if ($method === 'POST' && $id && isset($_POST['_delete'])) {
+        $ctrl->settingsDelete($id);
+    } elseif ($method === 'POST' && $id) {
+        $ctrl->settingsUpdate($id);
+    } elseif ($method === 'POST') {
+        $ctrl->settingsCreate();
+    } elseif ($id) {
+        $ctrl->settingsEdit($id);
+    } else {
+        $ctrl->settingsIndex();
+    }
     exit;
 }
 

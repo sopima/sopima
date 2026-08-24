@@ -2,7 +2,12 @@
 
 <div class="page-header">
     <h2><?php echo isset($contract) ? __('cf.edit') : __('cf.new'); ?></h2>
-    <a href="/contracts" class="btn btn-outline"><i class="ti ti-arrow-left"></i><?php echo __('cf.back'); ?></a>
+    <div style="display:flex;gap:.5rem;">
+        <?php if (isset($contract)): ?>
+            <a href="/contracts/<?php echo $contract['id']; ?>/letter" class="btn btn-outline"><i class="ti ti-file-text"></i> <?php echo __('letter.title'); ?></a>
+        <?php endif; ?>
+        <a href="/contracts" class="btn btn-outline"><i class="ti ti-arrow-left"></i><?php echo __('cf.back'); ?></a>
+    </div>
 </div>
 
 <form method="POST" action="/contracts">
@@ -57,6 +62,10 @@
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('cf.partner'); ?></label>
                 <input type="text" name="partner" value="<?php echo htmlspecialchars($contract['partner'] ?? ''); ?>" placeholder="<?php echo __('cf.ph.partner'); ?>">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label><?php echo __('cf.partner_contract_number'); ?></label>
+                <input type="text" name="partner_contract_number" value="<?php echo htmlspecialchars($contract['partner_contract_number'] ?? ''); ?>" placeholder="z.B. 123456789">
             </div>
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('cf.client'); ?></label>

@@ -15,6 +15,9 @@
     <a href="/settings?tab=mail" class="btn <?php echo $tab === 'mail' ? 'btn-primary' : 'btn-outline'; ?>">
         <i class="ti ti-mail"></i><?php echo __('settings.mail_templates'); ?>
     </a>
+    <a href="/settings/letter-templates" class="btn btn-outline">
+        <i class="ti ti-file-invoice"></i> Briefvorlagen
+    </a>
     <a href="/settings?tab=pdf" class="btn <?php echo $tab === 'pdf' ? 'btn-primary' : 'btn-outline'; ?>">
         <i class="ti ti-file-text"></i><?php echo __('settings.pdf_templates'); ?>
     </a>
