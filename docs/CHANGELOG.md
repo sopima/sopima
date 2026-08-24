@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.4.0] - 2026-08-24
+
+### Added
+- Briefgenerator: Briefvorlagen anlegen, bearbeiten, löschen (Settings)
+- Briefgenerator: PDF-Generierung via dompdf
+- Briefgenerator: PDF-Vorschau mit PDF.js (lokal, nur build/)
+- Briefgenerator: Button in Vertragsdetail- und Bearbeitungsansicht
+- Briefgenerator: Kündigungsvorlage als Seed (Migration 023)
+- Briefgenerator: Platzhalter {{contract_ref}}, {{partner_contract_number}}, {{external_id}}
+- Neues Feld `partner_contract_number` in Verträgen (Migration 024)
+- APP_DEBUG-Flag in .env für Fehleranzeige
+- i18n: Briefgenerator-Strings in de/en/pl
+
+
 ## [0.3.2] – 2026-08-23
 ### Added
 - API: English values for `status` (active/cancelled/expired/paused), `billing_interval` (yearly/monthly/quarterly/biannual), `direction` (expense/income) – mapped internally

@@ -4,6 +4,7 @@
 
 - PHP 8.2 or higher
 - PHP extensions: `pdo_sqlite`, `mbstring`, `fileinfo`, `zip`
+- Composer packages: `dompdf/dompdf` (installed automatically via `composer install`)
 - Composer
 - Apache 2.4 with `mod_rewrite`
 
@@ -49,6 +50,7 @@ Edit `.env`:
 APP_NAME=Sopima
 APP_URL=https://your-domain.example.com
 APP_SECRET=
+APP_DEBUG=false
 DB_SQLITE_PATH=/path/to/sopima/storage/database/sopima.sqlite
 ```
 
@@ -145,6 +147,7 @@ New migrations are detected and applied automatically.
 ## Troubleshooting
 
 **500 Internal Server Error**
+- Enable debug mode: set `APP_DEBUG=true` in `.env`
 - Check Apache log: `tail -50 /var/log/apache2/sopima_error.log`
 - PHP syntax error: `php -l public/index.php`
 - Is `mod_rewrite` active? `apache2ctl -M | grep rewrite`
