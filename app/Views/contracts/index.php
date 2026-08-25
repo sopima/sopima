@@ -4,8 +4,24 @@
     <a href="/contracts?action=create" class="btn btn-primary"><i class="ti ti-plus"></i> <?php echo __('contracts.add'); ?></a>
 </div>
 
+<?php if (count($clients) > 1): ?>
+<div class="tab-bar">
+    <a href="/contracts" class="tab-item<?php echo $filter_client == 0 ? ' tab-active' : ''; ?>"><?php echo __('contracts.all'); ?></a>
+    <?php foreach ($clients as $cl): ?>
+        <a href="/contracts?client_id=<?php echo $cl['id']; ?><?php echo $filter_status ? '&status=' . urlencode($filter_status) : ''; ?><?php echo $filter_search ? '&q=' . urlencode($filter_search) : ''; ?>"
+           class="tab-item<?php echo $filter_client == $cl['id'] ? ' tab-active' : ''; ?>">
+            <?php echo htmlspecialchars($cl['name']); ?>
+        </a>
+    <?php endforeach; ?>
+</div>
+<?php endif; ?>
+
 <div class="filter-bar">
     <form method="GET" action="/contracts" style="display:flex;gap:1rem;align-items:flex-end;flex:1;flex-wrap:wrap;">
+        <?php if ($filter_client): ?>
+            <input type="hidden" name="client_id" value="<?php echo $filter_client; ?>">
+        <?php endif; ?>
+        <?php if (count($clients) <= 1): ?>
         <div class="form-group" style="margin:0;min-width:160px;flex:1;">
             <label><?php echo __('contracts.client'); ?></label>
             <select name="client_id">
@@ -15,14 +31,15 @@
                 <?php endforeach; ?>
             </select>
         </div>
+        <?php endif; ?>
         <div class="form-group" style="margin:0;min-width:160px;flex:1;">
             <label><?php echo __('contracts.status'); ?></label>
             <select name="status">
                 <option value=""><?php echo __('contracts.all'); ?></option>
-                <option value="aktiv"      <?php echo $filter_status === 'aktiv'      ? 'selected' : ''; ?><?php echo __('contracts.status.aktiv'); ?></option>
-                <option value="gekuendigt" <?php echo $filter_status === 'gekuendigt' ? 'selected' : ''; ?><?php echo __('contracts.status.gekuendigt'); ?></option>
-                <option value="abgelaufen" <?php echo $filter_status === 'abgelaufen' ? 'selected' : ''; ?><?php echo __('contracts.status.abgelaufen'); ?></option>
-                <option value="pausiert"   <?php echo $filter_status === 'pausiert'   ? 'selected' : ''; ?><?php echo __('contracts.status.pausiert'); ?></option>
+                <option value="aktiv"      <?php echo $filter_status === 'aktiv'      ? 'selected' : ''; ?>><?php echo __('contracts.status.aktiv'); ?></option>
+                <option value="gekuendigt" <?php echo $filter_status === 'gekuendigt' ? 'selected' : ''; ?>><?php echo __('contracts.status.gekuendigt'); ?></option>
+                <option value="abgelaufen" <?php echo $filter_status === 'abgelaufen' ? 'selected' : ''; ?>><?php echo __('contracts.status.abgelaufen'); ?></option>
+                <option value="pausiert"   <?php echo $filter_status === 'pausiert'   ? 'selected' : ''; ?>><?php echo __('contracts.status.pausiert'); ?></option>
             </select>
         </div>
         <div class="form-group" style="margin:0;min-width:200px;flex:2;">

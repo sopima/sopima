@@ -67,16 +67,16 @@ foreach ($costRows as $row) {
 // Mandantennamen laden
 $clientNames = [];
 if ($ids) {
-    $stmt = $db->query("SELECT id, name FROM clients WHERE id IN ($in)");
+    $stmt = $db->query("SELECT id, name FROM clients WHERE active=1 AND id IN ($in)");
     foreach ($stmt->fetchAll() as $cl) $clientNames[$cl['id']] = $cl['name'];
 }
 
 // Tabs: Kennzahlen pro Mandant
 $tabs = [];
-foreach ($ids as $cid) {
+foreach (array_keys($clientNames) as $cid) {
     $cid = (int)$cid;
     $tabs[$cid] = [
-        'name'            => $clientNames[$cid] ?? ('Mandant ' . $cid),
+        'name'            => $clientNames[$cid],
         'totalContracts'  => $db->query("SELECT COUNT(*) FROM contracts WHERE client_id = $cid")->fetchColumn(),
         'activeContracts' => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND client_id = $cid")->fetchColumn(),
         'activeExpenses'  => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id = $cid")->fetchColumn(),
@@ -102,10 +102,10 @@ foreach ($costRows as $row) {
 
 // Tabs: Kennzahlen pro Mandant
 $tabs = [];
-foreach ($ids as $cid) {
+foreach (array_keys($clientNames) as $cid) {
     $cid = (int)$cid;
     $tabs[$cid] = [
-        'name'            => $clientNames[$cid] ?? ('Mandant ' . $cid),
+        'name'            => $clientNames[$cid],
         'totalContracts'  => $db->query("SELECT COUNT(*) FROM contracts WHERE client_id = $cid")->fetchColumn(),
         'activeContracts' => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND client_id = $cid")->fetchColumn(),
         'activeExpenses'  => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id = $cid")->fetchColumn(),

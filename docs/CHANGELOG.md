@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.2] - 2026-08-25
+### Added
+- Contracts: client quick-filter tabs above the contract list (mirrors dashboard behaviour)
+
+### Fixed
+- Contracts: status dropdown options were missing closing `>`, making entries invisible
+- Dashboard: inactive clients no longer appear as tabs
+
 ## [0.4.1] - 2026-08-24
 ### Fixed
 - Settings tab navigation refactored into shared include (letter-templates, backup)
