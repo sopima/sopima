@@ -61,8 +61,17 @@ class LetterService
         return (int)$this->db->lastInsertId();
     }
 
-    public function updateTemplate(int $id, array $data): void
+    public function updateTemplate(int $id, array $data, array $allowedClientIds = []): void
     {
+        // Mandantencheck: nur eigene oder globale Vorlagen bearbeitbar
+        $check = $this->db->prepare("SELECT client_id FROM letter_templates WHERE id = ?");
+        $check->execute([$id]);
+        $row = $check->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) return;
+        if ($row['client_id'] !== 0 && !empty($allowedClientIds) && !in_array((int)$row['client_id'], array_map('intval', $allowedClientIds))) {
+            http_response_code(403);
+            die('Zugriff verweigert.');
+        }
         $stmt = $this->db->prepare(
             "UPDATE letter_templates SET name=?, letter_type=?, subject=?, body_html=?, is_default=?, updated_at=CURRENT_TIMESTAMP WHERE id=?"
         );
@@ -76,8 +85,17 @@ class LetterService
         ]);
     }
 
-    public function deleteTemplate(int $id): void
+    public function deleteTemplate(int $id, array $allowedClientIds = []): void
     {
+        // Mandantencheck: nur eigene oder globale Vorlagen löschbar
+        $check = $this->db->prepare("SELECT client_id FROM letter_templates WHERE id = ?");
+        $check->execute([$id]);
+        $row = $check->fetch(\PDO::FETCH_ASSOC);
+        if (!$row) return;
+        if ($row['client_id'] !== 0 && !empty($allowedClientIds) && !in_array((int)$row['client_id'], array_map('intval', $allowedClientIds))) {
+            http_response_code(403);
+            die('Zugriff verweigert.');
+        }
         $stmt = $this->db->prepare("DELETE FROM letter_templates WHERE id = ?");
         $stmt->execute([$id]);
     }

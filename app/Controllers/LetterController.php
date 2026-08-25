@@ -118,7 +118,10 @@ class LetterController
     // Einstellungen: Neue Vorlage speichern
     public function settingsCreate(): void
     {
-        $clientId = $_SESSION['client_id'] ?? 0;
+        $clientId = (int)($_POST['client_id'] ?? 0);
+        if ($clientId && !clientAllowed($clientId)) {
+            http_response_code(403); die('Zugriff verweigert.');
+        }
         $this->letterService->createTemplate([
             'client_id'   => $clientId,
             'name'        => $_POST['name'] ?? '',
@@ -140,7 +143,7 @@ class LetterController
             'subject'     => $_POST['subject'] ?? '',
             'body_html'   => $_POST['body_html'] ?? '',
             'is_default'  => isset($_POST['is_default']) ? 1 : 0,
-        ]);
+        ], allowedClientIds());
         header('Location: /settings/letter-templates?saved=1');
         exit;
     }
@@ -148,7 +151,7 @@ class LetterController
     // Einstellungen: Vorlage löschen
     public function settingsDelete(int $id): void
     {
-        $this->letterService->deleteTemplate($id);
+        $this->letterService->deleteTemplate($id, allowedClientIds());
         header('Location: /settings/letter-templates?deleted=1');
         exit;
     }

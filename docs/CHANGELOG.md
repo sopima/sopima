@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.5] - 2026-08-25
+### Security
+- LetterService: deleteTemplate and updateTemplate now enforce tenant check (client_id)
+- LetterController: settingsCreate now reads client_id from POST with clientAllowed() check instead of non-existent session key
+
+### Fixed
+- MailService: PHP tags in wrapTemplate string literal replaced with concatenation (APP_NAME was rendered as literal text in emails)
+- ApiController: PUT /contracts/{id} mail lookup used wrong table `contacts` instead of `contract_contacts`
+- NotificationController: INSERT ON CONFLICT execute() had 8 params for 5 placeholders
+- DashboardController: duplicate $tabs build block removed (dead code)
+- BackupController: insertContract missing fields direction, plan, partner_contract_number, minimum_term_months, renewal_interval_months
+
 ## [0.4.4] - 2026-08-25
 ### Added
 - Contracts: pagination with configurable per-page (10 / 25 / 50 / 100 / All)

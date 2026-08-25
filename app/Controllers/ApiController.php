@@ -229,7 +229,7 @@ if (preg_match('#^/contracts/(\d+)$#', $apiUri, $m) && $method === 'PUT') {
     if ($contract) {
         // Empfänger ermitteln: Kontakt-Email oder body['email']
         $toEmail = null;
-        $cont = $db->prepare("SELECT email FROM contacts WHERE contract_id = ? AND email IS NOT NULL AND email != '' LIMIT 1");
+        $cont = $db->prepare("SELECT email FROM contract_contacts WHERE contract_id = ? AND email IS NOT NULL AND email != '' LIMIT 1");
         $cont->execute([$id]);
         $cRow = $cont->fetch();
         if ($cRow && filter_var($cRow['email'], FILTER_VALIDATE_EMAIL)) {

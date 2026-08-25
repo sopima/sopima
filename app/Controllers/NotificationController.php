@@ -102,7 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                ON CONFLICT(user_id, channel) DO UPDATE SET enabled=excluded.enabled, config=excluded.config, days_before=excluded.days_before");
         $stmt->execute([
             $user['id'], $channel, $enabled, json_encode($config), $days,
-            $enabled, json_encode($config), $days
         ]);
     }
     header('Location: /notifications?saved=1');

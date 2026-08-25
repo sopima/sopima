@@ -100,35 +100,6 @@ foreach ($costRows as $row) {
     $tabs[$cid]['costByDir'][$dir]['rows'][] = ['title' => $row['title'], 'monthly' => $monthly];
 }
 
-// Tabs: Kennzahlen pro Mandant
-$tabs = [];
-foreach (array_keys($clientNames) as $cid) {
-    $cid = (int)$cid;
-    $tabs[$cid] = [
-        'name'            => $clientNames[$cid],
-        'totalContracts'  => $db->query("SELECT COUNT(*) FROM contracts WHERE client_id = $cid")->fetchColumn(),
-        'activeContracts' => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND client_id = $cid")->fetchColumn(),
-        'activeExpenses'  => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id = $cid")->fetchColumn(),
-        'activeIncome'    => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id = $cid")->fetchColumn(),
-        'totalExpenses'   => $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id = $cid")->fetchColumn(),
-        'totalIncome'     => $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id = $cid")->fetchColumn(),
-        'expiringSoon'    => $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date BETWEEN date('now') AND date('now', '+30 days') AND status = 'aktiv' AND client_id = $cid")->fetchColumn(),
-        'overdue'         => $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date < date('now') AND status = 'aktiv' AND client_id = $cid")->fetchColumn(),
-        'deadlines'       => $db->query("SELECT c.title, c.notice_date, CAST((julianday(c.notice_date) - julianday('now')) AS INTEGER) AS days_left FROM contracts c WHERE c.notice_date >= date('now') AND c.status = 'aktiv' AND c.client_id = $cid ORDER BY c.notice_date ASC LIMIT 5")->fetchAll(),
-        'costByDir'       => [],
-    ];
-}
-// Monatliche Kosten pro Mandant-Tab
-foreach ($costRows as $row) {
-    $cid = (int)$row['client_id'];
-    if (!isset($tabs[$cid])) continue;
-    $monthly = $row['billing_interval'] === 'jaehrlich' ? round($row['value'] / 12, 2) : round($row['value'], 2);
-    $dir = $row['direction'];
-    if (!isset($tabs[$cid]['costByDir'][$dir])) $tabs[$cid]['costByDir'][$dir] = ['total' => 0, 'rows' => []];
-    $tabs[$cid]['costByDir'][$dir]['total'] += $monthly;
-    $tabs[$cid]['costByDir'][$dir]['rows'][] = ['title' => $row['title'], 'monthly' => $monthly];
-}
-
 require __DIR__ . '/../Views/layouts/main.php';
 require __DIR__ . '/../Views/dashboard/index.php';
 require __DIR__ . '/../Views/layouts/footer.php';

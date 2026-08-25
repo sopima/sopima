@@ -208,26 +208,29 @@ function collectBackupData(PDO $db, array $user): array {
 function insertContract(PDO $db, array $c): int {
     $db->prepare("INSERT INTO contracts (
         contract_number, client_id, category_id, contract_type, title, partner,
-        counterparty_type, description, start_date, end_date, auto_renewal,
-        cancellation_period_days, cancellation_deadline, notice_date,
+        partner_contract_number, counterparty_type, description, start_date, end_date, auto_renewal,
+        minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date,
         value, payment_method, iban, mandate_reference,
         interest_rate, loan_amount, monthly_rate, deductible,
-        service_interval_months, billing_interval, status, source, external_id,
-        document_path, notes, created_at, updated_at
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        service_interval_months, billing_interval, status, direction, plan, source, external_id,
+        notes, created_at, updated_at
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
     ->execute([
         $c['contract_number'] ?? null, $c['client_id'], $c['category_id'] ?? null,
         $c['contract_type'] ?? null, $c['title'], $c['partner'] ?? null,
+        $c['partner_contract_number'] ?? null,
         $c['counterparty_type'] ?? null, $c['description'] ?? null,
         $c['start_date'] ?? null, $c['end_date'] ?? null, $c['auto_renewal'] ?? 0,
+        $c['minimum_term_months'] ?? null, $c['renewal_interval_months'] ?? null,
         $c['cancellation_period_days'] ?? null, $c['cancellation_deadline'] ?? null,
         $c['notice_date'] ?? null, $c['value'] ?? null, $c['payment_method'] ?? null,
         $c['iban'] ?? null, $c['mandate_reference'] ?? null,
         $c['interest_rate'] ?? null, $c['loan_amount'] ?? null,
         $c['monthly_rate'] ?? null, $c['deductible'] ?? null,
         $c['service_interval_months'] ?? null, $c['billing_interval'] ?? 'jaehrlich',
-        $c['status'] ?? 'aktiv', $c['source'] ?? 'manuell', $c['external_id'] ?? null,
-        $c['document_path'] ?? null, $c['notes'] ?? null,
+        $c['status'] ?? 'aktiv', $c['direction'] ?? 'ausgabe', $c['plan'] ?? null,
+        $c['source'] ?? 'manuell', $c['external_id'] ?? null,
+        $c['notes'] ?? null,
         $c['created_at'], $c['updated_at'],
     ]);
     return (int)$db->lastInsertId();
