@@ -420,6 +420,22 @@ if ($action === 'create') {
     if ($filter_status) { $where[] = 'c.status = ?'; $params[] = $filter_status; }
     if ($filter_search) { $where[] = "(c.title LIKE ? OR c.partner LIKE ? OR c.description LIKE ? OR c.notes LIKE ? OR c.contract_number LIKE ?)"; $s = "%" . $filter_search . "%"; array_push($params, $s, $s, $s, $s, $s); }
 
+    // Pagination
+    $per_page_whitelist = [10, 25, 50, 100, 0]; // 0 = Alle
+    if (isset($_GET['per_page'])) {
+        $per_page = (int)$_GET['per_page'];
+        if (!in_array($per_page, $per_page_whitelist)) $per_page = 25;
+        $_SESSION['contracts_per_page'] = $per_page;
+    } else {
+        $per_page = $_SESSION['contracts_per_page'] ?? 25;
+    }
+    $page = max(1, (int)($_GET['page'] ?? 1));
+    $count_sql = "SELECT COUNT(*) FROM contracts c LEFT JOIN clients cl ON c.client_id = cl.id LEFT JOIN contract_categories cc ON c.category_id = cc.id WHERE " . implode(' AND ', $where);
+    $count_stmt = $db->prepare($count_sql);
+    $count_stmt->execute($params);
+    $total = (int)$count_stmt->fetchColumn();
+    $total_pages = $per_page > 0 ? (int)ceil($total / $per_page) : 1;
+    if ($page > $total_pages) $page = max(1, $total_pages);
     $sql = "SELECT c.*, cl.name AS client_name, cc.name AS category_name, cc.color AS category_color
             FROM contracts c
             LEFT JOIN clients cl ON c.client_id = cl.id
@@ -427,6 +443,7 @@ if ($action === 'create') {
             WHERE " . implode(' AND ', $where) . "
             ORDER BY $order_by";
 
+    if ($per_page > 0) { $sql .= " LIMIT $per_page OFFSET " . (($page - 1) * $per_page); }
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
     $contracts = $stmt->fetchAll();

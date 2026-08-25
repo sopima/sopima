@@ -85,6 +85,8 @@ return [
     'contracts.search_placeholder' => 'Title, partner, notes…',
     'contracts.all'                => 'All',
     'contracts.filter'             => 'Filter',
+    'contracts.per_page' => 'Per page',
+    'contracts.total' => 'entries total',
     'contracts.reset'              => 'Reset',
     'contracts.status.aktiv'       => 'Active',
     'contracts.status.gekuendigt'  => 'Cancelled',

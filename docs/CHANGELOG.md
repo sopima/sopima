@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.4] - 2026-08-25
+### Added
+- Contracts: pagination with configurable per-page (10 / 25 / 50 / 100 / All)
+- Contracts: per-page preference persisted in session
+- Contracts: reset button restores default per-page (25)
+
 ## [0.4.3] - 2026-08-25
 ### Added
 - Contracts: sortable column headers (title, partner, client, category, status, value, notice date)

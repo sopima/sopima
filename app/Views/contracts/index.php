@@ -46,8 +46,18 @@
             <label><?php echo __('contracts.search'); ?></label>
             <input type="text" name="q" value="<?php echo htmlspecialchars($filter_search); ?>" placeholder="<?php echo __('contracts.search_placeholder'); ?>">
         </div>
+        <div class="form-group" style="margin:0;min-width:100px;">
+            <label><?php echo __('contracts.per_page'); ?></label>
+            <select name="per_page" onchange="this.form.submit()">
+                <?php foreach ([10,25,50,100,0] as $pp): ?>
+                    <option value="<?php echo $pp; ?>" <?php echo ($per_page ?? 25) == $pp ? 'selected' : ''; ?>>
+                        <?php echo $pp === 0 ? __('contracts.all') : $pp; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
         <button type="submit" class="btn btn-outline"><i class="ti ti-filter"></i> <?php echo __('contracts.filter'); ?></button>
-        <a href="/contracts" class="btn btn-outline"><i class="ti ti-x"></i> <?php echo __('contracts.reset'); ?></a>
+        <a href="/contracts?per_page=25" class="btn btn-outline"><i class="ti ti-x"></i> <?php echo __('contracts.reset'); ?></a>
     </form>
 </div>
 
@@ -138,6 +148,37 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+    </div>
+    <?php endif; ?>
+    <?php if (($total_pages ?? 1) > 1): ?>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem 1rem;border-top:1px solid rgba(255,255,255,.07);font-size:.85rem;color:var(--text-muted);">
+        <span><?php echo ($total ?? 0); ?> <?php echo __('contracts.total'); ?></span>
+        <div style="display:flex;gap:.25rem;align-items:center;">
+            <?php
+                $pbase = array_filter([
+                    'client_id' => $_GET['client_id'] ?? '',
+                    'status'    => $_GET['status'] ?? '',
+                    'q'         => $_GET['q'] ?? '',
+                    'sort'      => $_GET['sort'] ?? '',
+                    'dir'       => $_GET['dir'] ?? '',
+                    'per_page'  => ($per_page ?? 25) ?: 0,
+                ]);
+                $cur = $page ?? 1;
+                $tp  = $total_pages ?? 1;
+            ?>
+            <?php if ($cur > 1): ?>
+                <a href="/contracts?<?php echo http_build_query(array_merge($pbase, ['page' => $cur - 1])); ?>" class="btn btn-outline" style="padding:.3rem .6rem;"><i class="ti ti-chevron-left"></i></a>
+            <?php endif; ?>
+            <?php for ($p = max(1, $cur - 2); $p <= min($tp, $cur + 2); $p++): ?>
+                <a href="/contracts?<?php echo http_build_query(array_merge($pbase, ['page' => $p])); ?>"
+                   class="btn <?php echo $p === $cur ? 'btn-primary' : 'btn-outline'; ?>" style="padding:.3rem .6rem;min-width:2rem;text-align:center;">
+                    <?php echo $p; ?>
+                </a>
+            <?php endfor; ?>
+            <?php if ($cur < $tp): ?>
+                <a href="/contracts?<?php echo http_build_query(array_merge($pbase, ['page' => $cur + 1])); ?>" class="btn btn-outline" style="padding:.3rem .6rem;"><i class="ti ti-chevron-right"></i></a>
+            <?php endif; ?>
+        </div>
     </div>
     <?php endif; ?>
 </div>
