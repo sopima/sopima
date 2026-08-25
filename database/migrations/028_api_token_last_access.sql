@@ -1,0 +1,2 @@
+ALTER TABLE api_tokens ADD COLUMN last_ip TEXT DEFAULT NULL;
+ALTER TABLE api_tokens ADD COLUMN last_endpoint TEXT DEFAULT NULL;

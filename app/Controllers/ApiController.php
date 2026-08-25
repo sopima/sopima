@@ -30,7 +30,9 @@ function apiAuth(): array {
     if (!$t) {
         apiResponse(401, [], true);
     }
-    $db->prepare("UPDATE api_tokens SET last_used_at = datetime('now') WHERE id = ?")->execute([$t['id']]);
+    $last_ip = trim(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR'] ?? '')[0]);
+    $last_endpoint = substr($_SERVER['REQUEST_URI'] ?? '', 0, 128);
+    $db->prepare("UPDATE api_tokens SET last_used_at = datetime('now'), last_ip = ?, last_endpoint = ? WHERE id = ?")->execute([$last_ip, $last_endpoint, $t['id']]);
     $t['permissions'] = json_decode($t['permissions'], true);
     apiRateLimit($t);
     return $t;

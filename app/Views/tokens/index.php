@@ -19,6 +19,8 @@
                     <th><?php echo __('tokens.col.perms'); ?></th>
                     <th><?php echo __('tokens.col.status'); ?></th>
                     <th><?php echo __('tokens.col.last_used'); ?></th>
+                    <th><?php echo __('tokens.col.last_ip'); ?></th>
+                    <th><?php echo __('tokens.col.last_endpoint'); ?></th>
                     <th></th>
                 </tr>
             </thead>
@@ -38,6 +40,8 @@
                         </span>
                     </td>
                     <td style="font-size:.82rem;color:var(--text-muted)"><?php echo $t['last_used_at'] ?? '–'; ?></td>
+                    <td style="font-size:.78rem;color:var(--text-muted)"><?php echo htmlspecialchars($t['last_ip'] ?? '–'); ?></td>
+                    <td style="font-size:.78rem;color:var(--text-muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?php echo htmlspecialchars($t['last_endpoint'] ?? ''); ?>"><?php echo htmlspecialchars($t['last_endpoint'] ?? '–'); ?></td>
                     <td style="white-space:nowrap;">
                         <form method="POST" action="/settings?tab=tokens" style="display:inline;">
                             <input type="hidden" name="action" value="toggle">

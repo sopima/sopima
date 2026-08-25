@@ -209,6 +209,8 @@ return [
     'tokens.col.client'     => 'Mandant',
     'tokens.col.perms'      => 'Berechtigungen',
     'tokens.col.status'     => 'Status',
+    'tokens.col.last_ip' => 'Letzte IP',
+    'tokens.col.last_endpoint' => 'Letzter Endpunkt',
     'tokens.col.last_used'  => 'Zuletzt genutzt',
     'tokens.all_clients'    => 'Alle',
     'tokens.active'         => 'Aktiv',

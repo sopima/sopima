@@ -208,6 +208,8 @@ return [
     'tokens.col.client'     => 'Client',
     'tokens.col.perms'      => 'Permissions',
     'tokens.col.status'     => 'Status',
+    'tokens.col.last_ip' => 'Last IP',
+    'tokens.col.last_endpoint' => 'Last Endpoint',
     'tokens.col.last_used'  => 'Last Used',
     'tokens.all_clients'    => 'All',
     'tokens.active'         => 'Active',
