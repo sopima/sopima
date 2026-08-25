@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.1] - 2026-08-25
+### Added
+- API tokens: last IP and last endpoint logged on every request (migrations 027, 028)
+- API tokens: "Last IP" and "Last Endpoint" columns in token list UI
+- CI: `composer audit` security job runs on every push to main
+### Fixed
+- Settings: PDF template upload now validates MIME type (PDF only) and file size (max 20 MB); random filename instead of predictable ID+timestamp
+- i18n: missing key `settings.pdf.empty` added in de/en/pl
+
 ## [0.5.0] - 2026-08-25
 ### Security
 - HTTP security headers added: `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Content-Security-Policy`
