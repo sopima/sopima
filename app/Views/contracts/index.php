@@ -60,15 +60,33 @@
     <?php else: ?>
     <div class="table-wrap">
         <table>
+            <?php
+                $sort_col = $_GET['sort'] ?? 'created_at';
+                $sort_dir = strtoupper($_GET['dir'] ?? 'DESC') === 'ASC' ? 'ASC' : 'DESC';
+                $next_dir = $sort_dir === 'ASC' ? 'DESC' : 'ASC';
+                $base_params = array_filter([
+                    'client_id' => $_GET['client_id'] ?? '',
+                    'status'    => $_GET['status'] ?? '',
+                    'q'         => $_GET['q'] ?? '',
+                ]);
+                function sort_link(string $col, string $label, string $sort_col, string $sort_dir, string $next_dir, array $base): string {
+                    $active = $sort_col === $col;
+                    $dir = $active ? $next_dir : 'ASC';
+                    $icon = $active ? ($sort_dir === 'ASC' ? ' <i class="ti ti-arrow-up" style="font-size:.75em;"></i>' : ' <i class="ti ti-arrow-down" style="font-size:.75em;"></i>') : ' <i class="ti ti-arrows-sort" style="font-size:.7em;opacity:.3;"></i>';
+                    $params = http_build_query(array_merge($base, ['sort' => $col, 'dir' => $dir]));
+                    $style = $active ? 'color:var(--text-primary);font-weight:600;' : 'color:inherit;';
+                    return '<a href="/contracts?' . $params . '" style="text-decoration:none;white-space:nowrap;' . $style . '">' . $label . $icon . '</a>';
+                }
+            ?>
             <thead>
                 <tr>
-                    <th><?php echo __('contracts.col.title'); ?></th>
-                    <th><?php echo __('contracts.col.partner'); ?></th>
-                    <th><?php echo __('contracts.col.client'); ?></th>
-                    <th><?php echo __('contracts.col.category'); ?></th>
-                    <th><?php echo __('contracts.col.status'); ?></th>
-                    <th><?php echo __('contracts.col.value'); ?></th>
-                    <th><?php echo __('contracts.col.notice_date'); ?></th>
+                    <th><?php echo sort_link('title', __('contracts.col.title'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
+                    <th><?php echo sort_link('partner', __('contracts.col.partner'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
+                    <th><?php echo sort_link('client', __('contracts.col.client'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
+                    <th><?php echo sort_link('category', __('contracts.col.category'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
+                    <th><?php echo sort_link('status', __('contracts.col.status'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
+                    <th><?php echo sort_link('value', __('contracts.col.value'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
+                    <th><?php echo sort_link('notice_date', __('contracts.col.notice_date'), $sort_col, $sort_dir, $next_dir, $base_params); ?></th>
                     <th></th>
                 </tr>
             </thead>

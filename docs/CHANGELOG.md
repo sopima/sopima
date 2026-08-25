@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.3] - 2026-08-25
+### Added
+- Contracts: sortable column headers (title, partner, client, category, status, value, notice date)
+- Contracts: sort preference persisted in session
+
 ## [0.4.2] - 2026-08-25
 ### Added
 - Contracts: client quick-filter tabs above the contract list (mirrors dashboard behaviour)

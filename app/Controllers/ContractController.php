@@ -392,6 +392,28 @@ if ($action === 'create') {
     $filter_status = $_GET['status'] ?? '';
     $filter_search = trim($_GET["q"] ?? "");
 
+
+    $sort_whitelist = [
+        'title'       => 'c.title',
+        'partner'     => 'c.partner',
+        'client'      => 'cl.name',
+        'category'    => 'cc.name',
+        'status'      => 'c.status',
+        'value'       => 'c.value',
+        'notice_date' => 'c.notice_date',
+        'created_at'  => 'c.created_at',
+    ];
+    if (isset($_GET['sort'])) {
+        $sort_col = $_GET['sort'];
+        $sort_dir = strtoupper($_GET['dir'] ?? 'ASC') === 'ASC' ? 'ASC' : 'DESC';
+        $_SESSION['contracts_sort_col'] = $sort_col;
+        $_SESSION['contracts_sort_dir'] = $sort_dir;
+    } else {
+        $sort_col = $_SESSION['contracts_sort_col'] ?? 'created_at';
+        $sort_dir = $_SESSION['contracts_sort_dir'] ?? 'DESC';
+    }
+    if (!array_key_exists($sort_col, $sort_whitelist)) { $sort_col = 'created_at'; $sort_dir = 'DESC'; }
+    $order_by = $sort_whitelist[$sort_col] . ' ' . $sort_dir;
     $where  = ["c.client_id IN ($in)"];
     $params = [];
     if ($filter_client && clientAllowed($filter_client)) { $where[] = 'c.client_id = ?'; $params[] = $filter_client; }
@@ -403,7 +425,7 @@ if ($action === 'create') {
             LEFT JOIN clients cl ON c.client_id = cl.id
             LEFT JOIN contract_categories cc ON c.category_id = cc.id
             WHERE " . implode(' AND ', $where) . "
-            ORDER BY c.created_at DESC";
+            ORDER BY $order_by";
 
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
