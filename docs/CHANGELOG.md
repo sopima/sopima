@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.9] - 2026-08-25
+### Added
+- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
+- Contracts: hint shown when contact data is adopted from existing contract
+
 ## [0.4.8] - 2026-08-25
 ### Added
 - Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
@@ -8,6 +13,11 @@
 
 ### Fixed
 - Letter generator: partner address loaded from contract_contacts instead of clients
+
+## [0.4.9] - 2026-08-25
+### Added
+- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
+- Contracts: hint shown when contact data is adopted from existing contract
 
 ## [0.4.8] - 2026-08-25
 ### Added
@@ -41,6 +51,11 @@
 ### Changed
 - `.env.example` updated with `APP_SECURE_COOKIE` entry
 
+## [0.4.9] - 2026-08-25
+### Added
+- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
+- Contracts: hint shown when contact data is adopted from existing contract
+
 ## [0.4.8] - 2026-08-25
 ### Added
 - Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
@@ -49,6 +64,11 @@
 
 ### Fixed
 - Letter generator: partner address loaded from contract_contacts instead of clients
+
+## [0.4.9] - 2026-08-25
+### Added
+- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
+- Contracts: hint shown when contact data is adopted from existing contract
 
 ## [0.4.8] - 2026-08-25
 ### Added

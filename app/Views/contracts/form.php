@@ -59,10 +59,71 @@
             <input type="text" name="title" required value="<?php echo htmlspecialchars($contract['title'] ?? ''); ?>" placeholder="<?php echo __('cf.ph.title'); ?>">
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
-            <div class="form-group" style="margin:0;">
+            <div class="form-group" style="margin:0;position:relative;">
                 <label><?php echo __('cf.partner'); ?></label>
-                <input type="text" name="partner" value="<?php echo htmlspecialchars($contract['partner'] ?? ''); ?>" placeholder="<?php echo __('cf.ph.partner'); ?>">
+                <input type="text" name="partner" id="partner_input" autocomplete="off"
+                    value="<?php echo htmlspecialchars($contract['partner'] ?? ''); ?>"
+                    placeholder="<?php echo __('cf.ph.partner'); ?>">
+                <div id="partner_hint" style="display:none;font-size:.78rem;color:#34d399;margin-top:.3rem;"><i class="ti ti-circle-check"></i> Kontaktdaten übernommen – im Tab „Ansprechpartner" prüfen</div>
+                <div id="partner_suggestions" style="display:none;position:absolute;z-index:999;background:#1e2a3a;border:1px solid rgba(99,102,241,.4);border-radius:8px;width:100%;max-height:220px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.5);margin-top:2px;"></div>
             </div>
+            <script>
+            (function() {
+                var input = document.getElementById('partner_input');
+                var box   = document.getElementById('partner_suggestions');
+                var timer = null;
+                input.addEventListener('input', function() {
+                    clearTimeout(timer);
+                    var q = input.value.trim();
+                    if (q.length < 2) { box.style.display = 'none'; return; }
+                    timer = setTimeout(function() {
+                        fetch('/contracts/partner-suggest?q=' + encodeURIComponent(q))
+                            .then(function(r) { return r.json(); })
+                            .then(function(data) {
+                                if (!data.length) { box.style.display = 'none'; return; }
+                                box.innerHTML = '';
+                                data.forEach(function(p) {
+                                    var item = document.createElement('div');
+                                    item.style.cssText = 'padding:.5rem .85rem;cursor:pointer;font-size:.9rem;border-bottom:1px solid rgba(255,255,255,.06);';
+                                    item.innerHTML = '<strong>' + p.partner + '</strong>' +
+                                        (p.customer_number ? ' <span style="color:var(--text-muted);font-size:.8rem;">Kundennr. ' + p.customer_number + '</span>' : '') +
+                                        (p.city ? '<br><span style="color:var(--text-muted);font-size:.8rem;">' + (p.company || '') + (p.company && p.city ? ' · ' : '') + p.city + '</span>' : '');
+                                    item.addEventListener('mousedown', function(e) {
+                                        e.preventDefault();
+                                        input.value = p.partner;
+                                        // Felder befüllen
+                                        var fields = {
+                                            'customer_number': p.customer_number || '',
+                                            'cc_company':      p.company || '',
+                                            'cc_street':       p.street || '',
+                                            'cc_zip':          p.zip || '',
+                                            'cc_city':         p.city || '',
+                                            'cc_email':        p.email || '',
+                                            'cc_phone':        p.phone || '',
+                                            'cc_mobile':       p.mobile || '',
+                                        };
+                                        Object.keys(fields).forEach(function(name) {
+                                            var el = document.querySelector('[name="' + name + '"]');
+                                            if (el && fields[name]) el.value = fields[name];
+                                        });
+                                        box.style.display = 'none';
+                                        // Hinweis anzeigen
+                                        var hint = document.getElementById('partner_hint');
+                                        if (hint) { hint.style.display = 'block'; }
+                                    });
+                                    item.addEventListener('mouseover', function() { item.style.background = 'rgba(255,255,255,.06)'; });
+                                    item.addEventListener('mouseout',  function() { item.style.background = ''; });
+                                    box.appendChild(item);
+                                });
+                                box.style.display = 'block';
+                            });
+                    }, 250);
+                });
+                document.addEventListener('click', function(e) {
+                    if (!box.contains(e.target) && e.target !== input) box.style.display = 'none';
+                });
+            })();
+            </script>
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('cf.customer_number'); ?></label>
                 <input type="text" name="customer_number" value="<?php echo htmlspecialchars($contract['customer_number'] ?? ''); ?>" placeholder="z.B. 6073477486">

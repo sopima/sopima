@@ -114,6 +114,30 @@ if ($uri === '/logout') {
     exit;
 }
 
+// Partner-Autocomplete
+if ($uri === '/contracts/partner-suggest' && $method === 'GET') {
+    middleware(['auth' => true, 'admin' => false]);
+    header('Content-Type: application/json');
+    $q = trim($_GET['q'] ?? '');
+    if (strlen($q) < 2) { echo json_encode([]); exit; }
+    $ids = allowedClientIds();
+    $in  = $ids ? implode(',', array_map('intval', $ids)) : '0';
+    $stmt = db()->prepare("
+        SELECT DISTINCT c.partner, c.customer_number, c.client_id,
+               cc.company, cc.street, cc.zip, cc.city, cc.email, cc.phone, cc.mobile
+        FROM contracts c
+        LEFT JOIN contract_contacts cc ON cc.contract_id = c.id
+        WHERE c.client_id IN ($in)
+          AND c.partner LIKE ?
+          AND c.partner != ''
+        ORDER BY c.partner ASC
+        LIMIT 10
+    ");
+    $stmt->execute(['%' . $q . '%']);
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    exit;
+}
+
 // Letter-Routen: /contracts/{id}/letter und /contracts/{id}/letter/{tid}/pdf
 if (preg_match('#^/contracts/(\d+)/letter$#', $uri, $m)) {
     middleware(['auth' => true, 'admin' => false]);
