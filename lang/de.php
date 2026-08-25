@@ -578,6 +578,7 @@ return [
     'settings.pdf.title'            => 'Titel',
     'settings.pdf.body'             => 'Inhalt (HTML)',
     'settings.pdf.placeholders'     => 'Platzhalter',
+    'settings.pdf.empty' => 'Keine PDF-Templates vorhanden. Erstelle ein neues Template.',
     'settings.pdf.save'             => 'Speichern',
 
     // pdf upload

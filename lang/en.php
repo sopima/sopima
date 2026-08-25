@@ -577,6 +577,7 @@ return [
     'settings.pdf.title'            => 'Title',
     'settings.pdf.body'             => 'Content (HTML)',
     'settings.pdf.placeholders'     => 'Placeholders',
+    'settings.pdf.empty' => 'No PDF templates found. Create a new template.',
     'settings.pdf.save'             => 'Save',
 
     // pdf upload

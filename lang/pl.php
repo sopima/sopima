@@ -565,6 +565,7 @@ return [
     'settings.pdf.title'            => 'Tytuł',
     'settings.pdf.body'             => 'Treść (HTML)',
     'settings.pdf.placeholders'     => 'Zmienne',
+    'settings.pdf.empty' => 'Brak szablonów PDF. Utwórz nowy szablon.',
     'settings.pdf.save'             => 'Zapisz',
 
     // pdf upload

@@ -51,14 +51,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $existing = $existing->fetch();
             $file_path = $existing["file_path"] ?? null;
 
-            if (!empty($_FILES["pdf_file"]["tmp_name"])) {
-                $dir = "storage/uploads/pdf_templates/" . $client_id . "/";
-                if (!is_dir($dir)) mkdir($dir, 0775, true);
-                $filename = $tpl_id . "_" . time() . ".pdf";
-                $dest = $dir . $filename;
-                if (move_uploaded_file($_FILES["pdf_file"]["tmp_name"], $dest)) {
-                    if ($file_path && file_exists($file_path)) unlink($file_path);
-                    $file_path = $dest;
+            if (!empty($_FILES["pdf_file"]["tmp_name"]) && $_FILES["pdf_file"]["error"] === UPLOAD_ERR_OK) {
+                $allowed_mime = ["application/pdf"];
+                $real_mime = mime_content_type($_FILES["pdf_file"]["tmp_name"]);
+                $max_size = 20 * 1024 * 1024;
+                if (in_array($real_mime, $allowed_mime) && $_FILES["pdf_file"]["size"] <= $max_size) {
+                    $dir = "storage/uploads/pdf_templates/" . $client_id . "/";
+                    if (!is_dir($dir)) mkdir($dir, 0775, true);
+                    $filename = uniqid("pdf_", true) . ".pdf";
+                    $dest = $dir . $filename;
+                    if (move_uploaded_file($_FILES["pdf_file"]["tmp_name"], $dest)) {
+                        if ($file_path && file_exists($file_path)) unlink($file_path);
+                        $file_path = $dest;
+                    }
                 }
             }
 
