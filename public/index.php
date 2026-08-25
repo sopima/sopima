@@ -43,7 +43,7 @@ require_once BASE_PATH . '/app/Helpers/i18n.php';
 load_lang(env('APP_LOCALE', 'de'));
 
 ini_set("session.gc_maxlifetime", 86400);
-session_set_cookie_params(["lifetime" => 86400, "path" => "/", "secure" => false, "httponly" => true, "samesite" => "Lax"]);
+session_set_cookie_params(["lifetime" => 86400, "path" => "/", "secure" => env('APP_SECURE_COOKIE', 'false') === 'true', "httponly" => true, "samesite" => "Lax"]);
 session_start();
 
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

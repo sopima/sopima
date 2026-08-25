@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.4.6] - 2026-08-25
+### Security
+- Session cookie `secure` flag now configurable via `APP_SECURE_COOKIE` env variable (default: true)
+
+### Changed
+- `.env.example` updated with `APP_SECURE_COOKIE` entry
+
+## [0.4.6] - 2026-08-25
+### Security
+- Session cookie `secure` flag now configurable via `APP_SECURE_COOKIE` env variable (default: true)
+
+### Changed
+- `.env.example` updated with `APP_SECURE_COOKIE` entry
+
 ## [0.4.5] - 2026-08-25
 ### Security
 - LetterService: deleteTemplate and updateTemplate now enforce tenant check (client_id)
