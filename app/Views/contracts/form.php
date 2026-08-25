@@ -64,6 +64,10 @@
                 <input type="text" name="partner" value="<?php echo htmlspecialchars($contract['partner'] ?? ''); ?>" placeholder="<?php echo __('cf.ph.partner'); ?>">
             </div>
             <div class="form-group" style="margin:0;">
+                <label><?php echo __('cf.customer_number'); ?></label>
+                <input type="text" name="customer_number" value="<?php echo htmlspecialchars($contract['customer_number'] ?? ''); ?>" placeholder="z.B. 6073477486">
+            </div>
+            <div class="form-group" style="margin:0;">
                 <label><?php echo __('cf.partner_contract_number'); ?></label>
                 <input type="text" name="partner_contract_number" value="<?php echo htmlspecialchars($contract['partner_contract_number'] ?? ''); ?>" placeholder="z.B. 123456789">
             </div>
@@ -174,6 +178,10 @@
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('cf.plan'); ?></label>
                 <input type="text" name="plan" value="<?php echo htmlspecialchars($contract['plan'] ?? ''); ?>" placeholder="<?php echo __('cf.ph.plan'); ?>">
+            </div>
+            <div class="form-group" style="margin:0;">
+                <label><?php echo __('cf.phone_number'); ?></label>
+                <input type="text" name="phone_number" value="<?php echo htmlspecialchars($contract['phone_number'] ?? ''); ?>" placeholder="z.B. +49 151 12345678">
             </div>
         </div>
         <div style="height:.75rem;"></div>

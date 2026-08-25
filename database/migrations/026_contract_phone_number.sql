@@ -1,0 +1,1 @@
+ALTER TABLE contracts ADD COLUMN phone_number TEXT DEFAULT NULL;

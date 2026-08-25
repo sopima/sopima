@@ -105,9 +105,13 @@ class LetterService
         // Vertragsdaten laden
         $stmt = $this->db->prepare(
             "SELECT c.*, cl.name AS client_name, cl.street AS client_address,
-                    cl.zip AS client_zip, cl.city AS client_city
+                    cl.zip AS client_zip, cl.city AS client_city,
+                    cc.company AS partner_company, cc.first_name AS partner_first_name,
+                    cc.last_name AS partner_last_name, cc.street AS partner_street,
+                    cc.zip AS partner_zip, cc.city AS partner_city
              FROM contracts c
              LEFT JOIN clients cl ON cl.id = c.client_id
+             LEFT JOIN contract_contacts cc ON cc.contract_id = c.id
              WHERE c.id = ?"
         );
         $stmt->execute([$contractId]);
@@ -142,20 +146,36 @@ class LetterService
         $map = [
             '{{contract_number}}'  => $contract['contract_number'] ?? '',
             '{{external_id}}'      => $contract['external_id'] ?? '',
+            '{{customer_number}}'        => $contract['customer_number'] ?? '',
             '{{partner_contract_number}}' => $contract['partner_contract_number'] ?? '',
+            '{{phone_number}}'            => $contract['phone_number'] ?? '',
+            '{{title}}'                   => $contract['title'] ?? '',
+            '{{plan}}'                    => $contract['plan'] ?? '',
             '{{contract_ref}}'     => !empty($contract['partner_contract_number'])
                 ? $contract['partner_contract_number']
                 : (!empty($contract['external_id']) ? $contract['external_id'] : ''),
             '{{partner}}'          => $contract['partner'] ?? '',
             '{{contract_type}}'    => $contract['contract_type'] ?? '',
-            '{{start_date}}'       => $contract['start_date'] ?? '',
-            '{{end_date}}'         => $contract['end_date'] ?? '',
-            '{{notice_date}}'      => $contract['notice_date'] ?? '',
+            '{{start_date}}'       => $contract['start_date'] ? date('d.m.Y', strtotime($contract['start_date'])) : '',
+            '{{end_date}}'         => $contract['end_date'] ? date('d.m.Y', strtotime($contract['end_date'])) : '',
+            '{{notice_date}}'      => $contract['notice_date'] ? date('d.m.Y', strtotime($contract['notice_date'])) : '',
+            '{{cancellation_deadline}}' => $contract['cancellation_deadline'] ? date('d.m.Y', strtotime($contract['cancellation_deadline'])) : '',
             '{{monthly_cost}}'     => $contract['monthly_cost'] ?? '',
             '{{client_name}}'      => $contract['client_name'] ?? '',
             '{{client_address}}'   => $contract['client_address'] ?? '',
             '{{client_zip}}'       => $contract['client_zip'] ?? '',
             '{{client_city}}'      => $contract['client_city'] ?? '',
+            '{{partner_company}}'  => $contract['partner_company'] ?? '',
+            '{{partner_name}}'     => trim(($contract['partner_first_name'] ?? '') . ' ' . ($contract['partner_last_name'] ?? '')),
+            '{{partner_street}}'   => $contract['partner_street'] ?? '',
+            '{{partner_zip}}'      => $contract['partner_zip'] ?? '',
+            '{{partner_city}}'     => $contract['partner_city'] ?? '',
+            '{{partner_address_block}}' => implode("\n", array_filter([
+                $contract['partner_company'] ?? '',
+                trim(($contract['partner_first_name'] ?? '') . ' ' . ($contract['partner_last_name'] ?? '')),
+                $contract['partner_street'] ?? '',
+                trim(($contract['partner_zip'] ?? '') . ' ' . ($contract['partner_city'] ?? '')),
+            ])),
             '{{today}}'            => $today,
         ];
         return str_replace(array_keys($map), array_values($map), $html);

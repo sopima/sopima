@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $renewal_interval_months = $_POST['renewal_interval_months'] ? (int)$_POST['renewal_interval_months'] : null;
         $cancellation_period_days = $_POST['cancellation_period_days'] ? (int)$_POST['cancellation_period_days'] : null;
         $dates = calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months, $cancellation_period_days, $renewal_interval_months);
-        $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, contract_type, title, partner, partner_contract_number, counterparty_type, description, start_date, end_date, auto_renewal, minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date, value, billing_interval, payment_method, iban, mandate_reference, interest_rate, loan_amount, monthly_rate, deductible, service_interval_months, status, notes, direction, plan) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, contract_type, title, partner, partner_contract_number, customer_number, counterparty_type, description, start_date, end_date, auto_renewal, minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date, value, billing_interval, payment_method, iban, mandate_reference, interest_rate, loan_amount, monthly_rate, deductible, service_interval_months, status, notes, direction, plan, phone_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $stmt->execute([
             $contract_number,
             $_POST['client_id'],
@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['title'],
             $_POST['partner'],
             $_POST['partner_contract_number'] ?? null,
+            $_POST['customer_number'] ?? null,
             $_POST['counterparty_type'] ?: null,
             $_POST['description'],
             $_POST['start_date'] ?: null,
@@ -116,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['notes'],
             $_POST['direction'] ?? 'ausgabe',
             $_POST['plan'] ?: null,
+            $_POST['phone_number'] ?? null,
         ]);
         $lastId = $db->lastInsertId();
         // Personen speichern
@@ -163,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $renewal_interval_months_u = $_POST['renewal_interval_months'] ? (int)$_POST['renewal_interval_months'] : null;
         $cancellation_period_days_u = $_POST['cancellation_period_days'] ? (int)$_POST['cancellation_period_days'] : null;
         $dates_u = calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months_u, $cancellation_period_days_u, $renewal_interval_months_u);
-        $stmt = $db->prepare("UPDATE contracts SET client_id=?, category_id=?, contract_type=?, title=?, partner=?, partner_contract_number=?, counterparty_type=?, description=?, start_date=?, end_date=?, auto_renewal=?, minimum_term_months=?, renewal_interval_months=?, cancellation_period_days=?, cancellation_deadline=?, notice_date=?, value=?, billing_interval=?, payment_method=?, iban=?, mandate_reference=?, interest_rate=?, loan_amount=?, monthly_rate=?, deductible=?, service_interval_months=?, status=?, notes=?, direction=?, plan=? WHERE id=? AND client_id IN ($in)");
+        $stmt = $db->prepare("UPDATE contracts SET client_id=?, category_id=?, contract_type=?, title=?, partner=?, partner_contract_number=?, customer_number=?, counterparty_type=?, description=?, start_date=?, end_date=?, auto_renewal=?, minimum_term_months=?, renewal_interval_months=?, cancellation_period_days=?, cancellation_deadline=?, notice_date=?, value=?, billing_interval=?, payment_method=?, iban=?, mandate_reference=?, interest_rate=?, loan_amount=?, monthly_rate=?, deductible=?, service_interval_months=?, status=?, notes=?, direction=?, plan=?, phone_number=? WHERE id=? AND client_id IN ($in)");
         $stmt->execute([
             $_POST['client_id'],
             $_POST['category_id'] ?: null,
@@ -171,6 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['title'],
             $_POST['partner'],
             $_POST['partner_contract_number'] ?? null,
+            $_POST['customer_number'] ?? null,
             $_POST['counterparty_type'] ?: null,
             $_POST['description'],
             $_POST['start_date'] ?: null,
@@ -195,6 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['notes'],
             $_POST['direction'] ?? 'ausgabe',
             $_POST['plan'] ?: null,
+            $_POST['phone_number'] ?? null,
             $_POST['id'],
         ]);
         // Personen: löschen und neu schreiben

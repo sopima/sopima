@@ -304,6 +304,7 @@ return [
     'cf.value' => 'Value (€)',
     'cf.direction' => 'Direction',
     'cf.interval' => 'Interval',
+    'cf.phone_number' => 'Phone number',
     'cf.plan' => 'Plan',
     'cf.description' => 'Description',
     'cf.notes' => 'Notes',
@@ -615,6 +616,7 @@ return [
     'letter.error_load' => 'Error loading PDF.',
     'letter.page_info' => 'Page',
     'letter.of' => 'of',
+    'cf.customer_number' => 'Customer number',
     'cf.partner_contract_number' => 'Partner Contract No.',
     'cd.partner_contract_number' => 'Partner Contract No.',
 ];

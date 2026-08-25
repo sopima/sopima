@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.4.8] - 2026-08-25
+### Added
+- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
+- Letter generator: new placeholders {{customer_number}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
+- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
+
+### Fixed
+- Letter generator: partner address loaded from contract_contacts instead of clients
+
+## [0.4.8] - 2026-08-25
+### Added
+- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
+- Contracts: new field `phone_number` (migration 026) for telecommunication contracts
+- Letter generator: new placeholders {{customer_number}}, {{phone_number}}, {{title}}, {{plan}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
+- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
+- Letter generator: two default templates – "Kündigung Mobilfunk/Internet" and "Kündigung Allgemein"
+
+### Fixed
+- Letter generator: partner address loaded from contract_contacts instead of clients
+- Letter generator: {{title}} and {{customer_number}} placeholders were missing
+
 ## [0.4.7] - 2026-08-25
 ### Fixed
 - Contract date calculation rewritten: exact day-based arithmetic instead of end-of-month rounding
@@ -19,6 +40,27 @@
 
 ### Changed
 - `.env.example` updated with `APP_SECURE_COOKIE` entry
+
+## [0.4.8] - 2026-08-25
+### Added
+- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
+- Letter generator: new placeholders {{customer_number}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
+- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
+
+### Fixed
+- Letter generator: partner address loaded from contract_contacts instead of clients
+
+## [0.4.8] - 2026-08-25
+### Added
+- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
+- Contracts: new field `phone_number` (migration 026) for telecommunication contracts
+- Letter generator: new placeholders {{customer_number}}, {{phone_number}}, {{title}}, {{plan}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
+- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
+- Letter generator: two default templates – "Kündigung Mobilfunk/Internet" and "Kündigung Allgemein"
+
+### Fixed
+- Letter generator: partner address loaded from contract_contacts instead of clients
+- Letter generator: {{title}} and {{customer_number}} placeholders were missing
 
 ## [0.4.7] - 2026-08-25
 ### Fixed
