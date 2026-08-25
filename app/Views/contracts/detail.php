@@ -25,9 +25,9 @@ $activeTab = $_GET['tab'] ?? 'uebersicht';
 <?php
 // Kündigungsfrist berechnen
 $kbox = null;
-if ($contract["notice_date"]) {
+if ($contract["cancellation_deadline"] ?? $contract["notice_date"]) {
     $today     = time();
-    $notice_ts = strtotime($contract["notice_date"]);
+    $notice_ts = strtotime($contract["cancellation_deadline"] ?? $contract["notice_date"]);
     $days      = (int)(($notice_ts - $today) / 86400);
     if ($days < 0) {
         $kbox = ['color'=>'#f87171','bg'=>'rgba(248,113,113,.08)','border'=>'rgba(248,113,113,.25)','icon'=>'ti-alert-circle',
@@ -46,29 +46,27 @@ if ($contract["notice_date"]) {
         $kbox = ['color'=>'#34d399','bg'=>'rgba(52,211,153,.08)','border'=>'rgba(52,211,153,.25)','icon'=>'ti-circle-check',
             'text'=>__('cd.kbox.soon', ['days'=>$days]),'sub'=>__('cd.kbox.soon_sub', ['date'=>date("d.m.Y",$notice_ts)])];
     }
-    $next_renewal = null;
-    if ($contract["end_date"] && $contract["billing_interval"]) {
-        $end_ts = strtotime($contract["end_date"]);
-        $interval_map = ["monatlich"=>"+1 month","quartalsweise"=>"+3 months","jaehrlich"=>"+1 year","einmalig"=>null];
-        $interval = $interval_map[$contract["billing_interval"]] ?? null;
-        if ($interval) {
-            $next = $end_ts;
-            while ($next < $today) { $next = strtotime($interval, $next); }
-            $kbox['renewal'] = date("d.m.Y", $next);
-        }
+    // Nächste Verlängerung direkt aus DB
+    if (!empty($contract["notice_date"])) {
+        $kbox['renewal'] = date("d.m.Y", strtotime($contract["notice_date"]));
     }
 }
 
-// Bei Kündigung heute: nächstes Vertragsende berechnen
+// Bei Kündigung heute: nächstes Vertragsende berechnen (taggenau)
 $kuendigung_heute = null;
-if ($contract['cancellation_period_days']) {
+if ($contract['cancellation_period_days'] && $contract['end_date']) {
     $today_dt  = new DateTime();
     $frist     = (int)$contract['cancellation_period_days'];
-    $deadline  = clone $today_dt;
-    $deadline->modify("+{$frist} days");
-    // Letzter Tag des Monats nach Fristablauf
-    $deadline->modify('last day of this month');
-    $kuendigung_heute = $deadline->format('d.m.Y');
+    $end_dt    = new DateTime($contract['end_date']);
+    // Finde nächstes Enddatum nach heute + Kündigungsfrist
+    $kuendigbar_ab = clone $today_dt;
+    $kuendigbar_ab->modify("+{$frist} days");
+    $next_end = clone $end_dt;
+    while ($next_end <= $kuendigbar_ab) {
+        $renewal = (int)($contract['renewal_interval_months'] ?? 1);
+        $next_end->modify("+{$renewal} months");
+    }
+    $kuendigung_heute = $next_end->format('d.m.Y');
     if ($kbox) {
         $kbox['kuendigung_heute'] = $kuendigung_heute;
     }

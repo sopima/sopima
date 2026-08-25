@@ -9,6 +9,8 @@
 
 ### Changed
 - Contract detail view: "Kündigungsdatum" split into "Kündigungsfrist bis" (deadline) and "Nächste Verlängerung" (renewal date)
+- Detail banner now uses cancellation_deadline for countdown and notice_date for renewal display
+- "Bei Kündigung heute" calculation rewritten to exact day-based arithmetic
 - i18n: new keys cd.cancellation_deadline and cd.renewal_date in de/en/pl
 
 ## [0.4.6] - 2026-08-25
@@ -27,6 +29,8 @@
 
 ### Changed
 - Contract detail view: "Kündigungsdatum" split into "Kündigungsfrist bis" (deadline) and "Nächste Verlängerung" (renewal date)
+- Detail banner now uses cancellation_deadline for countdown and notice_date for renewal display
+- "Bei Kündigung heute" calculation rewritten to exact day-based arithmetic
 - i18n: new keys cd.cancellation_deadline and cd.renewal_date in de/en/pl
 
 ## [0.4.6] - 2026-08-25
