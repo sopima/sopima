@@ -411,6 +411,8 @@ return [
     'cd.status' => 'Status',
     'cd.start_date' => 'Data rozpoczęcia',
     'cd.end_date' => 'Data zakończenia',
+    'cd.cancellation_deadline' => 'Termin wypowiedzenia',
+    'cd.renewal_date'          => 'Następne odnowienie',
     'cd.notice_date' => 'Data wypowiedzenia',
     'cd.value' => 'Wartość',
     'cd.interval' => 'Interwał',

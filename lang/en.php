@@ -423,6 +423,8 @@ return [
     'cd.status' => 'Status',
     'cd.start_date' => 'Start Date',
     'cd.end_date' => 'End Date',
+    'cd.cancellation_deadline' => 'Cancellation deadline',
+    'cd.renewal_date'          => 'Next renewal',
     'cd.notice_date' => 'Cancellation Date',
     'cd.value' => 'Value',
     'cd.interval' => 'Interval',

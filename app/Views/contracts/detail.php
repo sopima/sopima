@@ -193,7 +193,11 @@ $logCount     = count($comm_log ?? []);
             <div style="font-size:.9rem;"><?php echo $contract['end_date'] ? date('d.m.Y', strtotime($contract['end_date'])) : '–'; ?></div>
         </div>
         <div>
-            <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.notice_date'); ?></div>
+            <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.cancellation_deadline'); ?></div>
+            <div style="font-size:.9rem;"><?php echo $contract['cancellation_deadline'] ? date('d.m.Y', strtotime($contract['cancellation_deadline'])) : '–'; ?></div>
+        </div>
+        <div>
+            <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.renewal_date'); ?></div>
             <div style="font-size:.9rem;"><?php echo $contract['notice_date'] ? date('d.m.Y', strtotime($contract['notice_date'])) : '–'; ?></div>
         </div>
         <div>

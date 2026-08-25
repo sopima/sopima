@@ -6,42 +6,36 @@ function calculateContractDates(?string $start_date, ?int $minimum_term_months, 
     if (!$start_date || !$minimum_term_months) {
         return ['end_date' => null, 'cancellation_deadline' => null, 'notice_date' => null];
     }
-
     $start = new DateTime($start_date);
 
-    // Enddatum = Startdatum + Mindestlaufzeit
+    // Enddatum = Startdatum + Mindestlaufzeit (taggenau)
     $end = clone $start;
-    $end->modify("+" . ($minimum_term_months - 1) . " months");
-    // Letzter Tag des Endmonats (Mindestlaufzeit - 1, da Startmonat zählt)
-    $end->modify('last day of this month');
+    $end->modify('+' . $minimum_term_months . ' months');
     $end_date = $end->format('Y-m-d');
     $notice_date = $end_date;
 
-    // Kündigungsfrist: letzter Tag des Monats, der mind. X Tage vor Enddatum liegt
+    // Kuendigungsdeadline = Enddatum - Kuendigungsfrist in Tagen (taggenau)
     $cancellation_deadline = null;
     if ($cancellation_period_days) {
         $deadline = clone $end;
-        $deadline->modify("-{$cancellation_period_days} days");
-        $deadline->modify('last day of this month');
-        // Wenn deadline >= end, einen Monat früher
-        if ($deadline >= $end) {
-            $deadline->modify('last day of previous month');
-        }
+        $deadline->modify('-' . $cancellation_period_days . ' days');
         $cancellation_deadline = $deadline->format('Y-m-d');
     }
 
+    // notice_date = Enddatum + Verlaengerungsintervall (taggenau)
     if ($renewal_interval_months) {
         $renewal = clone $end;
         $renewal->modify('+' . $renewal_interval_months . ' months');
-        $renewal->modify('last day of this month');
         $notice_date = $renewal->format('Y-m-d');
     }
+
     return [
-        'end_date'             => $end_date,
+        'end_date'              => $end_date,
         'cancellation_deadline' => $cancellation_deadline,
-        'notice_date'          => $notice_date,
+        'notice_date'           => $notice_date,
     ];
 }
+
 $db   = db();
 
 $action = $_GET['action'] ?? 'index';

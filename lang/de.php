@@ -424,6 +424,8 @@ return [
     'cd.status' => 'Status',
     'cd.start_date' => 'Startdatum',
     'cd.end_date' => 'Enddatum',
+    'cd.cancellation_deadline' => 'Kündigungsfrist bis',
+    'cd.renewal_date'          => 'Nächste Verlängerung',
     'cd.notice_date' => 'Kündigungsdatum',
     'cd.value' => 'Wert',
     'cd.interval' => 'Intervall',

@@ -1,11 +1,33 @@
 # Changelog
 
+## [0.4.7] - 2026-08-25
+### Fixed
+- Contract date calculation rewritten: exact day-based arithmetic instead of end-of-month rounding
+- End date now correctly = start + term (e.g. 26.03.2026 + 24 months = 26.03.2028)
+- Cancellation deadline now correctly = end date - cancellation period in days
+- Renewal date now correctly = end date + renewal interval
+
+### Changed
+- Contract detail view: "Kündigungsdatum" split into "Kündigungsfrist bis" (deadline) and "Nächste Verlängerung" (renewal date)
+- i18n: new keys cd.cancellation_deadline and cd.renewal_date in de/en/pl
+
 ## [0.4.6] - 2026-08-25
 ### Security
 - Session cookie `secure` flag now configurable via `APP_SECURE_COOKIE` env variable (default: true)
 
 ### Changed
 - `.env.example` updated with `APP_SECURE_COOKIE` entry
+
+## [0.4.7] - 2026-08-25
+### Fixed
+- Contract date calculation rewritten: exact day-based arithmetic instead of end-of-month rounding
+- End date now correctly = start + term (e.g. 26.03.2026 + 24 months = 26.03.2028)
+- Cancellation deadline now correctly = end date - cancellation period in days
+- Renewal date now correctly = end date + renewal interval
+
+### Changed
+- Contract detail view: "Kündigungsdatum" split into "Kündigungsfrist bis" (deadline) and "Nächste Verlängerung" (renewal date)
+- i18n: new keys cd.cancellation_deadline and cd.renewal_date in de/en/pl
 
 ## [0.4.6] - 2026-08-25
 ### Security
