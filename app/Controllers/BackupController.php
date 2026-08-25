@@ -7,11 +7,25 @@ $action = $_GET['action'] ?? 'index';
 if ($action === 'export-json' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = collectBackupData($db, $user);
     $json = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-    $filename = 'sopima-backup-' . date('Y-m-d_His') . '.json';
-    header('Content-Type: application/json; charset=utf-8');
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-    header('Content-Length: ' . strlen($json));
-    echo $json;
+    $password = trim($_POST['backup_password'] ?? '');
+    if ($password !== '') {
+        $salt = random_bytes(16);
+        $iv   = random_bytes(16);
+        $key  = hash_pbkdf2('sha256', $password, $salt, 100000, 32, true);
+        $encrypted = openssl_encrypt($json, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        $payload = base64_encode($salt . $iv . $encrypted);
+        $filename = 'sopima-backup-' . date('Y-m-d_His') . '.enc';
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . strlen($payload));
+        echo $payload;
+    } else {
+        $filename = 'sopima-backup-' . date('Y-m-d_His') . '.json';
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+        header('Content-Length: ' . strlen($json));
+        echo $json;
+    }
     exit;
 }
 
@@ -25,9 +39,10 @@ if ($action === 'export-csv' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($rows) || !is_array($rows) || !isset($rows[0]) || !is_array($rows[0])) continue;
         $fp = fopen($tmpDir . '/' . $table . '.csv', 'w');
         fwrite($fp, "\xEF\xBB\xBF");
-        fputcsv($fp, array_keys($rows[0]), ';');
+        fputcsv($fp, array_keys($rows[0]), ';', '"', '\\');
         foreach ($rows as $row) {
-            fputcsv($fp, array_map(fn($v) => $v ?? '', $row), ';');
+            $flat = array_map(fn($v) => is_array($v) ? json_encode($v, JSON_UNESCAPED_UNICODE) : ($v ?? ''), $row);
+            fputcsv($fp, $flat, ';', '"', '\\');
         }
         fclose($fp);
     }
@@ -58,10 +73,35 @@ if ($action === 'import' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_FILES['backup_file']['tmp_name'])) {
         $errors[] = 'Keine Datei hochgeladen.';
     } else {
-        $json = file_get_contents($_FILES['backup_file']['tmp_name']);
-        $data = json_decode($json, true);
-        if (!$data || !isset($data['meta']['version'])) {
-            $errors[] = __('backup.error.invalid');
+        $raw = file_get_contents($_FILES['backup_file']['tmp_name']);
+        $ext = strtolower(pathinfo($_FILES['backup_file']['name'], PATHINFO_EXTENSION));
+        if ($ext === 'enc') {
+            $password = trim($_POST['restore_password'] ?? '');
+            if ($password === '') {
+                $errors[] = __('backup.error.password_required');
+            } else {
+                $decoded = base64_decode($raw);
+                if (strlen($decoded) < 33) {
+                    $errors[] = __('backup.error.invalid');
+                } else {
+                    $salt = substr($decoded, 0, 16);
+                    $iv   = substr($decoded, 16, 16);
+                    $enc  = substr($decoded, 32);
+                    $key  = hash_pbkdf2('sha256', $password, $salt, 100000, 32, true);
+                    $decrypted = openssl_decrypt($enc, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+                    if ($decrypted === false) {
+                        $errors[] = __('backup.error.wrong_password');
+                    } else {
+                        $raw = $decrypted;
+                    }
+                }
+            }
+        }
+        if (empty($errors)) {
+            $data = json_decode($raw, true);
+            if (!$data || !isset($data['meta']['version'])) {
+                $errors[] = __('backup.error.invalid');
+            }
         }
     }
 

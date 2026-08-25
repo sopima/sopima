@@ -534,6 +534,13 @@ return [
     'tokens.show.all' => 'Alle',
 
     // Remaining strings
+        'backup.password_optional' => 'Passwort (optional)',
+    'backup.password_placeholder' => 'Leer lassen für unverschlüsselt',
+    'backup.password_hint' => 'Mit Passwort wird die Backup-Datei verschlüsselt (.enc).',
+    'backup.restore_password' => 'Passwort zum Entschlüsseln',
+    'backup.error.password_required' => 'Passwort erforderlich für verschlüsselte Backup-Datei.',
+    'backup.error.wrong_password' => 'Falsches Passwort – Entschlüsselung fehlgeschlagen.',
+    'backup.csv_no_encryption' => 'Kein Passwortschutz. Nur für Tabellenkalkulationen geeignet.',
     'backup.error.invalid' => 'Ungültige oder beschädigte Backup-Datei.',
     'backup.success.import' => 'Import erfolgreich abgeschlossen. API-Tokens müssen neu erstellt werden.',
     'notify.test.incomplete' => 'Konfiguration unvollständig – bitte zuerst speichern',

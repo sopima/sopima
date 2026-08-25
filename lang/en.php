@@ -533,6 +533,13 @@ return [
     'tokens.show.all' => 'All',
 
     // Remaining strings
+        'backup.password_optional' => 'Password (optional)',
+    'backup.password_placeholder' => 'Leave empty for unencrypted',
+    'backup.password_hint' => 'With a password the backup will be encrypted (.enc).',
+    'backup.restore_password' => 'Password to decrypt',
+    'backup.error.password_required' => 'Password required for encrypted backup file.',
+    'backup.error.wrong_password' => 'Wrong password – decryption failed.',
+    'backup.csv_no_encryption' => 'No password protection. Suitable for spreadsheets only.',
     'backup.error.invalid' => 'Invalid or corrupted backup file.',
     'backup.success.import' => 'Import completed successfully. API tokens must be recreated.',
     'notify.test.incomplete' => 'Configuration incomplete – please save first',

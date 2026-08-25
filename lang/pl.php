@@ -521,6 +521,13 @@ return [
     'tokens.show.all' => 'Wszyscy',
 
     // Remaining strings
+        'backup.password_optional' => 'Haslo (opcjonalne)',
+    'backup.password_placeholder' => 'Pozostaw puste dla niezaszyfrowanego',
+    'backup.password_hint' => 'Z haslem kopia zapasowa bedzie zaszyfrowana (.enc).',
+    'backup.restore_password' => 'Haslo do odszyfrowania',
+    'backup.error.password_required' => 'Haslo wymagane dla zaszyfrowanego pliku kopii.',
+    'backup.error.wrong_password' => 'Bledne haslo – odszyfrowanie nie powiodlo sie.',
+    'backup.csv_no_encryption' => 'Brak ochrony haslem. Tylko do arkuszy kalkulacyjnych.',
     'backup.error.invalid' => 'Nieprawidłowy lub uszkodzony plik kopii zapasowej.',
     'backup.success.import' => 'Import zakończony pomyślnie. Tokeny API muszą zostać odtworzone.',
     'notify.test.incomplete' => 'Konfiguracja niekompletna – najpierw zapisz',
