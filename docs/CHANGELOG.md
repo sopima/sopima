@@ -1,18 +1,9 @@
 # Changelog
 
-## [0.4.9] - 2026-08-25
-### Added
-- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
-- Contracts: hint shown when contact data is adopted from existing contract
-
-## [0.4.8] - 2026-08-25
-### Added
-- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
-- Letter generator: new placeholders {{customer_number}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
-- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
-
-### Fixed
-- Letter generator: partner address loaded from contract_contacts instead of clients
+## [0.5.0] - 2026-08-25
+### Security
+- HTTP security headers added: `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Content-Security-Policy`
+- API: `GET /api/clients` now enforces tenant isolation – tokens without `client_id` receive 403 unless role is admin
 
 ## [0.4.9] - 2026-08-25
 ### Added
@@ -26,7 +17,6 @@
 - Letter generator: new placeholders {{customer_number}}, {{phone_number}}, {{title}}, {{plan}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
 - Letter generator: dates now formatted as dd.mm.yyyy in PDF output
 - Letter generator: two default templates – "Kündigung Mobilfunk/Internet" and "Kündigung Allgemein"
-
 ### Fixed
 - Letter generator: partner address loaded from contract_contacts instead of clients
 - Letter generator: {{title}} and {{customer_number}} placeholders were missing
@@ -37,7 +27,6 @@
 - End date now correctly = start + term (e.g. 26.03.2026 + 24 months = 26.03.2028)
 - Cancellation deadline now correctly = end date - cancellation period in days
 - Renewal date now correctly = end date + renewal interval
-
 ### Changed
 - Contract detail view: "Kündigungsdatum" split into "Kündigungsfrist bis" (deadline) and "Nächste Verlängerung" (renewal date)
 - Detail banner now uses cancellation_deadline for countdown and notice_date for renewal display
@@ -47,58 +36,6 @@
 ## [0.4.6] - 2026-08-25
 ### Security
 - Session cookie `secure` flag now configurable via `APP_SECURE_COOKIE` env variable (default: true)
-
-### Changed
-- `.env.example` updated with `APP_SECURE_COOKIE` entry
-
-## [0.4.9] - 2026-08-25
-### Added
-- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
-- Contracts: hint shown when contact data is adopted from existing contract
-
-## [0.4.8] - 2026-08-25
-### Added
-- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
-- Letter generator: new placeholders {{customer_number}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
-- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
-
-### Fixed
-- Letter generator: partner address loaded from contract_contacts instead of clients
-
-## [0.4.9] - 2026-08-25
-### Added
-- Contracts: partner autocomplete in create/edit form – suggests known partners and prefills customer number and contact data
-- Contracts: hint shown when contact data is adopted from existing contract
-
-## [0.4.8] - 2026-08-25
-### Added
-- Contracts: new field `customer_number` (migration 025) for grouping contracts under one customer account
-- Contracts: new field `phone_number` (migration 026) for telecommunication contracts
-- Letter generator: new placeholders {{customer_number}}, {{phone_number}}, {{title}}, {{plan}}, {{partner_address_block}}, {{partner_company}}, {{partner_street}}, {{partner_zip}}, {{partner_city}}, {{cancellation_deadline}}
-- Letter generator: dates now formatted as dd.mm.yyyy in PDF output
-- Letter generator: two default templates – "Kündigung Mobilfunk/Internet" and "Kündigung Allgemein"
-
-### Fixed
-- Letter generator: partner address loaded from contract_contacts instead of clients
-- Letter generator: {{title}} and {{customer_number}} placeholders were missing
-
-## [0.4.7] - 2026-08-25
-### Fixed
-- Contract date calculation rewritten: exact day-based arithmetic instead of end-of-month rounding
-- End date now correctly = start + term (e.g. 26.03.2026 + 24 months = 26.03.2028)
-- Cancellation deadline now correctly = end date - cancellation period in days
-- Renewal date now correctly = end date + renewal interval
-
-### Changed
-- Contract detail view: "Kündigungsdatum" split into "Kündigungsfrist bis" (deadline) and "Nächste Verlängerung" (renewal date)
-- Detail banner now uses cancellation_deadline for countdown and notice_date for renewal display
-- "Bei Kündigung heute" calculation rewritten to exact day-based arithmetic
-- i18n: new keys cd.cancellation_deadline and cd.renewal_date in de/en/pl
-
-## [0.4.6] - 2026-08-25
-### Security
-- Session cookie `secure` flag now configurable via `APP_SECURE_COOKIE` env variable (default: true)
-
 ### Changed
 - `.env.example` updated with `APP_SECURE_COOKIE` entry
 
@@ -106,7 +43,6 @@
 ### Security
 - LetterService: deleteTemplate and updateTemplate now enforce tenant check (client_id)
 - LetterController: settingsCreate now reads client_id from POST with clientAllowed() check instead of non-existent session key
-
 ### Fixed
 - MailService: PHP tags in wrapTemplate string literal replaced with concatenation (APP_NAME was rendered as literal text in emails)
 - ApiController: PUT /contracts/{id} mail lookup used wrong table `contacts` instead of `contract_contacts`
@@ -128,7 +64,6 @@
 ## [0.4.2] - 2026-08-25
 ### Added
 - Contracts: client quick-filter tabs above the contract list (mirrors dashboard behaviour)
-
 ### Fixed
 - Contracts: status dropdown options were missing closing `>`, making entries invisible
 - Dashboard: inactive clients no longer appear as tabs
@@ -149,9 +84,9 @@
 - `APP_DEBUG` flag in `.env` for PHP error output
 - i18n: letter generator strings in de/en/pl
 
-## [0.3.2] – 2026-08-23
+## [0.3.2] - 2026-08-23
 ### Added
-- API: English values for `status` (active/cancelled/expired/paused), `billing_interval` (yearly/monthly/quarterly/biannual), `direction` (expense/income) – mapped internally
+- API: English values for `status`, `billing_interval`, `direction` – mapped internally
 - API: additional general fields: `auto_renewal`, `minimum_term_months`, `cancellation_period_days`, `cancellation_deadline`, `payment_method`
 - API documentation: complete rewrite with all fields, contact block, mail notification notes, full response examples
 - `app/bootstrap.php` – shared bootstrap for CLI scripts
@@ -163,109 +98,69 @@
 - PDF templates: freely named, accordion UI, add/delete per tenant (migration 019)
 - Mail templates: accordion UI
 ### Fixed
-- API `status` values from external sources (e.g. `active`) normalized to internal values
+- API `status` values from external sources normalized to internal values
 - Settings General tab: tab navigation was missing
+- Mail template save broken due to `header()` called after HTML output
+- Mail template editor: newlines now converted to `<br>` on load, stripped back on save
 ### Changed
 - `bin/notify.php` refactored to use `app/bootstrap.php`
+- PDF templates refactored: fixed types replaced by freely named templates per tenant, collapsible accordion UI
 
-## [0.3.2] – 2026-08-23
+## [0.3.1] - 2026-08-22
 ### Added
-- Mail events `contract.updated`, `contract.cancelled`, `contract.expiring` – triggered via API and cronjob
-- `bin/notify-expiring.php` – daily cronjob for end-date notifications via mail templates
-- `bin/cron.php` – central cron runner with auto-discovery of all `bin/*.php` jobs
-- `app/bootstrap.php` – shared bootstrap for CLI scripts
-- `notify_expiring_days` configurable in Settings (General tab), stored in `settings` table
-- `settings` table (migration 021) for persistent app configuration
-- Mail templates for `contract.expiring`, `contract.cancelled`, `contract.updated` (migration 020)
-- PDF templates refactored: freely named templates per tenant, accordion UI, add/delete support (migration 019)
-- Settings General tab: tab navigation now correctly rendered
-### Changed
-- `bin/notify.php` refactored to use `app/bootstrap.php` instead of self-contained bootstrap
-### Fixed
-- Mail template save broken due to `header()` called after HTML output – all POST redirects in SettingsController moved before layout render
-- Mail template editor (contenteditable) displayed body as single line – newlines now converted to `<br>` on load, stripped back on save
-### Changed
-- PDF templates refactored: fixed types (`Datenschutz`, `AGB`, `Vertrag`) replaced by freely named templates per tenant
-- PDF templates now collapsible (accordion), individually deletable, new templates can be added via button
-- Settings General tab: tab navigation was missing, now correctly rendered
-
-## [0.3.1] – 2026-08-22
-### Added
-- Per-tenant tabs on dashboard – one tab per Mandant showing the same widgets filtered by `client_id`; overall summary remains as the first tab
-- Webhook mail Phase 1: send mail automatically on `POST /api/contracts` if `email` is provided
-- Webhook mail Phase 2: configurable mail templates per event (subject + body with placeholders) in Settings
+- Per-tenant tabs on dashboard
+- Webhook mail Phase 1: send mail automatically on `POST /api/contracts`
+- Webhook mail Phase 2: configurable mail templates per event in Settings
 - SMTP test button in Settings
-- Contact person (`Ansprechpartner`) manageable via API; contact block moved to dedicated tab in form and detail view
-- `ROADMAP.md` with planned features
-- WYSIWYG editor (contenteditable + execCommand toolbar) for mail templates and PDF templates
-- PDF templates per tenant: upload static PDF files or compose via HTML editor
-- PDF attachments on `contract.created` mail – uploaded PDF takes priority, HTML template as fallback (rendered via dompdf)
-- `pdf_templates` table with per-tenant, per-type storage (Datenschutz, AGB, Vertrag)
-- `clients` table extended with address fields (street, zip, city, email, phone, website)
-- PDF template placeholders: contract data, tenant address, contact person data
-- Settings tab "PDF-Templates" with per-tenant dropdown and attach toggle
-
+- Contact person manageable via API; contact block moved to dedicated tab
+- `ROADMAP.md`
+- WYSIWYG editor for mail templates and PDF templates
+- PDF templates per tenant with dompdf rendering
+- `clients` table extended with address fields
+- Settings tab "PDF-Templates"
 ### Fixed
-- `GET /api/clients` now correctly filtered by `client_id` when token is bound to a tenant
+- `GET /api/clients` filtered by `client_id` when token is bound to a tenant
 - `INSERT IGNORE` replaced with `INSERT OR IGNORE` for SQLite compatibility
 - Dashboard widget layout and financial calculation corrected
 - Backup filename prefix renamed from `contracthub` to `sopima`
-- Backup view syntax error in `onchange` attribute fixed
-
 ### Docs
 - Screenshots added to README
-- ROADMAP expanded with additional planned features
 - INSTALL and API documentation translated to English
 
-## [0.3.0] – 2026-08-16
+## [0.3.0] - 2026-08-16
 ### Added
-- Internationalization (i18n) – full multilingual support across the entire UI
-- Languages: German (de), English (en), Polish (pl)
-- Language switching via `APP_LOCALE` in `.env` or directly in the browser via the Settings page
-- Setup wizard: language selection in step 2 – seed data (client types, categories) inserted based on selected language
-- Settings tab "General" – configure `APP_NAME`, `APP_URL`, `APP_LOCALE` and SMTP directly in the browser
-- `CONTRIBUTING.md` – contributor guidelines including translation instructions
-- `README.md` in English as primary file, `README.de.md` as German version
-- `lang/` directory: add new languages by creating a single PHP file
-
+- Internationalization (i18n) – full multilingual support (de, en, pl)
+- Language switching via `APP_LOCALE` or Settings page
+- Setup wizard: language selection with language-aware seed data
+- Settings tab "General" – configure APP_NAME, APP_URL, APP_LOCALE, SMTP in browser
+- `CONTRIBUTING.md` with translation instructions
+- `README.md` in English, `README.de.md` in German
 ### Changed
-- All views fully migrated to `__()` i18n helper
-- Migration seed data removed from SQL files – now inserted language-aware by the setup wizard
-- `tokens/show.php` – copy button implementation made more robust
-- Project documentation cleaned up: MySQL references removed, SQLite-only documented
-
+- All views migrated to `__()` i18n helper
+- Migration seed data removed from SQL – inserted language-aware by setup wizard
 ### Removed
 - Hardcoded German strings from all views, controllers and services
 
-## [0.2.0] – 2026-08-15
+## [0.2.0] - 2026-08-15
 ### Added
-- Plan field added to contract list and edit form
-- `APP_NAME` as configurable `.env` variable – all hardcoded app names replaced
-- Setup wizard `/setup` – full browser-based initial setup (system check, configuration, migration, admin creation)
-- Auto-redirect to `/setup` on first install (no admin present)
+- Plan field in contract list and edit form
+- `APP_NAME` as configurable `.env` variable
+- Setup wizard `/setup` – browser-based initial setup
+- Auto-redirect to `/setup` on first install
 - `bin/notify.php` – notification cron job (email, Discord, Telegram, ntfy, Gotify, Pushover, Webhook)
-- `bin/entrypoint.sh` – Docker entrypoint with automatic migration on container start
-
+- `bin/entrypoint.sh` – Docker entrypoint with automatic migration
 ### Changed
 - SQLite only – MySQL support fully removed
-- `docker-compose.yml` – simplified, no MySQL container
-- `.env.example` – cleaned up, SQLite-only variables
-- API: contract number prefix now `APP_NAME`-based instead of hardcoded `CH-`
-- API: `direction` correctly taken from request body
-- API: rate limiting migrated to SQLite `ON CONFLICT`
-- All `ON DUPLICATE KEY UPDATE` migrated to SQLite `ON CONFLICT` (ContractController, NotificationController)
-- Setup assigns admin automatically to all existing clients
-
+- API: contract number prefix now APP_NAME-based
+- API: rate limiting migrated to SQLite ON CONFLICT
 ### Removed
-- `bin/create-admin.php` – replaced by setup wizard `/setup`
-- MySQL support from `db.php`, `migrate.php`, `docker-compose.yml`, `Dockerfile`
-- `README_EN.md`, `README_GER.md` – consolidated into `README.md`
+- `bin/create-admin.php` – replaced by setup wizard
+- MySQL support
 
-## [0.1.0] – 2026-08-14
+## [0.1.0] - 2026-08-14
 ### Added
 - Initial project structure (Apache, PHP 8.2, Composer)
-- SQLite support
-- 13 migrations: clients, contracts, users, sessions, API tokens, documents, notifications, communication log, rate limiting, client types, etc.
+- SQLite support with 13 migrations
 - Multi-tenant architecture with `user_clients` assignment
 - REST API with Bearer token authentication and rate limiting
 - Web UI: dashboard, contracts, clients, users, settings, backup, notifications
