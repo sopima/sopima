@@ -45,6 +45,13 @@ load_lang(env('APP_LOCALE', 'de'));
 ini_set("session.gc_maxlifetime", 86400);
 session_set_cookie_params(["lifetime" => 86400, "path" => "/", "secure" => env('APP_SECURE_COOKIE', 'false') === 'true', "httponly" => true, "samesite" => "Lax"]);
 session_start();
+// Security-Header
+header("X-Frame-Options: DENY");
+header("X-Content-Type-Options: nosniff");
+header("Referrer-Policy: strict-origin-when-cross-origin");
+header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; frame-ancestors 'none'");
+
 
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri    = rtrim($uri, '/');

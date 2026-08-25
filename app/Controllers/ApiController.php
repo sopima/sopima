@@ -74,7 +74,12 @@ $token  = apiAuth();
 if ($apiUri === '/clients' && $method === 'GET') {
     apiCan($token, 'clients.read');
     $where = ['active = 1']; $params = [];
-    if ($token['client_id']) { $where[] = 'id = ?'; $params[] = $token['client_id']; }
+    if ($token['client_id']) {
+        $where[] = 'id = ?';
+        $params[] = $token['client_id'];
+    } elseif (($token['role'] ?? '') !== 'admin') {
+        apiResponse(403, ['error' => 'Token nicht mandantengebunden.']);
+    }
     $stmt = $db->prepare("SELECT id, name, type, active FROM clients WHERE " . implode(' AND ', $where) . " ORDER BY name");
     $stmt->execute($params);
     $clients = $stmt->fetchAll();
