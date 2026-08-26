@@ -1,0 +1,1 @@
+ALTER TABLE contracts ADD COLUMN is_unlimited INTEGER NOT NULL DEFAULT 0;

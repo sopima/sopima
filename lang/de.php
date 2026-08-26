@@ -630,4 +630,5 @@ return [
     'cf.customer_number' => 'Kundennummer',
     'cf.partner_contract_number' => 'Vertragsnr. des Partners',
     'cd.partner_contract_number' => 'Vertragsnr. Partner',
+    'cf.is_unlimited' => 'Unbefristet (läuft nach Mindestlaufzeit weiter)',
 ];

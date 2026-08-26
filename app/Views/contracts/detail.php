@@ -46,8 +46,8 @@ if ($contract["cancellation_deadline"] ?? $contract["notice_date"]) {
         $kbox = ['color'=>'#34d399','bg'=>'rgba(52,211,153,.08)','border'=>'rgba(52,211,153,.25)','icon'=>'ti-circle-check',
             'text'=>__('cd.kbox.soon', ['days'=>$days]),'sub'=>__('cd.kbox.soon_sub', ['date'=>date("d.m.Y",$notice_ts)])];
     }
-    // Nächste Verlängerung direkt aus DB
-    if (!empty($contract["notice_date"])) {
+    // Nächste Verlängerung direkt aus DB (nicht bei unbefristeten Verträgen)
+    if (!empty($contract["notice_date"]) && empty($contract["is_unlimited"])) {
         $kbox['renewal'] = date("d.m.Y", strtotime($contract["notice_date"]));
     }
 }
@@ -188,16 +188,18 @@ $logCount     = count($comm_log ?? []);
         </div>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.end_date'); ?></div>
-            <div style="font-size:.9rem;"><?php echo $contract['end_date'] ? date('d.m.Y', strtotime($contract['end_date'])) : '–'; ?></div>
+            <div style="font-size:.9rem;"><?php echo !empty($contract['is_unlimited']) ? __('cf.is_unlimited') : ($contract['end_date'] ? date('d.m.Y', strtotime($contract['end_date'])) : '–'); ?></div>
         </div>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.cancellation_deadline'); ?></div>
             <div style="font-size:.9rem;"><?php echo $contract['cancellation_deadline'] ? date('d.m.Y', strtotime($contract['cancellation_deadline'])) : '–'; ?></div>
         </div>
+        <?php if (empty($contract['is_unlimited'])): ?>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.renewal_date'); ?></div>
             <div style="font-size:.9rem;"><?php echo $contract['notice_date'] ? date('d.m.Y', strtotime($contract['notice_date'])) : '–'; ?></div>
         </div>
+        <?php endif; ?>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.value'); ?></div>
             <div style="font-size:.9rem;"><?php echo $contract['value'] ? number_format($contract['value'],2,',','.').' €' : '–'; ?></div>

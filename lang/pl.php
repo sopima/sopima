@@ -617,4 +617,5 @@ return [
     'cf.customer_number' => 'Numer klienta',
     'cf.partner_contract_number' => 'Nr umowy partnera',
     'cd.partner_contract_number' => 'Nr umowy partnera',
+    'cf.is_unlimited' => 'Bezterminowa (kontynuuje po minimalnym okresie)',
 ];

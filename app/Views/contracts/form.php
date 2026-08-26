@@ -195,6 +195,10 @@
                 <input type="date" name="end_date" id="end_date" value="<?php echo $contract['end_date'] ?? ''; ?>" readonly style="opacity:.7;cursor:not-allowed;">
             </div>
             <input type="hidden" name="cancellation_deadline" id="cancellation_deadline" value="<?php echo $contract['cancellation_deadline'] ?? ''; ?>">
+            <div class="form-group" style="margin:0;display:flex;align-items:center;gap:.5rem;padding-top:1.6rem;">
+                <input type="checkbox" name="is_unlimited" id="is_unlimited" value="1" <?php echo (!empty($contract['is_unlimited'])) ? 'checked' : ''; ?> style="width:1.1rem;height:1.1rem;cursor:pointer;">
+                <label for="is_unlimited" style="margin:0;cursor:pointer;"><?php echo __('cf.is_unlimited'); ?></label>
+            </div>
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('cf.notice_date'); ?> <span style="font-size:.7rem;color:var(--text-muted);"><?php echo __('cf.end_date_calc'); ?></span></label>
                 <input type="date" name="notice_date" id="notice_date" value="<?php echo $contract['notice_date'] ?? ''; ?>" readonly style="opacity:.7;cursor:not-allowed;">
@@ -208,6 +212,10 @@
             </div>
             <input type="hidden" name="cancellation_deadline" id="cancellation_deadline" value="">
             <input type="hidden" name="notice_date" id="notice_date" value="">
+            <div class="form-group" style="margin:0;display:flex;align-items:center;gap:.5rem;padding-top:1.6rem;">
+                <input type="checkbox" name="is_unlimited" id="is_unlimited" value="1" style="width:1.1rem;height:1.1rem;cursor:pointer;">
+                <label for="is_unlimited" style="margin:0;cursor:pointer;"><?php echo __('cf.is_unlimited'); ?></label>
+            </div>
         </div>
         <?php endif; ?>
         <div style="height:.75rem;"></div>
@@ -438,6 +446,13 @@ window.cf_i18n = {
         var startEl = document.getElementById("start_date");
         var termEl  = document.getElementById("minimum_term_months");
         var daysEl  = document.getElementById("cancellation_period_days");
+        var unlimitedEl = document.getElementById("is_unlimited");
+        if (unlimitedEl && unlimitedEl.checked) {
+            if (endEl) { endEl.value = ""; endEl.closest('.form-group') && (endEl.closest('.form-group').style.opacity = '.4'); }
+            if (dlEl)  dlEl.value = "";
+            if (notEl) { notEl.value = ""; notEl.closest('.form-group') && (notEl.closest('.form-group').style.opacity = '.4'); }
+            return;
+        }
         if (!startEl || !termEl) return;
 
         var start = startEl.value;

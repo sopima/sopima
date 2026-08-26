@@ -82,8 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $minimum_term_months     = $_POST['minimum_term_months'] ? (int)$_POST['minimum_term_months'] : null;
         $renewal_interval_months = $_POST['renewal_interval_months'] ? (int)$_POST['renewal_interval_months'] : null;
         $cancellation_period_days = $_POST['cancellation_period_days'] ? (int)$_POST['cancellation_period_days'] : null;
-        $dates = calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months, $cancellation_period_days, $renewal_interval_months);
-        $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, contract_type, title, partner, partner_contract_number, customer_number, counterparty_type, description, start_date, end_date, auto_renewal, minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date, value, billing_interval, payment_method, iban, mandate_reference, interest_rate, loan_amount, monthly_rate, deductible, service_interval_months, status, notes, direction, plan, phone_number) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $is_unlimited = isset($_POST['is_unlimited']) ? 1 : 0;
+        $dates = $is_unlimited
+            ? ['end_date' => null, 'cancellation_deadline' => null, 'notice_date' => null]
+            : calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months, $cancellation_period_days, $renewal_interval_months);
+        $stmt = $db->prepare("INSERT INTO contracts (contract_number, client_id, category_id, contract_type, title, partner, partner_contract_number, customer_number, counterparty_type, description, start_date, end_date, auto_renewal, minimum_term_months, renewal_interval_months, cancellation_period_days, cancellation_deadline, notice_date, value, billing_interval, payment_method, iban, mandate_reference, interest_rate, loan_amount, monthly_rate, deductible, service_interval_months, status, notes, direction, plan, phone_number, is_unlimited) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $stmt->execute([
             $contract_number,
             $_POST['client_id'],
@@ -164,8 +167,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $minimum_term_months_u     = $_POST['minimum_term_months'] ? (int)$_POST['minimum_term_months'] : null;
         $renewal_interval_months_u = $_POST['renewal_interval_months'] ? (int)$_POST['renewal_interval_months'] : null;
         $cancellation_period_days_u = $_POST['cancellation_period_days'] ? (int)$_POST['cancellation_period_days'] : null;
-        $dates_u = calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months_u, $cancellation_period_days_u, $renewal_interval_months_u);
-        $stmt = $db->prepare("UPDATE contracts SET client_id=?, category_id=?, contract_type=?, title=?, partner=?, partner_contract_number=?, customer_number=?, counterparty_type=?, description=?, start_date=?, end_date=?, auto_renewal=?, minimum_term_months=?, renewal_interval_months=?, cancellation_period_days=?, cancellation_deadline=?, notice_date=?, value=?, billing_interval=?, payment_method=?, iban=?, mandate_reference=?, interest_rate=?, loan_amount=?, monthly_rate=?, deductible=?, service_interval_months=?, status=?, notes=?, direction=?, plan=?, phone_number=? WHERE id=? AND client_id IN ($in)");
+        $is_unlimited_u = isset($_POST['is_unlimited']) ? 1 : 0;
+        $dates_u = $is_unlimited_u
+            ? ['end_date' => null, 'cancellation_deadline' => null, 'notice_date' => null]
+            : calculateContractDates($_POST['start_date'] ?: null, $minimum_term_months_u, $cancellation_period_days_u, $renewal_interval_months_u);
+        $stmt = $db->prepare("UPDATE contracts SET client_id=?, category_id=?, contract_type=?, title=?, partner=?, partner_contract_number=?, customer_number=?, counterparty_type=?, description=?, start_date=?, end_date=?, auto_renewal=?, minimum_term_months=?, renewal_interval_months=?, cancellation_period_days=?, cancellation_deadline=?, notice_date=?, value=?, billing_interval=?, payment_method=?, iban=?, mandate_reference=?, interest_rate=?, loan_amount=?, monthly_rate=?, deductible=?, service_interval_months=?, status=?, notes=?, direction=?, plan=?, phone_number=?, is_unlimited=? WHERE id=? AND client_id IN ($in)");
         $stmt->execute([
             $_POST['client_id'],
             $_POST['category_id'] ?: null,
@@ -199,7 +205,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['direction'] ?? 'ausgabe',
             $_POST['plan'] ?: null,
             $_POST['phone_number'] ?? null,
-            $_POST['id'],
+            $is_unlimited_u,
+            (int)$_POST['id'],
         ]);
         // Personen: löschen und neu schreiben
         $db->prepare("DELETE FROM contract_persons WHERE contract_id=?")->execute([(int)$_POST['id']]);

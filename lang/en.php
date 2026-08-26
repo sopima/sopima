@@ -629,4 +629,5 @@ return [
     'cf.customer_number' => 'Customer number',
     'cf.partner_contract_number' => 'Partner Contract No.',
     'cd.partner_contract_number' => 'Partner Contract No.',
+    'cf.is_unlimited' => 'Unlimited (continues after minimum term)',
 ];
