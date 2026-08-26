@@ -71,7 +71,7 @@ $activeTab = isset($_GET['tab']) ? (int)$_GET['tab'] : 0;
                 <div class="alert-dot <?php echo $dotClass; ?>"></div>
                 <div class="alert-info">
                     <div class="alert-title"><?php echo htmlspecialchars($d['title']); ?></div>
-                    <div class="alert-meta"><?php echo htmlspecialchars($d['client_name']); ?> · <?php echo __('dashboard.cancellation_until'); ?> <?php echo $d['notice_date']; ?></div>
+                    <div class="alert-meta"><?php echo htmlspecialchars($d['client_name']); ?> · <?php echo __('dashboard.cancellation_until'); ?> <?php echo $d['notice_date'] ? date('d.m.Y', strtotime($d['notice_date'])) : ''; ?></div>
                 </div>
                 <span class="badge <?php echo $badgeClass; ?>"><?php echo $days; ?> <?php echo __('dashboard.days'); ?></span>
             </div></a>
@@ -214,7 +214,7 @@ $activeTab = isset($_GET['tab']) ? (int)$_GET['tab'] : 0;
                 <div class="alert-dot <?php echo $dotClass; ?>"></div>
                 <div class="alert-info">
                     <div class="alert-title"><?php echo htmlspecialchars($d['title']); ?></div>
-                    <div class="alert-meta"><?php echo __('dashboard.cancellation_until'); ?> <?php echo $d['notice_date']; ?></div>
+                    <div class="alert-meta"><?php echo __('dashboard.cancellation_until'); ?> <?php echo $d['notice_date'] ? date('d.m.Y', strtotime($d['notice_date'])) : ''; ?></div>
                 </div>
                 <span class="badge <?php echo $badgeClass; ?>"><?php echo $days; ?> <?php echo __('dashboard.days'); ?></span>
             </div>

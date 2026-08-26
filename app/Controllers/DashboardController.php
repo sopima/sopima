@@ -11,18 +11,18 @@ $activeExpenses  = $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'ak
 $activeIncome    = $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id IN ($in)")->fetchColumn();
 $totalExpenses   = $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id IN ($in)")->fetchColumn();
 $totalIncome     = $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id IN ($in)")->fetchColumn();
-$expiringSoon    = $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date BETWEEN date('now') AND date('now', '+30 days') AND status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
-$overdue         = $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date < date('now') AND status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
+$expiringSoon    = $db->query("SELECT COUNT(*) FROM contracts WHERE cancellation_deadline BETWEEN date('now') AND date('now', '+30 days') AND status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
+$overdue         = $db->query("SELECT COUNT(*) FROM contracts WHERE cancellation_deadline < date('now') AND status = 'aktiv' AND client_id IN ($in)")->fetchColumn();
 
 $deadlines = $db->query("
-    SELECT c.title, c.notice_date, cl.name AS client_name,
-           CAST((julianday(c.notice_date) - julianday('now')) AS INTEGER) AS days_left
+    SELECT c.title, c.cancellation_deadline AS notice_date, cl.name AS client_name,
+           CAST((julianday(c.cancellation_deadline) - julianday('now')) AS INTEGER) AS days_left
     FROM contracts c
     LEFT JOIN clients cl ON c.client_id = cl.id
-    WHERE c.notice_date >= date('now')
+    WHERE c.cancellation_deadline >= date('now')
       AND c.status = 'aktiv'
       AND c.client_id IN ($in)
-    ORDER BY c.notice_date ASC
+    ORDER BY c.cancellation_deadline ASC
     LIMIT 5
 ")->fetchAll();
 
@@ -83,9 +83,9 @@ foreach (array_keys($clientNames) as $cid) {
         'activeIncome'    => $db->query("SELECT COUNT(*) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id = $cid")->fetchColumn(),
         'totalExpenses'   => $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'ausgabe' AND client_id = $cid")->fetchColumn(),
         'totalIncome'     => $db->query("SELECT COALESCE(SUM(CASE WHEN billing_interval = 'jaehrlich' THEN value / 12 ELSE value END), 0) FROM contracts WHERE status = 'aktiv' AND direction = 'einnahme' AND client_id = $cid")->fetchColumn(),
-        'expiringSoon'    => $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date BETWEEN date('now') AND date('now', '+30 days') AND status = 'aktiv' AND client_id = $cid")->fetchColumn(),
-        'overdue'         => $db->query("SELECT COUNT(*) FROM contracts WHERE notice_date < date('now') AND status = 'aktiv' AND client_id = $cid")->fetchColumn(),
-        'deadlines'       => $db->query("SELECT c.title, c.notice_date, CAST((julianday(c.notice_date) - julianday('now')) AS INTEGER) AS days_left FROM contracts c WHERE c.notice_date >= date('now') AND c.status = 'aktiv' AND c.client_id = $cid ORDER BY c.notice_date ASC LIMIT 5")->fetchAll(),
+        'expiringSoon'    => $db->query("SELECT COUNT(*) FROM contracts WHERE cancellation_deadline BETWEEN date('now') AND date('now', '+30 days') AND status = 'aktiv' AND client_id = $cid")->fetchColumn(),
+        'overdue'         => $db->query("SELECT COUNT(*) FROM contracts WHERE cancellation_deadline < date('now') AND status = 'aktiv' AND client_id = $cid")->fetchColumn(),
+        'deadlines'       => $db->query("SELECT c.title, c.cancellation_deadline AS notice_date, CAST((julianday(c.cancellation_deadline) - julianday('now')) AS INTEGER) AS days_left FROM contracts c WHERE c.cancellation_deadline >= date('now') AND c.status = 'aktiv' AND c.client_id = $cid ORDER BY c.cancellation_deadline ASC LIMIT 5")->fetchAll(),
         'costByDir'       => [],
     ];
 }

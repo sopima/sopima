@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.5.2] - 2026-08-25
+### Added
+- Backup: optional AES-256-CBC encryption for JSON export – enter a password to download a `.enc` file
+- Backup: encrypted `.enc` files can be restored by providing the password on import
+- Backup: CSV export now shows "no password protection" notice
+### Fixed
+- Backup: CSV export `fputcsv()` deprecation warning resolved (explicit escape parameter)
+- Backup: nested arrays in CSV rows no longer cause "Array to string conversion" warnings
+
 ## [0.5.1] - 2026-08-25
 ### Added
 - API tokens: last IP and last endpoint logged on every request (migrations 027, 028)
