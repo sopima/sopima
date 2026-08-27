@@ -1,4 +1,10 @@
 # Changelog
+## [0.5.4] - 2026-08-27
+### Fixed
+- Settings: general settings form could not be saved due to nested `<form>` tags (SMTP test button)
+- Settings: removed stale `notify_expiring_days` DB write on general settings save
+- Settings: removed unnecessary "Back" button from general settings page
+
 ## [0.5.3] - 2026-08-27
 ### Changed
 - UI: complete visual redesign to a clean light theme inspired by Wallos

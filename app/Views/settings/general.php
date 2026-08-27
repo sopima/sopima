@@ -34,11 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         foreach ($current as $k => $v) {
             $_ENV[$k] = $v;
         }
-        // Benachrichtigungseinstellungen in DB speichern
-        $db = db();
-        $days = (int)($_POST['notify_expiring_days'] ?? 30);
-        $db->prepare("INSERT INTO settings (key, value, updated_at) VALUES ('notify_expiring_days', ?, datetime('now')) ON CONFLICT(key) DO UPDATE SET value=excluded.value, updated_at=excluded.updated_at")
-           ->execute([$days]);
         header('Location: /settings?tab=general&saved=1');
         exit;
     } else {
@@ -62,7 +57,7 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
 
 <div class="page-header">
     <h2><?php echo __('settings.general.title'); ?></h2>
-    <a href="/settings" class="btn btn-outline"><i class="ti ti-arrow-left"></i> <?php echo __('cf.back'); ?></a>
+
 </div>
 
 <?php if ($saved): ?>
@@ -129,9 +124,7 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
             </div>
         </div>
         <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:1rem;">
-            <form method="POST" action="/settings?tab=general&action=smtp_test" style="margin:0;">
-                <button type="submit" class="btn btn-outline"><i class="ti ti-mail"></i> Test-Mail senden</button>
-            </form>
+            <button type="button" class="btn btn-outline" onclick="document.getElementById('smtp-test-form').submit()"><i class="ti ti-mail"></i> Test-Mail senden</button>
             <span style="font-size:.75rem;color:var(--text-muted);">Zuerst speichern</span>
         </div>
     </div>
@@ -142,6 +135,7 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
         <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i> <?php echo __('settings.save'); ?></button>
     </div>
 </form>
+<form id="smtp-test-form" method="POST" action="/settings?tab=general&action=smtp_test" style="display:none;"></form>
 <div style="display:flex;justify-content:flex-start;align-items:center;margin-top:.75rem;gap:1rem;">
 
 </div>
