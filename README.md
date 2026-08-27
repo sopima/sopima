@@ -10,6 +10,10 @@ Self-hosted, open-source contract management for individuals, small organization
 
 ![Dashboard](docs/screenshots/dashboard.png)
 ![Contracts](docs/screenshots/contracts.png)
+![Contract Detail](docs/screenshots/contract-detail.png)
+![Communication Log](docs/screenshots/contract-communication.png)
+![Notifications](docs/screenshots/notifications.png)
+![Settings](docs/screenshots/settings.png)
 
 ## Features
 

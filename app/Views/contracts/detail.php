@@ -168,7 +168,7 @@ $logCount     = count($comm_log ?? []);
         <?php endif; ?>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.status'); ?></div>
-            <div style="font-size:.9rem;color:<?php echo $color; ?>;"><?php echo ucfirst($contract['status']); ?></div>
+            <div style="font-size:.9rem;color:<?php echo $color; ?>;"><?php echo __('contracts.status.' . $contract['status']); ?></div>
         </div>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.start_date'); ?></div>
@@ -194,7 +194,7 @@ $logCount     = count($comm_log ?? []);
         </div>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.interval'); ?></div>
-            <div style="font-size:.9rem;"><?php echo ucfirst($contract['billing_interval'] ?? '–'); ?></div>
+            <div style="font-size:.9rem;"><?php echo $contract['billing_interval'] ? __('cf.interval.' . $contract['billing_interval']) : '–'; ?></div>
         </div>
         <div>
             <div style="font-size:.72rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.2rem;"><?php echo __('cd.category'); ?></div>
