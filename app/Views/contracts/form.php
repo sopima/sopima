@@ -19,7 +19,7 @@
 
     <!-- Tab-Navigation -->
     <div style="max-width:1100px;margin:0 auto 1.25rem;">
-        <div style="display:flex;gap:.25rem;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:0;">
+        <div class="contract-tabs">
             <?php
             $tabs = [
                 'stammdaten'      => ['icon'=>'ti-file-description', 'label'=>__('cf.tab.stammdaten')],
@@ -32,19 +32,7 @@
                 $isActive = ($activeTab === $key);
                 if (isset($tab['show_if_new']) && $tab['show_if_new'] === false && !isset($contract)) continue;
             ?>
-            <a href="#" onclick="switchTab('<?php echo $key; ?>');return false;" id="tabnav-<?php echo $key; ?>" style="
-                display:inline-flex;align-items:center;gap:.4rem;
-                padding:.55rem 1rem;
-                font-size:.83rem;font-weight:500;
-                border-radius:8px 8px 0 0;
-                text-decoration:none;
-                border:1px solid <?php echo $isActive ? 'rgba(255,255,255,.1)' : 'transparent'; ?>;
-                border-bottom:<?php echo $isActive ? '1px solid var(--bg-card,#1e2535)' : '1px solid transparent'; ?>;
-                margin-bottom:-1px;
-                color:<?php echo $isActive ? '#e2e8f0' : 'var(--text-muted)'; ?>;
-                background:<?php echo $isActive ? 'rgba(255,255,255,.05)' : 'transparent'; ?>;
-                transition:color .15s,background .15s;
-            ">
+            <a href="#" onclick="switchTab('<?php echo $key; ?>');return false;" id="tabnav-<?php echo $key; ?>" class="contract-tab <?php echo $isActive ? 'active' : ''; ?>">
                 <i class="ti <?php echo $tab['icon']; ?>"></i>
                 <?php echo $tab['label']; ?>
             </a>
@@ -399,7 +387,7 @@
     <div id="tab-eigene-felder" class="card" style="padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto;display:none;">
         <div id="custom-fields-list">
             <?php foreach (($custom_fields ?? []) as $cf): ?>
-            <div class="custom-field-row" style="display:grid;grid-template-columns:2fr 3fr 1fr auto;gap:.5rem;margin-bottom:.5rem;align-items:center;">
+            <div class="custom-field-row" style="display:grid;grid-template-columns:2fr 3fr 1fr auto;gap:.5rem;margin-bottom:.5rem;align-items:center;padding:.5rem;background:var(--surface-1,#f9fafb);border:1px solid var(--border);border-radius:var(--radius);">
                 <input type="text" name="custom_labels[]" placeholder="<?php echo __('cf.ph.custom_label'); ?>" value="<?php echo htmlspecialchars($cf['label']); ?>">
                 <input type="<?php echo in_array($cf['field_type'], ['date','url','email','number']) ? $cf['field_type'] : 'text'; ?>" name="custom_values[]" value="<?php echo htmlspecialchars($cf['value'] ?? ''); ?>">
                 <select name="custom_types[]" onchange="syncInputType(this)">
@@ -604,10 +592,11 @@ function switchTab(key) {
         if (!panel || !nav) return;
         var isActive = (t === key);
         panel.style.display = isActive ? '' : 'none';
-        nav.style.color      = isActive ? '#e2e8f0' : 'var(--text-muted)';
-        nav.style.background = isActive ? 'rgba(255,255,255,.05)' : 'transparent';
-        nav.style.border     = isActive ? '1px solid rgba(255,255,255,.1)' : '1px solid transparent';
-        nav.style.borderBottom = isActive ? '1px solid var(--bg-card,#1e2535)' : '1px solid transparent';
+        nav.classList.toggle('active', isActive);
+        nav.style.color = '';
+        nav.style.background = '';
+        nav.style.border = '';
+        nav.style.borderBottom = '';
     });
     document.getElementById('form_tab').value = key;
     activeTab = key;

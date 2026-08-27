@@ -1,5 +1,5 @@
 <aside class="sidebar">
-    <div class="logo"><span><?php echo substr(APP_NAME,0,1); ?></span><?php echo substr(APP_NAME,1); ?></div>
+    <div class="logo"><?php echo APP_NAME; ?></div>
     <nav>
         <a href="/dashboard" class="<?php echo str_contains($_SERVER['REQUEST_URI'], 'dashboard') || $_SERVER['REQUEST_URI'] === '/' ? 'active' : ''; ?>">
             <i class="ti ti-layout-dashboard"></i><?php echo __('nav.dashboard'); ?>
@@ -10,7 +10,6 @@
         <a href="/clients" class="<?php echo str_contains($_SERVER['REQUEST_URI'], 'clients') ? 'active' : ''; ?>">
             <i class="ti ti-users"></i><?php echo __('nav.clients'); ?>
         </a>
-        <div class="sidebar-section">System</div>
         <a href="/notifications" class="<?php echo str_contains($_SERVER['REQUEST_URI'], 'notifications') ? 'active' : ''; ?>">
             <i class="ti ti-bell"></i><?php echo __('nav.notifications'); ?>
         </a>

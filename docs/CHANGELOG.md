@@ -1,4 +1,20 @@
 # Changelog
+## [0.5.3] - 2026-08-27
+### Changed
+- UI: complete visual redesign to a clean light theme inspired by Wallos
+- UI: sidebar navigation with section labels, accent color, and active state
+- UI: dashboard rebuilt with single stat row, mandant tabs, and deadlines table replacing card layout
+- UI: contract tabs unified across detail, form, and settings views
+- UI: topbar with page subtitle and improved search field contrast
+- UI: stat cards with colored left border accents replacing glassmorphism style
+- UI: zebra striping on contract list table for better row separation
+- UI: settings pages (general, mail templates, letter templates, PDF templates, backup) cleaned up and aligned
+- UI: letter template editor collapsible by default
+- UI: monthly costs card split into two centered columns
+- UI: info banners added to mail templates, letter templates, PDF templates, and letter generator
+- i18n: topbar subtitles added for all pages (de/en/pl)
+- i18n: info banner keys added for mail/letter/pdf templates and letter generator (de/en/pl)
+
 
 ## [0.5.2] - 2026-08-25
 ### Added

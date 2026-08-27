@@ -102,7 +102,7 @@ $logCount     = count($comm_log ?? []);
 
 <!-- Tab-Navigation -->
 <div style="max-width:1100px;margin:0 auto 1.25rem;">
-    <div style="display:flex;gap:.25rem;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:0;">
+    <div class="contract-tabs">
         <?php
         $tabs = [
             'uebersicht'   => ['icon'=>'ti-file-description', 'label'=>__('cd.tab.uebersicht')],
@@ -115,23 +115,11 @@ $logCount     = count($comm_log ?? []);
             $isActive = ($activeTab === $key);
             $baseUrl = '/contracts?action=view&id='.$contract['id'].'&tab='.$key;
         ?>
-        <a href="<?php echo $baseUrl; ?>" style="
-            display:inline-flex;align-items:center;gap:.4rem;
-            padding:.55rem 1rem;
-            font-size:.83rem;font-weight:500;
-            border-radius:8px 8px 0 0;
-            text-decoration:none;
-            border:1px solid <?php echo $isActive ? 'rgba(255,255,255,.1)' : 'transparent'; ?>;
-            border-bottom:<?php echo $isActive ? '1px solid var(--bg-card, #1e2535)' : '1px solid transparent'; ?>;
-            margin-bottom:-1px;
-            color:<?php echo $isActive ? '#e2e8f0' : 'var(--text-muted)'; ?>;
-            background:<?php echo $isActive ? 'rgba(255,255,255,.05)' : 'transparent'; ?>;
-            transition:color .15s,background .15s;
-        ">
+        <a href="<?php echo $baseUrl; ?>" class="contract-tab <?php echo $isActive ? 'active' : ''; ?>">
             <i class="ti <?php echo $tab['icon']; ?>"></i>
             <?php echo $tab['label']; ?>
             <?php if (!empty($tab['badge'])): ?>
-            <span style="background:rgba(255,255,255,.1);color:var(--text-muted);font-size:.7rem;padding:.05rem .4rem;border-radius:20px;font-weight:600;"><?php echo $tab['badge']; ?></span>
+            <span class="tab-badge"><?php echo $tab['badge']; ?></span>
             <?php endif; ?>
         </a>
         <?php endforeach; ?>

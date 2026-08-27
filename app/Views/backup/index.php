@@ -1,7 +1,7 @@
 <?php require BASE_PATH . '/app/Views/settings/tabs.php'; ?>
 
 <?php if (!empty($errors)): ?>
-    <div class="alert alert-danger mb-4">
+    <div class="alert alert-error">
         <?php foreach ($errors as $e): ?>
             <div><?= htmlspecialchars($e) ?></div>
         <?php endforeach; ?>
@@ -9,19 +9,19 @@
 <?php endif; ?>
 
 <?php if (!empty($success)): ?>
-    <div class="alert alert-success mb-4">
+    <div class="alert alert-success">
         <?= htmlspecialchars($success) ?>
     </div>
 <?php endif; ?>
 
-<div style="display:flex;flex-direction:column;gap:1.5rem;max-width:720px;">
+<div style="display:flex;flex-direction:column;gap:1.5rem;max-width:860px;">
 
     <!-- Export -->
     <div class="card">
-        <div class="card-header">
-            <h3 class="card-title"><i class="ti ti-download" style="margin-right:.4rem;opacity:.7;"></i><?php echo __('backup.export_title'); ?></h3>
+        <div class="card-head">
+            <span><i class="ti ti-download" style="margin-right:.4rem;opacity:.7;"></i><?php echo __('backup.export_title'); ?></span>
         </div>
-        <div class="card-body">
+        <div style="padding:1rem 1.25rem;">
             <p class="text-muted mb-4">
                 <?php echo __('backup.export_desc'); ?>
             </p>
@@ -30,16 +30,16 @@
                     <label style="font-size:.8rem;color:var(--text-muted);"><?php echo __('backup.password_optional'); ?></label>
                     <div style="display:flex;gap:.5rem;align-items:center;">
                         <input type="password" name="backup_password" placeholder="<?php echo htmlspecialchars(__('backup.password_placeholder')); ?>"
-                               style="flex:1;padding:.4rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.85rem;">
+                               style="flex:1;">
                         <button type="submit" class="btn btn-primary" style="white-space:nowrap;">
                             <i class="ti ti-file-type-json"></i><?php echo __('backup.export_json'); ?>
                         </button>
                     </div>
                     <p style="font-size:.75rem;color:var(--text-muted);margin:0;"><?php echo __('backup.password_hint'); ?></p>
                 </form>
-                <hr style="border:none;border-top:1px solid rgba(255,255,255,.08);margin:.25rem 0;">
+                <hr style="border:none;border-top:1px solid var(--border);margin:.5rem 0;">
                 <form method="POST" action="/backup?action=export-csv" style="display:flex;flex-direction:column;gap:.3rem;">
-                    <button type="submit" class="btn btn-outline">
+                    <button type="submit" class="btn btn-primary">
                         <i class="ti ti-file-zip"></i><?php echo __('backup.export_csv'); ?>
                     </button>
                     <p style="font-size:.75rem;color:var(--text-muted);margin:.25rem 0 0 .5rem;"><?php echo __('backup.csv_no_encryption'); ?></p>
@@ -50,11 +50,11 @@
 
     <!-- Import -->
     <div class="card">
-        <div class="card-header">
-            <h3 class="card-title"><i class="ti ti-upload" style="margin-right:.4rem;opacity:.7;"></i><?php echo __('backup.import_title'); ?></h3>
+        <div class="card-head">
+            <span><i class="ti ti-upload" style="margin-right:.4rem;opacity:.7;"></i><?php echo __('backup.import_title'); ?></span>
         </div>
-        <div class="card-body">
-            <div class="alert alert-warning mb-4" style="display:flex;gap:.75rem;align-items:flex-start;">
+        <div style="padding:1rem 1.25rem;">
+            <div style="display:flex;gap:.75rem;align-items:flex-start;padding:.75rem 1rem;background:var(--warning-bg);border:1px solid #fde68a;border-radius:7px;color:var(--warning);font-size:.88rem;margin-bottom:1rem;">
                 <i class="ti ti-alert-triangle" style="font-size:1.2rem;flex-shrink:0;margin-top:.1rem;"></i>
                 <div>
                     <?php echo __('backup.import_warning'); ?>
@@ -66,11 +66,11 @@
                     <label id="file-drop" style="
                         display:flex;flex-direction:column;align-items:center;justify-content:center;
                         gap:.5rem;padding:2rem 1.5rem;border-radius:.75rem;cursor:pointer;
-                        border:2px dashed rgba(255,255,255,.15);
-                        background:rgba(255,255,255,.04);
+                        border:2px dashed var(--border-strong);
+                        background:#f9fafb;
                         transition:border-color .2s,background .2s;
-                    " onmouseover="this.style.borderColor='rgba(255,255,255,.3)';this.style.background='rgba(255,255,255,.07)'"
-                       onmouseout="this.style.borderColor='rgba(255,255,255,.15)';this.style.background='rgba(255,255,255,.04)'">
+                    " onmouseover="this.style.borderColor='var(--accent)';this.style.background='#eef2ff'"
+                       onmouseout="this.style.borderColor='var(--border-strong)';this.style.background='#f9fafb'">
                         <i class="ti ti-file-import" style="font-size:2rem;opacity:.5;"></i>
                         <span id="file-label" style="font-size:.9rem;color:var(--text-muted);"><?php echo __('backup.file_drop'); ?></span>
                         <span style="font-size:.78rem;opacity:.45;">.json / .enc</span>
@@ -85,7 +85,7 @@
                 <div id="enc-password-wrap" style="display:none;margin-bottom:1rem;">
                     <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;"><?php echo __('backup.restore_password'); ?></label>
                     <input type="password" name="restore_password" id="restore_password"
-                           style="padding:.4rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.85rem;width:100%;box-sizing:border-box;">
+                           style="width:100%;">
                 </div>
                 <button type="submit" class="btn btn-danger"
                         onclick="return confirm(this.dataset.confirm)" data-confirm="<?php echo __('backup.confirm_import'); ?>">

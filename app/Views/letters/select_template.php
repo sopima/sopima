@@ -27,7 +27,7 @@ require BASE_PATH . '/app/Views/layouts/main.php';
             <tbody>
                 <?php foreach ($templates as $tpl): ?>
                 <tr style="border-bottom:1px solid rgba(255,255,255,.04);">
-                    <td style="padding:.75rem 1.5rem;font-size:.88rem;color:#fff;">
+                    <td style="padding:.75rem 1.5rem;font-size:.88rem;color:var(--text);">
                         <?= htmlspecialchars($tpl['name']) ?>
                         <?php if ($tpl['is_default']): ?>
                             <span style="margin-left:.5rem;font-size:.72rem;color:#a5b4fc;background:rgba(165,180,252,.1);padding:.1rem .4rem;border-radius:3px;">Standard</span>
@@ -56,7 +56,7 @@ require BASE_PATH . '/app/Views/layouts/main.php';
 <div id="pdf-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center;">
     <div style="background:#1e2a3a;border-radius:10px;width:90vw;max-width:900px;height:88vh;display:flex;flex-direction:column;overflow:hidden;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;border-bottom:1px solid rgba(255,255,255,.1);">
-            <span style="font-weight:600;color:#fff;font-size:.95rem;"><i class="ti ti-file-text" style="margin-right:.4rem;color:#a5b4fc;"></i><?php echo __('letter.preview'); ?></span>
+            <span style="font-weight:600;color:var(--text);font-size:.95rem;"><i class="ti ti-file-text" style="margin-right:.4rem;color:#a5b4fc;"></i><?php echo __('letter.preview'); ?></span>
             <div style="display:flex;gap:.5rem;align-items:center;">
                 <a id="pdf-download-btn" href="#" class="btn btn-primary" style="font-size:.8rem;padding:.3rem .75rem;">
                     <i class="ti ti-download"></i> PDF herunterladen

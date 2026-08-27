@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div class="card" style="padding: 1.5rem;">
+<div class="card" style="padding:1.25rem 1.5rem;max-width:1100px;margin:0 auto;">
     <form method="POST" action="/clients">
         <input type="hidden" name="action" value="<?php echo $client ? 'update' : 'store'; ?>">
         <?php if ($client): ?>

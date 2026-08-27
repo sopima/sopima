@@ -2,11 +2,15 @@
 $saved = $_GET['saved'] ?? '';
 ?>
 <?php if ($saved === '1'): ?>
-<div class="alert alert-success" style="margin-bottom:1rem;padding:.75rem 1rem;background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.3);border-radius:8px;color:#34d399;font-size:.88rem;">
+<div class="alert alert-success" style="margin-bottom:1rem;padding:.75rem 1rem;background:var(--success-bg);border:1px solid #bbf7d0;border-radius:7px;color:var(--success);font-size:.88rem;">
     <?php echo __('settings.pdf.saved'); ?>
 </div>
 <?php endif; ?>
 
+<div style="margin-bottom:1rem;padding:.65rem 1rem;background:#eef2ff;border:1px solid #c7d2fe;border-radius:7px;font-size:.83rem;color:#3a5bd4;display:flex;align-items:center;gap:.5rem;">
+    <i class="ti ti-info-circle" style="font-size:16px;flex-shrink:0"></i>
+    <?php echo __('pdf_templates.hint'); ?>
+</div>
 <div style="margin-bottom:1.5rem;display:flex;align-items:center;gap:1rem;">
     <label style="font-size:.85rem;color:var(--text-muted);"><?php echo __('settings.pdf.mandant'); ?>:</label>
     <div class="form-group" style="margin:0;">
@@ -59,28 +63,28 @@ $saved = $_GET['saved'] ?? '';
         <div>
             <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;"><?php echo __('settings.pdf.title'); ?></label>
             <input type="text" name="title" value="<?php echo htmlspecialchars($tpl['title']); ?>"
-                style="width:100%;padding:.5rem .75rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.88rem;box-sizing:border-box;">
+                style="width:100%;padding:.5rem .75rem;background:#fff;border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:.88rem;box-sizing:border-box;">
         </div>
         <div>
             <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;"><?php echo __('settings.pdf.body'); ?></label>
-            <div style="display:flex;gap:.3rem;margin-bottom:.3rem;flex-wrap:wrap;padding:.4rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-bottom:none;border-radius:6px 6px 0 0;">
-                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'bold')" style="padding:.2rem .55rem;font-weight:700;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">B</button>
-                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'italic')" style="padding:.2rem .55rem;font-style:italic;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">I</button>
-                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'underline')" style="padding:.2rem .55rem;text-decoration:underline;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">U</button>
-                <span style="border-left:1px solid rgba(255,255,255,.15);margin:0 .2rem"></span>
-                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'justifyLeft')" title="Linksbündig" style="padding:.2rem .55rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">&#8676;</button>
-                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'justifyCenter')" title="Zentriert" style="padding:.2rem .55rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">&#8596;</button>
-                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'justifyRight')" title="Rechtsbündig" style="padding:.2rem .55rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.07);color:#fff;border-radius:3px;cursor:pointer">&#8677;</button>
-                <span style="border-left:1px solid rgba(255,255,255,.15);margin:0 .2rem"></span>
-                <select onchange="pdfFmtSize(<?php echo $tpl['id']; ?>,this.value);this.selectedIndex=0;" style="padding:.2rem .4rem;background:#2d3748;border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:3px;font-size:.8rem;">
+            <div style="display:flex;gap:.3rem;margin-bottom:.3rem;flex-wrap:wrap;padding:.4rem;background:#f9fafb;border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;">
+                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'bold')" style="padding:.2rem .55rem;font-weight:700;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:3px;cursor:pointer">B</button>
+                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'italic')" style="padding:.2rem .55rem;font-style:italic;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:3px;cursor:pointer">I</button>
+                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'underline')" style="padding:.2rem .55rem;text-decoration:underline;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:3px;cursor:pointer">U</button>
+                <span style="border-left:1px solid var(--border);margin:0 .2rem"></span>
+                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'justifyLeft')" title="Linksbündig" style="padding:.2rem .55rem;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:3px;cursor:pointer">&#8676;</button>
+                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'justifyCenter')" title="Zentriert" style="padding:.2rem .55rem;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:3px;cursor:pointer">&#8596;</button>
+                <button type="button" onclick="pdfFmt(<?php echo $tpl['id']; ?>,'justifyRight')" title="Rechtsbündig" style="padding:.2rem .55rem;border:1px solid var(--border);background:#fff;color:var(--text);border-radius:3px;cursor:pointer">&#8677;</button>
+                <span style="border-left:1px solid var(--border);margin:0 .2rem"></span>
+                <select onchange="pdfFmtSize(<?php echo $tpl['id']; ?>,this.value);this.selectedIndex=0;" style="padding:.2rem .4rem;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:.8rem;">
                     <option value="">Größe</option>
                     <option value="1">Klein</option>
                     <option value="3">Normal</option>
                     <option value="5">Groß</option>
                     <option value="7">Sehr groß</option>
                 </select>
-                <span style="border-left:1px solid rgba(255,255,255,.15);margin:0 .2rem"></span>
-                <select onchange="pdfInsertPH(<?php echo $tpl['id']; ?>,this.value);this.selectedIndex=0;" style="padding:.2rem .4rem;background:#2d3748;border:1px solid rgba(255,255,255,.15);color:#fff;border-radius:3px;font-size:.8rem;">
+                <span style="border-left:1px solid var(--border);margin:0 .2rem"></span>
+                <select onchange="pdfInsertPH(<?php echo $tpl['id']; ?>,this.value);this.selectedIndex=0;" style="padding:.2rem .4rem;background:#fff;border:1px solid var(--border);color:var(--text);border-radius:3px;font-size:.8rem;">
                     <option value="">+ Platzhalter</option>
                     <optgroup label="Vertrag">
                         <option value="{{title}}">{{title}}</option>
@@ -118,11 +122,11 @@ $saved = $_GET['saved'] ?? '';
             </div>
             <div id="pdf-editor-<?php echo $tpl['id']; ?>"
                  contenteditable="true"
-                 style="min-height:280px;background:#fff;color:#111;border:1px solid rgba(255,255,255,.1);border-radius:0 0 6px 6px;padding:.75rem;font-size:11pt;line-height:1.7;font-family:Arial,Helvetica,sans-serif;overflow-y:auto;"
+                 style="min-height:280px;background:#fff;color:#111;border:1px solid var(--border);border-radius:0 0 6px 6px;padding:.75rem;font-size:11pt;line-height:1.7;font-family:Arial,Helvetica,sans-serif;overflow-y:auto;"
             ><?php echo $tpl['body']; ?></div>
             <input type="hidden" name="body" id="pdf-hidden-<?php echo $tpl['id']; ?>">
         </div>
-        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:1rem;margin-top:.5rem;">
+        <div style="border-top:1px solid var(--border);padding-top:1rem;margin-top:.5rem;">
             <label style="font-size:.8rem;color:var(--text-muted);display:block;margin-bottom:.35rem;"><?php echo __('settings.pdf.upload'); ?></label>
             <?php if (!empty($tpl['file_path']) && file_exists($tpl['file_path'])): ?>
             <div style="display:flex;align-items:center;gap:1rem;margin-bottom:.75rem;">

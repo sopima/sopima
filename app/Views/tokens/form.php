@@ -27,7 +27,7 @@
             <label><?php echo __('tokens.form.perms'); ?></label>
             <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.5rem;margin-top:.5rem;">
                 <?php foreach ($allPerms as $p): ?>
-                <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--text-muted);background:rgba(255,255,255,.05);padding:.5rem .75rem;border-radius:8px;border:1px solid rgba(255,255,255,.1);">
+                <label style="display:flex;align-items:center;gap:.5rem;cursor:pointer;text-transform:none;letter-spacing:0;font-size:.88rem;color:var(--text);background:#f9fafb;padding:.4rem .75rem;border-radius:7px;border:1px solid var(--border);">
                     <input type="checkbox" name="permissions[]" value="<?php echo $p; ?>" style="width:auto;">
                     <?php echo $p; ?>
                 </label>

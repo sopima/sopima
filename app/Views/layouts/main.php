@@ -12,18 +12,29 @@
     <?php require __DIR__ . '/nav.php'; ?>
     <div class="main-content">
     <div class="topbar">
-        <h2><?php
-            $uri = $_SERVER['REQUEST_URI'];
-            if (str_contains($uri, 'contracts')) echo __('topbar.contracts');
-            elseif (str_contains($uri, 'clients')) echo __('topbar.clients');
-            elseif (str_contains($uri, 'settings')) echo __('topbar.settings');
-            elseif (str_contains($uri, 'notifications')) echo __('topbar.notifications');
-            else echo __('topbar.dashboard');
-        ?></h2>
+        <div class="topbar-left">
+            <div class="topbar-title"><?php
+                $uri = $_SERVER['REQUEST_URI'];
+                if (str_contains($uri, 'contracts')) echo __('topbar.contracts');
+                elseif (str_contains($uri, 'clients')) echo __('topbar.clients');
+                elseif (str_contains($uri, 'backup')) echo __('topbar.settings');
+                elseif (str_contains($uri, 'settings')) echo __('topbar.settings');
+                elseif (str_contains($uri, 'notifications')) echo __('topbar.notifications');
+                else echo __('topbar.dashboard');
+            ?></div>
+            <div class="topbar-sub"><?php
+                if (str_contains($uri, 'contracts')) echo __('topbar.sub.contracts');
+                elseif (str_contains($uri, 'clients')) echo __('topbar.sub.clients');
+                elseif (str_contains($uri, 'backup')) echo __('topbar.sub.settings');
+                elseif (str_contains($uri, 'settings')) echo __('topbar.sub.settings');
+                elseif (str_contains($uri, 'notifications')) echo __('topbar.sub.notifications');
+                else echo __('topbar.sub.dashboard');
+            ?></div>
+        </div>
         <form method="GET" action="/contracts" style="display:flex;align-items:center;gap:.5rem;position:absolute;left:50%;transform:translateX(-50%);">
             <div style="position:relative;">
                 <i class="ti ti-search" style="position:absolute;left:.7rem;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:.95rem;pointer-events:none;"></i>
-                <input type="text" name="q" placeholder="<?php echo __('topbar.search'); ?>" value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>" style="padding:.4rem .75rem .4rem 2.1rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#fff;font-size:.85rem;width:220px;outline:none;">
+                <input type="text" name="q" placeholder="<?php echo __('topbar.search'); ?>" value="<?php echo htmlspecialchars($_GET['q'] ?? ''); ?>" style="">
             </div>
         </form>
     </div>

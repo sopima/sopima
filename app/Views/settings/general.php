@@ -73,8 +73,8 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
 <?php endif; ?>
 
 <form method="POST" action="/settings?tab=general">
-    <div class="card" style="padding:1.5rem;margin-bottom:1rem;">
-        <h3 style="font-size:.88rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:1rem;"><?php echo __('settings.general.title'); ?></h3>
+    <div class="card" style="padding:1rem 1.25rem;margin-bottom:.75rem;">
+        <h3 style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:1rem;"><?php echo __('settings.general.title'); ?></h3>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
             <div class="form-group" style="margin:0;">
                 <label><?php echo __('settings.app_name'); ?></label>
@@ -104,8 +104,8 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
         </div>
     </div>
 
-    <div class="card" style="padding:1.5rem;margin-bottom:1rem;">
-        <h3 style="font-size:.88rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:1rem;"><?php echo __('settings.smtp_title'); ?></h3>
+    <div class="card" style="padding:1rem 1.25rem;margin-bottom:.75rem;">
+        <h3 style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:1rem;"><?php echo __('settings.smtp_title'); ?></h3>
         <div style="display:grid;grid-template-columns:1fr auto;gap:.5rem;">
             <div class="form-group" style="margin:0;"><label><?php echo __('settings.smtp_host'); ?></label><input type="text" name="mail_host" value="<?php echo htmlspecialchars($env['MAIL_HOST'] ?? ''); ?>"></div>
             <div class="form-group" style="margin:0;"><label><?php echo __('settings.smtp_port'); ?></label><input type="number" name="mail_port" value="<?php echo htmlspecialchars($env['MAIL_PORT'] ?? '587'); ?>" style="width:80px;"></div>
@@ -128,31 +128,20 @@ foreach (file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line)
                 <input type="text" name="mail_name" value="<?php echo htmlspecialchars($env['MAIL_FROM_NAME'] ?? ''); ?>">
             </div>
         </div>
-    </div>
-
-    <div class="card" style="padding:1.5rem;margin-bottom:1rem;">
-        <h3 style="font-size:.88rem;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:1rem;"><?php echo __('settings.notify_title'); ?></h3>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
-            <div class="form-group" style="margin:0;">
-                <label><?php echo __('settings.notify_expiring_days'); ?></label>
-                <input type="number" name="notify_expiring_days" min="1" max="365" value="<?php echo $notifyDays; ?>" style="width:120px;">
-            </div>
+        <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:1rem;">
+            <form method="POST" action="/settings?tab=general&action=smtp_test" style="margin:0;">
+                <button type="submit" class="btn btn-outline"><i class="ti ti-mail"></i> Test-Mail senden</button>
+            </form>
+            <span style="font-size:.75rem;color:var(--text-muted);">Zuerst speichern</span>
         </div>
     </div>
+
+
 
     <div style="display:flex;justify-content:flex-end;">
         <button type="submit" class="btn btn-primary"><i class="ti ti-device-floppy"></i> <?php echo __('settings.save'); ?></button>
     </div>
 </form>
 <div style="display:flex;justify-content:flex-start;align-items:center;margin-top:.75rem;gap:1rem;">
-    <form method="POST" action="/settings?tab=general&action=smtp_test" style="margin:0;">
-        <button type="submit" class="btn btn-outline"><i class="ti ti-mail"></i> <?php echo __('settings.smtp_test'); ?></button>
-    </form>
-    <?php if (isset($_GET['smtp_test'])): ?>
-        <?php if ($_GET['smtp_test'] === '1'): ?>
-        <span style="font-size:.83rem;color:#34d399;"><i class="ti ti-check"></i> <?php echo __('settings.smtp_test_ok'); ?></span>
-        <?php else: ?>
-        <span style="font-size:.83rem;color:#f87171;"><i class="ti ti-alert-circle"></i> <?php echo __('settings.smtp_test_fail'); ?></span>
-        <?php endif; ?>
-    <?php endif; ?>
+
 </div>
