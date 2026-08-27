@@ -5,3 +5,4 @@ vendor/
 *.log
 .DS_Store
 public/pdfjs/web/
+*.bak
