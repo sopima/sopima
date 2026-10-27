@@ -1,4 +1,8 @@
 # Changelog
+## [0.5.5] - 2026-10-27
+### Fixed
+- Contracts: creating a contract failed with HTTP 500 because `is_unlimited` was not bound in the INSERT statement (NOT NULL constraint)
+
 ## [0.5.4] - 2026-08-27
 ### Fixed
 - Settings: general settings form could not be saved due to nested `<form>` tags (SMTP test button)

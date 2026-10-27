@@ -121,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['direction'] ?? 'ausgabe',
             $_POST['plan'] ?: null,
             $_POST['phone_number'] ?? null,
+            $is_unlimited,
         ]);
         $lastId = $db->lastInsertId();
         // Personen speichern
